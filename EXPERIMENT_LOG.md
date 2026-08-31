@@ -444,3 +444,280 @@ size 10602 bytes
 ```
 
 异常审计文件准确记录1个源文件、7500个NaN、750个trial和10个vertex；HDF5属性同时标记 `source_nonfinite_values_preserved=true`。随后于 `2026-09-01T04:56:12+08:00` 启动完整低优先级数据扫描，用于验证全部正式选中顶点、生成100图映射抽查、parcel token映射和最终数据指纹。
+
+---
+
+## 2026-09-01 数据完整扫描、划分与训练缓存
+
+### 完整数据门禁
+
+完整扫描于 `2026-09-01T05:00:42+08:00` 完成。结果为：
+
+```text
+presentations                  30000
+unique NSD images              10000
+repetitions per image              3
+standard train images           9000
+standard test images            1000
+selected parcels                 200
+selected lh vertices           25479
+selected rh vertices           27328
+max_voxels                       626
+selected vertex NaN / Inf          0
+```
+
+右半球全表扫描仍准确观察到此前记录的7500个源NaN，位置全部在未选中的parcel 320；正式输入顶点没有非有限值。关键指纹为：
+
+```text
+parcel map SHA-256
+2764c8c62f1544065267c661b9e33f5aceab818b9ec4ab6dd4be0b299fe7f4a7
+
+100-image mapping audit SHA-256
+3f2b216396e6e4bec5f74e4234e9ea7c1493bf669fd3868a2d69bbd386e822fa
+```
+
+正式数据指纹位于：
+
+```text
+data/fingerprints/data_fingerprint.json
+```
+
+### Selection划分
+
+划分于唯一图片ID层面执行，随机算法为NumPy `Generator(PCG64)`，seed为`20260901`。结果于 `2026-09-01T05:02:50+08:00` 冻结：
+
+```text
+selection_train     8500
+validation           500
+standard test       1000
+```
+
+清单哈希：
+
+```text
+selection_train
+4681431e4f9fc3054f1d758bf0a95f485082f29eea1674b78a72f93c769d74c4
+
+validation
+1eb801c0460754e803c9d86f6c60aec0512da0a49205971d1efb0fef1cc256ad
+
+standard test
+d1afe140491cd887f7b8c612e144d104e56e412a33956f99bfefa3e27aac6605
+
+9000-image train pool
+11e107c402acfffea891215e39375312f3e98cce5a2d332811dc2181a2953f4e
+```
+
+### 9000图训练缓存
+
+训练缓存以低优先级、无GPU方式构建，完成时间为 `2026-09-01T05:09:34+08:00`，退出码为0：
+
+```text
+path
+data/derived/training/subject01_train_pool_top100.h5
+
+shape         [9000, 200, 626]
+dtype         float32
+size          1924581142 bytes
+SHA-256       88218e827856562a8efef1353d1cbaea0b4b00a2b139a5d9b09feb9892820400
+```
+
+独立验证器不复用构建过程中的统计值，于 `2026-09-01T05:24:04+08:00` 对缓存重新执行完整扫描：
+
+```bash
+python scripts/verify_training_cache.py \
+  --cache data/derived/training/subject01_train_pool_top100.h5 \
+  --manifest data/fingerprints/training_cache_manifest.json \
+  --metadata data/derived/neural_data/metadata_sub-01.npy \
+  --selection-train-ids data/derived/splits/selection_train_ids.txt \
+  --validation-ids data/derived/splits/validation_ids.txt \
+  --output data/fingerprints/training_cache_verification.json
+```
+
+独立验证结果：
+
+```text
+status                       verified
+image IDs                    9000 unique train-pool IDs
+standard test overlap        0
+selected values finite       yes
+padding outside valid mask   all zero
+cache hash match             yes
+```
+
+有效parcel值的完整统计为：
+
+```text
+count    475263000
+min      -30.841522216796875
+max       59.4533805847168
+mean       1.1830519251528038
+std        1.6606457324689756
+```
+
+---
+
+## 2026-09-01 模型资产同步与离线审计
+
+### 模型树同步
+
+由于服务器不能稳定访问Hugging Face，固定revision资产在本机完成下载和哈希后传入项目专用`models/`。本机基准清单包含50个正式文件：
+
+```text
+file count    50
+total bytes   14165180204
+```
+
+服务器重新计算SHA-256后的比较结果：
+
+```text
+missing files       0
+hash mismatches     0
+server-only files   3
+```
+
+3个服务器独有文件是此前已通过官方来源下载的torchvision权重：
+
+```text
+alexnet-owt-7be5be79.pth
+inception_v3_google-0cc3c7bd.pth
+efficientnet_b1-c27df63c.pth
+```
+
+排除Hugging Face `.cache`目录后，服务器正式模型树包含53个文件、`14550139191` bytes。完整清单位于：
+
+```text
+data/fingerprints/model_assets_sha256.json
+```
+
+### 图像评价模型离线门禁
+
+在以下环境约束下执行验证：
+
+```text
+CUDA_VISIBLE_DEVICES=
+HF_HUB_OFFLINE=1
+TRANSFORMERS_OFFLINE=1
+```
+
+命令：
+
+```bash
+python scripts/download_evaluation_assets.py \
+  --project-root /data/matengyu/geyugong/neuroadapter-subject1-research \
+  --verify-only
+```
+
+于 `2026-09-01T05:50:00+08:00` 确认以下六类模型均可从固定本地代码和权重离线构建：
+
+```text
+AlexNet ImageNet1K V1
+InceptionV3 default
+EfficientNet-B1 default
+OpenAI CLIP ViT-L/14
+SwAV ResNet-50
+DINOv2 ViT-B/14
+```
+
+其中CLIP、SwAV和DINOv2关键哈希分别为：
+
+```text
+CLIP    b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836
+SwAV    029d0b8c2e70bcee3f8beb70cc104ef51585c090224d33fb9c6f51d146cfd1eb
+DINOv2  0b8b82f85de91b424aded121c7e1dcc2b7bc6d0adeea651bf73a13307fad8c73
+```
+
+### whole-brain encoder ensemble
+
+新增可重复的纯CPU审计脚本，提交为：
+
+```text
+be2e860 feat(assets): verify brain encoder ensemble
+```
+
+运行命令：
+
+```bash
+python scripts/verify_brain_encoder_assets.py \
+  --root models/brain-encoder/dinov2_q_transformer/schaefer/subj_01 \
+  --output data/fingerprints/brain_encoder_assets_verification.json
+```
+
+审计于 `2026-09-01T05:58:03+08:00` 完成：
+
+```text
+layers                       1, 3, 5, 7
+runs                         1, 2
+hemispheres                  lh, rh
+ensemble members             16 / 16
+model tensors per member     25
+model values per member      132734018
+nonfinite model values       0
+confidence shape             [163842] for every member
+nonfinite confidence values  0
+```
+
+---
+
+## 2026-09-01 Canonical初始化与协议修订
+
+### Canonical adapter initialization
+
+Stable Diffusion v1.5在离线、纯CPU模式下成功加载。canonical adapter初始化随后生成并在新建模型实例中重新加载，全部张量逐项位级相等：
+
+```bash
+python scripts/create_canonical_initialization.py \
+  --model-path models/stable-diffusion-v1-5 \
+  --model-manifest data/fingerprints/model_assets_sha256.json \
+  --data-fingerprint data/fingerprints/data_fingerprint.json \
+  --output models/canonical/subject01_adapter_init.pt \
+  --manifest models/canonical/subject01_adapter_init.json \
+  --seed 20260901
+```
+
+结果：
+
+```text
+created at                 2026-09-01T05:52:02+08:00
+size                       464285745 bytes
+SHA-256                    dc363931727f5f5e445d267f9b31e1a366b134b2e62a34dc72ae12693d875fca
+trainable tensors          38
+trainable parameters       116068608
+frozen parameters          859520964
+reload bitwise equal       true
+```
+
+selection和final必须加载这一完全相同的初始化文件，不允许依赖进程启动顺序重新随机初始化。
+
+### Checkpoint选择规则更新
+
+第一阶段协议已收紧为：
+
+```text
+一级评价     每个checkpoint对500张validation图生成2个固定candidate
+shortlist    5个checkpoint
+二级评价     每个shortlist checkpoint生成500 x 8 candidates
+主选择器     SemanticScore
+brain encoder不参与validation选择
+```
+
+final训练长度固定为selection选中checkpoint的`U* optimizer updates`。在global batch 16保持不变时，总样本曝光量同步固定为`I*=16 x U*`，不直接迁移8500图数据上的epoch数。
+
+### 当前测试与停止边界
+
+服务器项目环境在全部上述代码更新后的CPU测试结果为：
+
+```text
+26 passed
+2 harmless Diffusers CPU import warnings
+```
+
+截至 `2026-09-01T06:02:28+08:00`，既有GPU任务仍在运行：
+
+```text
+GPU 0   17242 / 32607 MiB   utilization 81%
+GPU 1   18057 / 32607 MiB   utilization 100%
+tmux    diffinverse_sd_rgb, diffinverse_sd_thermal
+```
+
+本项目未终止、暂停、重启或修改这些任务。GPU、NCCL、BF16、显存、forward对齐、精确恢复和确定性解码门禁尚未执行。正式配置保持`status: draft`，`protocol_commit`仍未冻结，没有创建approval file，也没有启动正式训练。

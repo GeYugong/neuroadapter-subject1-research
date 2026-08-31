@@ -30,11 +30,11 @@ gradient accumulation = 1
 
 公开 whole-brain encoder 使用其 validation split 建立 voxel confidence，并明确建议只在 test 或未见数据上评价。新划出的 500 张 validation 来自原 9000 张 decoder 训练池，不能把现成 encoder 当成完全独立的 checkpoint 选择器。
 
-因此 validation 使用固定候选和图像指标选择训练时长。brain encoder 只用于模型锁定后的标准 test 论文口径评价，以及不参与决策的附加诊断。
+因此 validation 使用固定候选和图像指标选择训练时长。一级评价对每张图使用 2 个固定 candidate 以降低单 seed 偶然性，二级评价仅对 5 个 shortlist checkpoint 使用完整 8 候选。brain encoder 只用于模型锁定后的标准 test 论文口径评价，以及不参与决策的附加诊断。
 
 ## D005：Final run 按 optimizer updates 迁移
 
-selection 使用 8500 张图，final 使用 9000 张图。直接复用同一 epoch 数会增加约 5.88% 的样本曝光量。因此 selection 记录最优 checkpoint 对应的 `U* optimizer updates`，final 使用全部 9000 张图训练恰好 `U*` 次更新。
+selection 使用 8500 张图，final 使用 9000 张图。直接复用同一 epoch 数会增加约 5.88% 的样本曝光量。因此 selection 记录最优 checkpoint 对应的 `U* optimizer updates`，final 使用全部 9000 张图训练恰好 `U*` 次更新。由于 global batch 保持 16，总样本曝光量也固定为 `I*=16 x U*`；epoch 只作为派生量记录。
 
 ## D006：`max_voxels=626` 作为数据指纹
 

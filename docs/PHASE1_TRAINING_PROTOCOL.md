@@ -246,25 +246,34 @@ optimizer state      new and continuous
 
 - 每 5 reference epochs 计算固定随机输入的 deterministic validation loss；
 - 每 25 reference epochs 保存 inference snapshot；
-- 对全部 500 张 validation 图片生成固定 candidate 0；
+- 对全部 500 张 validation 图片生成 2 个固定 candidate；
 - 使用 50 denoising steps、guidance scale 4.0；
 - 计算完整八项官方图像指标；
 - 不使用 whole-brain encoder 选择候选。
 
+两个 candidate index 分别形成完整的 500 图评价集，再对两套指标求平均。该设计避免单一扩散随机状态主导一级排序，同时将生成成本限制在完整八候选评价的四分之一。
+
 ### 9.3 Shortlist
 
-一级验证完成后得到 4 个候选 checkpoint：
+一级验证完成后得到 5 个候选 checkpoint：
 
 ```text
 SemanticScore 前 3 名
++ LowLevelRank 最低者
 + deterministic validation loss 最低者
 ```
 
-若 loss 最低者已经位于前三，则补入 SemanticScore 第四名。
+其中：
+
+```text
+LowLevelRank = mean(rank(PixCorr), rank(SSIM), rank(AlexNet-2))
+```
+
+所有 rank 均按“越高越好”的方向计算。若低层或 loss 候选已在前三，则按 SemanticScore 顺序补足到 5 个，候选不得少于 5 个。
 
 ### 9.4 二级验证
 
-四个 checkpoint 分别生成：
+五个 checkpoint 分别生成：
 
 ```text
 500 validation images x 8 fixed candidates
@@ -285,7 +294,7 @@ SemanticScore = mean(AlexNet-5, Inception, CLIP)
 选择顺序：
 
 1. 找到 SemanticScore 最高的 checkpoint；
-2. 使用图像级 paired bootstrap 建立 one-standard-error 候选集合；
+2. 对图像进行 paired cluster bootstrap，并将与最佳值的差小于等于配对差值一个标准误的 checkpoint 纳入 one-standard-error 候选集合；
 3. 在集合内使用低层指标和高层指标各占 50% 的 BalancedRank；
 4. 若仍并列，选择 deterministic validation loss 更低者；
 5. 若仍并列，选择更早的 optimizer update。
@@ -304,7 +313,13 @@ selection manifest SHA-256
 
 ## 10. Final run
 
-Final run 重新加载 canonical adapter initialization，创建新的 AdamW，使用全部 9000 张 train pool 图片，连续训练恰好 `U*` 个 optimizer updates。
+Final run 重新加载 canonical adapter initialization，创建新的 AdamW，使用全部 9000 张 train pool 图片，连续训练恰好 `U*` 个 optimizer updates。由于 selection 与 final 使用相同 global batch 16，该规则同时固定总样本曝光量：
+
+```text
+I* = 16 x U* images seen
+```
+
+selection checkpoint 的 reference epoch 只作为可读的派生量，不直接迁移为 final epoch；final 可能停在一个数据遍历周期内部。
 
 Final run 中：
 
