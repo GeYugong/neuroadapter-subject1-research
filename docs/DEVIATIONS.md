@@ -44,3 +44,8 @@ selection 使用 8500 张图，final 使用 9000 张图。直接复用同一 epo
 
 固定上游训练脚本包含明文 W&B 登录凭据。该凭据不复制、不使用、不写入日志。W&B 默认关闭；任何外部服务凭据只能通过运行时环境变量提供。
 
+## D008：保留并审计官方 beta 中未选中顶点的 NaN
+
+官方 Subject 1 `rh.betas_session11.mgh` 在 10 个固定顶点的全部 750 个 trial 中包含 NaN，共 7500 个非有限值。下载文件大小与官方 S3 inventory 一致；这些顶点全部属于右半球 Schaefer parcel 320（不含 medial wall 的零基索引），该 parcel 的 mean-ncsnr 排名为 461，与正式 top-100 parcel 无交集。
+
+本阶段不对源值执行 `nan_to_num`。HDF5 转换原样保留 NaN，并生成 `source_nonfinite_values.json`。完整数据指纹扫描必须证明所有正式选中顶点均为有限值；训练缓存只抽取经过该门禁的 top-100 parcel。若后续任一选中顶点出现非有限值，数据准备立即失败。

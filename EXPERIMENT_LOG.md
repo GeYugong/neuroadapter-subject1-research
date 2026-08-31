@@ -272,3 +272,175 @@ accelerate==1.14.0
 ```
 
 `diffusers 0.36.0` 与其余三个版本的声明依赖区间存在交集。模型资产将按固定 commit 下载为本地快照，后续训练只接受经过哈希验证的本地模型路径，不从浮动 Hub 分支直接加载远程代码。
+
+---
+
+## 2026-09-01 候选环境、NSD下载与Schaefer转换完成
+
+### 候选环境
+
+修正后的独立环境于 `2026-09-01T03:24:32+08:00` 安装完成，`pip check` 无依赖冲突。当前候选版本为：
+
+```text
+Python             3.11.16
+PyTorch            2.11.0+cu128
+torchvision        0.26.0+cu128
+NumPy              1.26.4
+Accelerate         1.14.0
+Diffusers          0.36.0
+Transformers       4.57.6
+Hugging Face Hub   0.36.0
+```
+
+环境仅安装在项目专用 prefix，没有修改共享 Conda 环境。CPU import 门禁通过；GPU、NCCL、BF16 与显存门禁仍等待两张 RTX 5090 同时空闲。
+
+### NSD Subject 1
+
+官方 S3 下载于 `2026-09-01T03:26:26+08:00` 完成，原始目录约 74 GiB。远端与本地 inventory 核对结果：
+
+```text
+session beta files           80
+ncsnr files                   6
+beta objects                 86
+beta bytes          39326038008
+all local files              90
+all local bytes     78919016728
+stimuli bytes       39556877048
+```
+
+关键清单哈希：
+
+```text
+S3 inventory SHA-256
+85a388645bf65e6b1cdab1b22c741b3553abcb0497455f1b35f5b36a672d8ee3
+
+local size inventory SHA-256
+5eac93c452152b7cf4ebc4eec84b9c8d643717829c230f80218a244ac61f0548
+```
+
+完整原始文件树 SHA-256 清单已生成：
+
+```text
+data/fingerprints/nsd_subj01_sha256_inventory.json
+```
+
+所有下载和哈希任务均使用低 CPU/IO 优先级且不使用 GPU。
+
+### Schaefer parcel
+
+CBIG 固定提交的左右半球 annotation 已成功转换。每侧均得到 501 个 label（含 medial wall）和 500 个可用 parcel，顶点总数均为 163842。转换文件和每个 parcel 的 vertex-list SHA-256 已写入：
+
+```text
+data/derived/parcels/schaefer/schaefer_summary.json
+```
+
+---
+
+## 2026-09-01 可恢复训练基础设施
+
+按独立里程碑建立了正式训练所需的确定性基础：
+
+```text
+00e4aed feat(training): add deterministic data and sampling layer
+97b38c8 feat(checkpoint): add exact resumable state format
+03e31fe feat(model): freeze canonical adapter initialization
+356096c feat(training): add guarded resumable DDP trainer
+```
+
+训练器固定使用显式 DDP 批次规划，保存每个 rank 的训练随机生成器、进程 RNG、sampler 状态、optimizer、下一 update 和输入哈希。正式模式同时要求：
+
+```text
+status: frozen
+完整 protocol commit
+Git worktree clean
+与 config SHA-256 完全匹配的 approval file
+```
+
+当前配置模板保持 `status: draft`，没有创建 approval file，也没有启动正式训练。服务器项目环境的 CPU 测试结果为：
+
+```text
+16 passed, 2 import warnings
+```
+
+两项 warning 均来自在 `CUDA_VISIBLE_DEVICES=` 条件下导入 Diffusers 时自动关闭 CUDA autocast，不影响CPU测试结论。
+
+---
+
+## 2026-09-01 模型资产本地下载
+
+服务器无法稳定访问 Hugging Face，因此按同一固定 revision 在本机下载后再传入服务器。固定资产为：
+
+```text
+Stable Diffusion v1.5
+revision 451f4fe16113bff5a5d2269ed5ad43b0592e9a14
+
+Subject 1 brain encoder
+revision d8a978abb212eb2965b5d01673f96536b77e2ea0
+```
+
+本地下载共 98 个文件、`12772335879` bytes，文件树 SHA-256 清单已生成。首次下载实际完成后，脚本因目标清单父目录不存在而在最后一步退出；已下载文件完整保留。提交 `659d969` 修复父目录创建后复用已下载文件，第二次运行在约3秒内完成校验并成功写出下载记录，没有重新下载12.77GB内容。
+
+评价资产中的 torchvision AlexNet、InceptionV3 和 EfficientNet 权重已在服务器下载约465 MiB。OpenAI CLIP 下载中断后产生的文件未通过官方URL内置SHA-256校验，因此不得作为正式资产；后续使用通过哈希验证的完整文件覆盖。
+
+---
+
+## 2026-09-01 NSD转换异常审计与第二次运行
+
+第一次转换于 `2026-09-01T04:05:54+08:00` 启动，在处理右半球 session 11 时因非有限值门禁退出。没有生成正式 `betas_sub-01.h5`，只留下未完成的 `.tmp`。
+
+逐块扫描确认：
+
+```text
+file             rh.betas_session11.mgh
+NaN count        7500
+affected trials  750 / 750
+affected vertices 10
+Inf count        0
+```
+
+10个顶点为：
+
+```text
+6706, 31007, 84758, 84759, 84760,
+110759, 110760, 134628, 134629, 134632
+```
+
+相邻的右半球 session 10、12和左半球 session 11均无非有限值。10个异常顶点全部属于右半球 Schaefer parcel 320（不含 medial wall 的零基索引），mean-ncsnr 排名461，与top-100正式输入没有交集；正式top-100的 `max_voxels` 自然计算为626。
+
+处理决策为：保留官方源NaN并单独审计，不执行静默置零；完整扫描必须证明所有选中顶点有限，训练缓存只读取选中parcel。对应提交：
+
+```text
+659d969 fix(data): audit source nonfinite beta values
+```
+
+新增合成测试覆盖源异常记录、未选中异常允许和选中异常硬失败。服务器测试结果：
+
+```text
+19 passed, 2 import warnings
+```
+
+第二次低优先级转换于 `2026-09-01T04:46:10+08:00` 启动：
+
+```text
+tmux session  na_nsd_convert_v2
+GPU           disabled
+nice          15
+ionice        idle class
+```
+
+运行开始后再次确认两张GPU仍由既有任务占用，本项目没有终止、暂停或修改这些进程。
+
+第二次转换于 `2026-09-01T04:53:22+08:00` 正常结束，退出码为0。正式产物：
+
+```text
+data/derived/neural_data/metadata_sub-01.npy
+size 1631462 bytes
+
+data/derived/neural_data/betas_sub-01.h5
+size 39322447152 bytes
+
+data/derived/neural_data/source_nonfinite_values.json
+size 10602 bytes
+```
+
+异常审计文件准确记录1个源文件、7500个NaN、750个trial和10个vertex；HDF5属性同时标记 `source_nonfinite_values_preserved=true`。随后于 `2026-09-01T04:56:12+08:00` 启动完整低优先级数据扫描，用于验证全部正式选中顶点、生成100图映射抽查、parcel token映射和最终数据指纹。

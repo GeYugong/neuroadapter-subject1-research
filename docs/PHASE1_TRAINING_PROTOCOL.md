@@ -62,8 +62,10 @@ sessions                    40
 trials per session          750
 total trials                30000
 vertices per hemisphere     163842
-NaN / Inf                   0
+selected parcel NaN / Inf   0
 ```
+
+官方源文件中的非有限值不得静默替换。转换结果必须原样保留源值，并生成逐文件、trial 和 vertex 审计；只有全部正式 top-SNR parcel 顶点通过完整有限值扫描后，训练数据门禁才算通过。位于未选中 parcel 的源异常必须记录，但不构成修改原始数据的理由。
 
 ### 3.2 图像映射硬门禁
 
