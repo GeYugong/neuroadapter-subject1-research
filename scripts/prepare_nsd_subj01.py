@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 from pathlib import Path
 
@@ -13,6 +14,8 @@ import numpy as np
 import scipy.io as sio
 from tqdm import tqdm
 
+from neuroadapter_research.atomic import write_json_atomic
+
 
 TRIALS_PER_SESSION = 750
 SESSIONS = 40
@@ -20,7 +23,26 @@ TOTAL_TRIALS = TRIALS_PER_SESSION * SESSIONS
 VERTICES_PER_HEMISPHERE = 163842
 
 
-def load_mgh_session(path: Path) -> np.ndarray:
+def summarize_nonfinite(array: np.ndarray, path: Path) -> dict[str, object] | None:
+    finite = np.isfinite(array)
+    if finite.all():
+        return None
+    invalid = ~finite
+    trial_indices, vertex_indices = np.nonzero(invalid)
+    return {
+        "source_path": str(path),
+        "nonfinite_count": int(invalid.sum()),
+        "nan_count": int(np.isnan(array).sum()),
+        "positive_inf_count": int(np.isposinf(array).sum()),
+        "negative_inf_count": int(np.isneginf(array).sum()),
+        "affected_trial_count": int(np.unique(trial_indices).size),
+        "affected_vertex_count": int(np.unique(vertex_indices).size),
+        "affected_trial_indices_zero_based": np.unique(trial_indices).tolist(),
+        "affected_vertex_indices_zero_based": np.unique(vertex_indices).tolist(),
+    }
+
+
+def load_mgh_session(path: Path) -> tuple[np.ndarray, dict[str, object] | None]:
     if not path.is_file():
         raise FileNotFoundError(path)
     data = nib.load(str(path)).get_fdata(dtype=np.float32)
@@ -28,9 +50,7 @@ def load_mgh_session(path: Path) -> np.ndarray:
     expected = (TRIALS_PER_SESSION, VERTICES_PER_HEMISPHERE)
     if array.shape != expected:
         raise ValueError(f"{path}: expected {expected}, got {array.shape}")
-    if not np.isfinite(array).all():
-        raise ValueError(f"{path}: beta data contains NaN or Inf")
-    return array
+    return array, summarize_nonfinite(array, path)
 
 
 def build_metadata(nsd_root: Path, output_dir: Path, subject: int) -> dict[str, np.ndarray]:
@@ -102,10 +122,12 @@ def build_betas(nsd_root: Path, output_dir: Path, subject: int, overwrite: bool)
     temporary = target.with_suffix(".h5.tmp")
     temporary.unlink(missing_ok=True)
 
+    anomalies: list[dict[str, object]] = []
     with h5py.File(temporary, "w") as h5:
         h5.attrs["subject"] = subject
         h5.attrs["surface_space"] = "fsaverage"
         h5.attrs["beta_derivative"] = "betas_fithrf_GLMdenoise_RR"
+        h5.attrs["source_nonfinite_values_preserved"] = True
         for hemi in ("lh", "rh"):
             dataset = h5.create_dataset(
                 f"{hemi}_betas",
@@ -116,7 +138,12 @@ def build_betas(nsd_root: Path, output_dir: Path, subject: int, overwrite: bool)
             )
             cursor = 0
             for session in tqdm(range(1, SESSIONS + 1), desc=f"{hemi} sessions"):
-                array = load_mgh_session(beta_dir / f"{hemi}.betas_session{session:02}.mgh")
+                source = beta_dir / f"{hemi}.betas_session{session:02}.mgh"
+                array, anomaly = load_mgh_session(source)
+                if anomaly is not None:
+                    anomaly["hemisphere"] = hemi
+                    anomaly["session"] = session
+                    anomalies.append(anomaly)
                 dataset[cursor : cursor + TRIALS_PER_SESSION] = array
                 cursor += TRIALS_PER_SESSION
             if cursor != TOTAL_TRIALS:
@@ -124,6 +151,19 @@ def build_betas(nsd_root: Path, output_dir: Path, subject: int, overwrite: bool)
         h5.flush()
 
     os.replace(temporary, target)
+    report = {
+        "schema_version": 1,
+        "subject": subject,
+        "policy": (
+            "Preserve source values exactly. Formal training is permitted only after a "
+            "full scan proves that all vertices in the selected top-SNR parcels are finite."
+        ),
+        "anomalous_file_count": len(anomalies),
+        "nonfinite_value_count": sum(int(item["nonfinite_count"]) for item in anomalies),
+        "files": anomalies,
+    }
+    write_json_atomic(output_dir / "source_nonfinite_values.json", report)
+    print(json.dumps(report, indent=2))
 
 
 def main() -> None:
@@ -146,4 +186,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

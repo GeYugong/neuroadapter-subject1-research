@@ -5,6 +5,7 @@
 /credentials/
 __pycache__/
 *.py[cod]
+*.egg-info/
 .pytest_cache/
 
 # Large research assets

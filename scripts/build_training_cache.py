@@ -46,7 +46,10 @@ def pad_parcels(
     output = np.zeros((len(parcels), maximum), dtype=np.float32)
     for parcel_index, vertices in enumerate(parcels):
         vertex_indices = vertices.numpy()
-        output[parcel_index, : vertex_indices.size] = average[vertex_indices]
+        values = average[vertex_indices]
+        if not np.isfinite(values).all():
+            raise ValueError(f"selected parcel {parcel_index} contains NaN or Inf")
+        output[parcel_index, : vertex_indices.size] = values
     return output
 
 
@@ -103,8 +106,10 @@ def main() -> None:
             hemispheres = []
             for hemi in HEMISPHERES:
                 repetitions = np.asarray(source[f"{hemi}_betas"][rows], dtype=np.float32)
-                if repetitions.shape != (3, VERTICES) or not np.isfinite(repetitions).all():
-                    raise ValueError(f"invalid {hemi} repetitions for image {image_id}")
+                if repetitions.shape != (3, VERTICES):
+                    raise ValueError(
+                        f"invalid {hemi} repetitions for image {image_id}: {repetitions.shape}"
+                    )
                 average = repetitions.mean(axis=0, dtype=np.float32)
                 hemispheres.append(pad_parcels(average, parcels[hemi], maximum))
             value = np.concatenate(hemispheres, axis=0)

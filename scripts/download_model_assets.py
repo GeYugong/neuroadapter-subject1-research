@@ -71,10 +71,10 @@ def main() -> None:
         }
 
     output = root / "data" / "fingerprints" / "model_downloads.json"
+    output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(records, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(records, indent=2))
 
 
 if __name__ == "__main__":
     main()
-

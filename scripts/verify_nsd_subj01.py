@@ -31,11 +31,41 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def finite_scan(dataset: h5py.Dataset, chunk_size: int = 16) -> None:
+def nonfinite_scan(
+    dataset: h5py.Dataset, selected_vertex_mask: np.ndarray, chunk_size: int = 16
+) -> dict[str, object]:
+    nonfinite_count = 0
+    nan_count = 0
+    positive_inf_count = 0
+    negative_inf_count = 0
+    affected_rows: set[int] = set()
+    affected_vertices: set[int] = set()
     for start in range(0, dataset.shape[0], chunk_size):
         array = np.asarray(dataset[start : start + chunk_size])
-        if not np.isfinite(array).all():
-            raise ValueError(f"{dataset.name}: NaN/Inf in rows {start}:{start + len(array)}")
+        invalid = ~np.isfinite(array)
+        if invalid[:, selected_vertex_mask].any():
+            raise ValueError(
+                f"{dataset.name}: selected top-SNR vertices contain NaN/Inf in "
+                f"rows {start}:{start + len(array)}"
+            )
+        if invalid.any():
+            row_indices, vertex_indices = np.nonzero(invalid)
+            nonfinite_count += int(invalid.sum())
+            nan_count += int(np.isnan(array).sum())
+            positive_inf_count += int(np.isposinf(array).sum())
+            negative_inf_count += int(np.isneginf(array).sum())
+            affected_rows.update(int(start + value) for value in row_indices)
+            affected_vertices.update(int(value) for value in vertex_indices)
+    return {
+        "nonfinite_count": nonfinite_count,
+        "nan_count": nan_count,
+        "positive_inf_count": positive_inf_count,
+        "negative_inf_count": negative_inf_count,
+        "affected_row_count": len(affected_rows),
+        "affected_vertex_count": len(affected_vertices),
+        "affected_rows_zero_based": sorted(affected_rows),
+        "affected_vertices_zero_based": sorted(affected_vertices),
+    }
 
 
 def main() -> None:
@@ -64,6 +94,37 @@ def main() -> None:
     if train.size != 9000 or test.size != 1000 or np.intersect1d(train, test).size:
         raise ValueError("invalid 9000/1000 train/test split")
 
+    parcel_rows = []
+    selected: dict[str, list[int]] = {}
+    selected_vertex_masks: dict[str, np.ndarray] = {}
+    max_voxels = 0
+    for hemi in HEMISPHERES:
+        parcels = torch.load(args.parcel_dir / f"{hemi}_labels_s01.pt", weights_only=True)
+        if len(parcels) != 501:
+            raise ValueError(f"{hemi}: expected 501 labels including medial wall")
+        ncsnr = np.asarray(metadata[f"{hemi}_ncsnr"], dtype=np.float32)
+        scores = np.asarray([float(ncsnr[vertices.numpy()].mean()) for vertices in parcels[1:]])
+        top_indices = np.argsort(scores)[::-1][:100]
+        selected[hemi] = [int(value) for value in top_indices]
+        selected_vertex_mask = np.zeros(VERTICES, dtype=np.bool_)
+        for rank, parcel_index in enumerate(top_indices, start=1):
+            vertices = parcels[int(parcel_index) + 1].numpy().astype("<i8", copy=False)
+            selected_vertex_mask[vertices] = True
+            max_voxels = max(max_voxels, int(vertices.size))
+            parcel_rows.append(
+                {
+                    "model_token": len(parcel_rows),
+                    "hemisphere": hemi,
+                    "parcel_index_zero_based_excluding_medial_wall": int(parcel_index),
+                    "schaefer_label_id": int(parcel_index) + 1,
+                    "snr_rank": rank,
+                    "mean_ncsnr": float(scores[int(parcel_index)]),
+                    "vertex_count": int(vertices.size),
+                    "vertex_sha256": sha256_bytes(vertices.tobytes()),
+                }
+            )
+        selected_vertex_masks[hemi] = selected_vertex_mask
+
     beta_summary: dict[str, object] = {}
     with h5py.File(betas_path, "r") as h5:
         for hemi in HEMISPHERES:
@@ -72,18 +133,22 @@ def main() -> None:
                 raise ValueError(f"invalid {hemi} beta dataset: {dataset.shape}, {dataset.dtype}")
             sample_rows = np.unique(np.linspace(0, TRIALS - 1, 64, dtype=np.int64))
             sample = np.asarray(dataset[sample_rows])
-            if not np.isfinite(sample).all():
-                raise ValueError(f"{hemi}: sampled beta data contains NaN/Inf")
+            selected_sample = sample[:, selected_vertex_masks[hemi]]
+            if not np.isfinite(selected_sample).all():
+                raise ValueError(f"{hemi}: sampled selected beta data contains NaN/Inf")
+            nonfinite_summary = None
             if args.full_scan:
-                finite_scan(dataset)
+                nonfinite_summary = nonfinite_scan(dataset, selected_vertex_masks[hemi])
             beta_summary[hemi] = {
                 "shape": list(dataset.shape),
                 "dtype": str(dataset.dtype),
-                "sample_min": float(sample.min()),
-                "sample_max": float(sample.max()),
-                "sample_mean": float(sample.mean(dtype=np.float64)),
-                "sample_std": float(sample.std(dtype=np.float64)),
-                "full_finite_scan": args.full_scan,
+                "selected_vertex_count": int(selected_vertex_masks[hemi].sum()),
+                "selected_sample_min": float(selected_sample.min()),
+                "selected_sample_max": float(selected_sample.max()),
+                "selected_sample_mean": float(selected_sample.mean(dtype=np.float64)),
+                "selected_sample_std": float(selected_sample.std(dtype=np.float64)),
+                "full_nonfinite_scan": args.full_scan,
+                "full_nonfinite_summary": nonfinite_summary,
             }
 
     with h5py.File(stimuli_path, "r") as h5:
@@ -111,33 +176,6 @@ def main() -> None:
         writer = csv.DictWriter(handle, fieldnames=audit_rows[0].keys())
         writer.writeheader()
         writer.writerows(audit_rows)
-
-    parcel_rows = []
-    selected: dict[str, list[int]] = {}
-    max_voxels = 0
-    for hemi in HEMISPHERES:
-        parcels = torch.load(args.parcel_dir / f"{hemi}_labels_s01.pt", weights_only=True)
-        if len(parcels) != 501:
-            raise ValueError(f"{hemi}: expected 501 labels including medial wall")
-        ncsnr = np.asarray(metadata[f"{hemi}_ncsnr"], dtype=np.float32)
-        scores = np.asarray([float(ncsnr[vertices.numpy()].mean()) for vertices in parcels[1:]])
-        top_indices = np.argsort(scores)[::-1][:100]
-        selected[hemi] = [int(value) for value in top_indices]
-        for rank, parcel_index in enumerate(top_indices, start=1):
-            vertices = parcels[int(parcel_index) + 1].numpy().astype("<i8", copy=False)
-            max_voxels = max(max_voxels, int(vertices.size))
-            parcel_rows.append(
-                {
-                    "model_token": len(parcel_rows),
-                    "hemisphere": hemi,
-                    "parcel_index_zero_based_excluding_medial_wall": int(parcel_index),
-                    "schaefer_label_id": int(parcel_index) + 1,
-                    "snr_rank": rank,
-                    "mean_ncsnr": float(scores[int(parcel_index)]),
-                    "vertex_count": int(vertices.size),
-                    "vertex_sha256": sha256_bytes(vertices.tobytes()),
-                }
-            )
 
     with (args.output_dir / "parcel_token_map.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=parcel_rows[0].keys())
@@ -170,4 +208,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
