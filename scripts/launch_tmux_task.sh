@@ -30,4 +30,3 @@ fi
 echo "session=$session"
 echo "status_file=$status_file"
 echo "log_file=$log_file"
-
