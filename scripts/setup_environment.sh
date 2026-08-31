@@ -25,6 +25,7 @@ PYTHON="$PREFIX/bin/python"
 
 "$PYTHON" -m pip install -r "$PROJECT_ROOT/repo/environment/requirements-candidate.txt"
 "$PYTHON" -m pip install --no-deps -e "$PROJECT_ROOT/repo/vendor/CLIP"
+"$PYTHON" -m pip install --no-deps -e "$PROJECT_ROOT/repo"
 
 "$PYTHON" -m pip check
 "$PYTHON" -m pip freeze --all | LC_ALL=C sort \
@@ -59,4 +60,3 @@ payload = {
 )
 print(json.dumps(payload, indent=2))
 PY
-
