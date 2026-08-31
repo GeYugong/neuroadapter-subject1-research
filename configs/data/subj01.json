@@ -1,0 +1,18 @@
+{
+  "subject": 1,
+  "surface_space": "fsaverage",
+  "beta_derivative": "betas_fithrf_GLMdenoise_RR",
+  "sessions": 40,
+  "trials_per_session": 750,
+  "total_trials": 30000,
+  "vertices_per_hemisphere": 163842,
+  "unique_images": 10000,
+  "train_pool_images": 9000,
+  "test_images": 1000,
+  "selection_train_images": 8500,
+  "validation_images": 500,
+  "selection_split_seed": 20260901,
+  "schaefer_parcels_per_hemisphere": 500,
+  "selected_parcels_per_hemisphere": 100,
+  "expected_max_voxels_reference": 626
+}

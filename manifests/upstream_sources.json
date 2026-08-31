@@ -25,20 +25,20 @@
       "repository": "https://github.com/ThomasYeoLab/CBIG.git",
       "asset": "Schaefer2018_1000Parcels_7Networks_order.annot",
       "surface_space": "fsaverage",
-      "revision": null,
-      "status": "revision_must_be_frozen_before_formal_use"
+      "revision": "35b5664bec8822e2f77da5e090e96f91d0095be6",
+      "status": "frozen"
     },
     "stable_diffusion_v1_5": {
       "type": "huggingface_snapshot",
       "repository": "stable-diffusion-v1-5/stable-diffusion-v1-5",
-      "revision": null,
-      "status": "revision_must_be_frozen_before_formal_use"
+      "revision": "451f4fe16113bff5a5d2269ed5ad43b0592e9a14",
+      "status": "frozen"
     },
     "brain_encoder_weights": {
       "type": "huggingface_snapshot",
       "repository": "ehwang/brain_encoder_weights",
-      "revision": null,
-      "status": "revision_must_be_frozen_before_formal_use"
+      "revision": "d8a978abb212eb2965b5d01673f96536b77e2ea0",
+      "status": "frozen"
     }
   }
 }

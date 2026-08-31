@@ -1,18 +1,18 @@
 # Local environments and caches
 .venv/
-envs/
-cache/
-credentials/
+/envs/
+/cache/
+/credentials/
 __pycache__/
 *.py[cod]
 .pytest_cache/
 
 # Large research assets
-data/
-models/
-runs/
-archives/
-artifacts/
+/data/
+/models/
+/runs/
+/archives/
+/artifacts/
 *.pt
 *.pth
 *.ckpt
@@ -24,7 +24,7 @@ artifacts/
 *.npz
 
 # Local logs and temporary files
-logs/
+/logs/
 *.log
 *.tmp
 *.part
@@ -34,4 +34,3 @@ logs/
 .idea/
 .DS_Store
 Thumbs.db
-

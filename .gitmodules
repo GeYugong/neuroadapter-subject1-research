@@ -1,0 +1,6 @@
+[submodule "vendor/NeuroAdapter"]
+	path = vendor/NeuroAdapter
+	url = https://github.com/kriegeskorte-lab/NeuroAdapter.git
+[submodule "vendor/whole_brain_encoder"]
+	path = vendor/whole_brain_encoder
+	url = https://github.com/kriegeskorte-lab/whole_brain_encoder.git
