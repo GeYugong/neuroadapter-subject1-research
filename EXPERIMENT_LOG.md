@@ -77,3 +77,156 @@ SHA256:nnoKIE53Zt40ozI5mTs5HT5eVw04CVqAj3KKRlvXjgU
 
 硬件、磁盘和外网条件足以开展本项目。正式训练必须等待两张 RTX 5090 同时空闲；在此之前只进行不会抢占 GPU 的仓库、下载、转换、环境和验证准备。
 
+---
+
+## 2026-09-01 私有仓库、服务器目录与固定源码
+
+### GitHub 仓库
+
+建立私有仓库：
+
+```text
+https://github.com/GeYugong/neuroadapter-subject1-research
+```
+
+首个提交：
+
+```text
+24a94c0 docs(protocol): define subject 1 research and training phase
+```
+
+该提交建立：
+
+- 完整研究目的与当前阶段边界；
+- 第一阶段训练权重详细协议；
+- 已知实现差异；
+- 标准 test 访问规则；
+- 唯一连续实验日志制度；
+- 初始上游来源清单。
+
+第二个提交：
+
+```text
+3e3be5c chore(setup): pin sources and add data preparation scripts
+```
+
+该提交加入：
+
+- NeuroAdapter 固定 submodule；
+- whole_brain_encoder 固定 submodule；
+- Subject 1 数据配置；
+- NSD、Schaefer 下载脚本；
+- Schaefer 转换脚本；
+- NSD metadata/HDF5 转换脚本；
+- 文件树 SHA-256 清单工具；
+- 正式训练 GPU 空闲门禁。
+
+### 服务器项目结构
+
+项目只使用：
+
+```text
+/data/matengyu/geyugong/neuroadapter-subject1-research
+```
+
+建立目录：
+
+```text
+repo/
+data/raw/
+data/derived/
+data/fingerprints/
+models/stable-diffusion-v1-5/
+models/brain-encoder/
+models/evaluation/
+cache/huggingface/
+cache/torch/
+cache/wheels/
+envs/
+runs/calibration/
+runs/selection/
+runs/final/
+archives/resume/
+artifacts/subject01-final-v1/
+logs/
+credentials/
+```
+
+GitHub 访问采用只对该私有仓库有效的 read-write deploy key。服务器未保存个人 GitHub token。服务器 checkout 与 `origin/main` 一致。
+
+### Submodule 部署异常
+
+首次执行递归 submodule 初始化时失败：固定 NeuroAdapter 提交内部包含 `whole_brain_encoder` gitlink，但该上游提交没有为该路径提供可用的 `.gitmodules` URL。
+
+处理方式：
+
+```text
+顶层 NeuroAdapter submodule：非递归初始化
+顶层 whole_brain_encoder submodule：独立固定到 767f25a
+```
+
+两份源码最终 HEAD 均通过精确 SHA 校验。失败过程中没有修改上游源码；whole_brain_encoder 首次 checkout 未展开的工作树通过其已固定 index 补出，最终 submodule 工作树干净。
+
+---
+
+## 2026-09-01 原始数据下载启动
+
+### NSD Subject 1
+
+启动时间：
+
+```text
+2026-09-01T02:54:58+08:00
+```
+
+运行位置：
+
+```text
+tmux session: na_nsd_download
+script: repo/scripts/download_nsd_subj01.sh
+log: logs/download_nsd_subj01.log
+target: data/raw/nsd
+```
+
+调度优先级：
+
+```text
+nice -n 15
+ionice -c 3
+GPU usage: none
+```
+
+下载来源为 NSD 官方公开 S3。脚本使用文件级原子落盘、单实例文件锁、远端 object inventory 和本地 size inventory。启动后确认已有 GPU 训练进程保持运行，未修改其 PID、显存或调度状态。
+
+当前状态：下载仍在进行，完成状态、总大小和 SHA-256 在结束后另行追加。
+
+### Schaefer2018 annotation
+
+固定来源：
+
+```text
+repository: ThomasYeoLab/CBIG
+commit: 35b5664bec8822e2f77da5e090e96f91d0095be6
+surface: FreeSurfer5.3/fsaverage
+atlas: Schaefer2018 1000 Parcels, 7 Networks
+```
+
+服务器直接访问 `raw.githubusercontent.com` 长时间无数据，因此终止了本项目自己的 curl 进程，改由本机已认证 GitHub API 获取同一 commit 的二进制内容，再通过 SSH 传入服务器。未终止任何其他进程。
+
+最终文件：
+
+```text
+lh annotation
+size: 1336179 bytes
+sha256: ae529bddcb84b3ea8c5d7fdf577326a1e4922c9e0439ddf20e4052cf0497681b
+
+rh annotation
+size: 1336303 bytes
+sha256: f0c93933c447616aff151d312074ee82189cf5a6de2f889cbbc186c2f3f7b097
+```
+
+存放位置：
+
+```text
+data/raw/schaefer/fsaverage/label/
+```
