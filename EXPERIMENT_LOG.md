@@ -721,3 +721,26 @@ tmux    diffinverse_sd_rgb, diffinverse_sd_thermal
 ```
 
 本项目未终止、暂停、重启或修改这些任务。GPU、NCCL、BF16、显存、forward对齐、精确恢复和确定性解码门禁尚未执行。正式配置保持`status: draft`，`protocol_commit`仍未冻结，没有创建approval file，也没有启动正式训练。
+
+---
+
+## 2026-09-01 非GPU准备阶段停止审计
+
+停止前完成逐项检查：
+
+```text
+GitHub repository     GeYugong/neuroadapter-subject1-research
+visibility            private
+default branch        main
+protocol/log commit   ec34cfbf1709767210701597946030bb4af0755c
+unique experiment log EXPERIMENT_LOG.md
+future-stage plans    none
+project secret hits   none
+formal approval       absent
+MODEL_LOCK.json       absent
+formal train process  absent
+```
+
+离线评价模型加载曾在`vendor/swav`生成一个未跟踪的`__pycache__/hubconf.cpython-311.pyc`。确认该文件为本次导入产生的Python字节码后，仅删除该文件和空缓存目录；所有vendor源码和固定submodule提交保持不变。清理后服务器Git工作树重新为clean。
+
+停止审计时，本地`main`、GitHub`origin/main`与服务器`main`均指向同一提交，关键数据、模型和canonical初始化产物全部存在。两张GPU仍由既有任务占用，因此按协议不执行任何GPU门禁。下一次工作应从“等待两张GPU同时空闲并执行训练前GPU门禁”开始，而不是直接启动正式selection训练。
