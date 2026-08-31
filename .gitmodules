@@ -4,3 +4,12 @@
 [submodule "vendor/whole_brain_encoder"]
 	path = vendor/whole_brain_encoder
 	url = https://github.com/kriegeskorte-lab/whole_brain_encoder.git
+[submodule "vendor/CLIP"]
+	path = vendor/CLIP
+	url = https://github.com/openai/CLIP.git
+[submodule "vendor/swav"]
+	path = vendor/swav
+	url = https://github.com/facebookresearch/swav.git
+[submodule "vendor/dinov2"]
+	path = vendor/dinov2
+	url = https://github.com/facebookresearch/dinov2.git

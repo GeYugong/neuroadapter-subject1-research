@@ -39,6 +39,21 @@
       "repository": "ehwang/brain_encoder_weights",
       "revision": "d8a978abb212eb2965b5d01673f96536b77e2ea0",
       "status": "frozen"
+    },
+    "openai_clip": {
+      "type": "git",
+      "url": "https://github.com/openai/CLIP.git",
+      "commit": "d05afc436d78f1c48dc0dbf8e5980a9d471f35f6"
+    },
+    "swav": {
+      "type": "git",
+      "url": "https://github.com/facebookresearch/swav.git",
+      "commit": "06b1b7cbaf6ba2a792300d79c7299db98b93b7f9"
+    },
+    "dinov2": {
+      "type": "git",
+      "url": "https://github.com/facebookresearch/dinov2.git",
+      "commit": "7764ea0f912e53c92e82eb78a2a1631e92725fc8"
     }
   }
 }
