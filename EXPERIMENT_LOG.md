@@ -230,3 +230,45 @@ sha256: f0c93933c447616aff151d312074ee82189cf5a6de2f889cbbc186c2f3f7b097
 ```text
 data/raw/schaefer/fsaverage/label/
 ```
+
+---
+
+## 2026-09-01 候选环境第一次安装与依赖修正
+
+第一次候选环境安装使用独立 Conda prefix：
+
+```text
+/data/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter
+```
+
+运行方式：
+
+```text
+tmux session: na_environment
+script: repo/scripts/setup_environment.sh
+log: logs/setup_environment.log
+nice: 15
+ionice: idle class
+GPU usage: none
+```
+
+Python 3.11、PyTorch 2.11.0+cu128 和 torchvision 0.26.0 已成功安装，随后候选依赖解析失败。失败原因是：
+
+```text
+accelerate 1.14.0       -> huggingface-hub >=0.21.0
+diffusers 0.40.0        -> huggingface-hub >=1.23.0,<2.0
+transformers 4.57.6     -> huggingface-hub >=0.34.0,<1.0
+```
+
+`diffusers 0.40.0` 与 `transformers 4.57.6` 对 Hugging Face Hub 的版本区间无交集。本次失败发生在依赖解析阶段，没有启动 GPU 进程，也没有进入训练。
+
+上游 NeuroAdapter 固定提交的日期为 2026-03-01。为靠近上游代码时期并保留 Python 3.11、PyTorch 2.11 对 RTX 5090 的支持，候选版本修正为：
+
+```text
+diffusers==0.36.0
+huggingface-hub==0.36.0
+transformers==4.57.6
+accelerate==1.14.0
+```
+
+`diffusers 0.36.0` 与其余三个版本的声明依赖区间存在交集。模型资产将按固定 commit 下载为本地快照，后续训练只接受经过哈希验证的本地模型路径，不从浮动 Hub 分支直接加载远程代码。
