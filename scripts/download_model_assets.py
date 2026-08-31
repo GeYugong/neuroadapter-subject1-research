@@ -53,7 +53,7 @@ def main() -> None:
         records["stable_diffusion_v1_5"] = {
             "repository": SD_REPOSITORY,
             "revision": SD_REVISION,
-            "path": str(path),
+            "path": Path(path).resolve().relative_to(root).as_posix(),
         }
 
     if args.asset in ("all", "brain_encoder"):
@@ -67,7 +67,7 @@ def main() -> None:
         records["brain_encoder"] = {
             "repository": BRAIN_REPOSITORY,
             "revision": BRAIN_REVISION,
-            "path": str(path),
+            "path": Path(path).resolve().relative_to(root).as_posix(),
         }
 
     output = root / "data" / "fingerprints" / "model_downloads.json"
