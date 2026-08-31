@@ -1,0 +1,37 @@
+# Local environments and caches
+.venv/
+envs/
+cache/
+credentials/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Large research assets
+data/
+models/
+runs/
+archives/
+artifacts/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.h5
+*.hdf5
+*.mgh
+*.npy
+*.npz
+
+# Local logs and temporary files
+logs/
+*.log
+*.tmp
+*.part
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
