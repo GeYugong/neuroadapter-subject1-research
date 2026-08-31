@@ -102,7 +102,7 @@ split_seed        20260901
 ### 3.5 Parcel 选择
 
 - 每侧应有 500 个非 medial-wall Schaefer parcels；
-- 仅使用 selection training 数据的 mean ncsnr 排序；
+- 使用官方 Subject 1 `lh/rh.ncsnr.mgh`，按 parcel 内 vertex 的 mean ncsnr 排序；
 - 每侧选择 top 100，共形成 200 个 model tokens；
 - selection、validation、final 和 test 使用同一 parcel 顺序；
 - `max_voxels` 由实际 vertex membership 计算，旧结果 626 只作为预期指纹，不得人为截断或补齐来满足该数值。
@@ -118,6 +118,8 @@ mean ncsnr
 vertex count
 vertex-list SHA-256
 ```
+
+`ncsnr.mgh` 是固定的扫描质量/可靠性元数据，不从新划出的 8500/500 split 重新估计。该选择复现公开数据管线，只用于固定输入维度，不参与 checkpoint 比较。
 
 ## 4. 环境与硬件门禁
 
@@ -370,4 +372,3 @@ failure_cases.csv
 - 解码或 evaluator 不可重复；
 - 正式配置仍存在未冻结字段；
 - 当前 Git 工作树不干净或 protocol commit 未记录。
-
