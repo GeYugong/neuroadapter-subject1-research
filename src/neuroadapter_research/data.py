@@ -75,9 +75,9 @@ class Subject1TrainingDataset(Dataset[dict[str, torch.Tensor]]):
 
     def _ensure_open(self) -> None:
         if self._cache is None:
-            self._cache = h5py.File(self.cache_path, "r", swmr=True)
+            self._cache = h5py.File(self.cache_path, "r")
         if self._stimuli is None:
-            self._stimuli = h5py.File(self.stimuli_path, "r", swmr=True)
+            self._stimuli = h5py.File(self.stimuli_path, "r")
 
     def __getitem__(self, index: int) -> dict[str, torch.Tensor]:
         self._ensure_open()

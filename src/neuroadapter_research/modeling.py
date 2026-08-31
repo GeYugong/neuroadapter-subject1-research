@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import itertools
+import hashlib
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -46,6 +47,36 @@ class AdapterBundle:
             self.neuro_adapter.image_proj_model.parameters(),
             self.neuro_adapter.adapter_modules.parameters(),
             self.guidance_generator.parameters(),
+        )
+
+
+class NeuroAdapterTrainingModule(torch.nn.Module):
+    """One DDP boundary containing every trainable adapter component."""
+
+    def __init__(self, bundle: AdapterBundle) -> None:
+        super().__init__()
+        self.neuro_adapter = bundle.neuro_adapter
+        self.guidance_generator = bundle.guidance_generator
+
+    def forward(
+        self,
+        noisy_latents: torch.Tensor,
+        timesteps: torch.Tensor,
+        text_embeddings: torch.Tensor,
+        brain: torch.Tensor,
+        token_keep_mask: torch.Tensor,
+    ) -> torch.Tensor:
+        condition_tokens, _ = self.guidance_generator(brain)
+        condition_tokens = condition_tokens * token_keep_mask
+        prediction, _ = self.neuro_adapter(
+            noisy_latents, timesteps, text_embeddings, condition_tokens
+        )
+        return prediction
+
+    def as_bundle(self) -> AdapterBundle:
+        return AdapterBundle(
+            neuro_adapter=self.neuro_adapter,
+            guidance_generator=self.guidance_generator,
         )
 
 
@@ -154,6 +185,13 @@ def unwrap_module(module: torch.nn.Module) -> torch.nn.Module:
     return module.module if hasattr(module, "module") else module
 
 
+def unwrap_training_module(module: torch.nn.Module) -> NeuroAdapterTrainingModule:
+    unwrapped = unwrap_module(module)
+    if not isinstance(unwrapped, NeuroAdapterTrainingModule):
+        raise TypeError(f"unexpected training module type: {type(unwrapped)!r}")
+    return unwrapped
+
+
 def trainable_state_dict(bundle: AdapterBundle) -> dict[str, dict[str, torch.Tensor]]:
     adapter = unwrap_module(bundle.neuro_adapter)
     guidance = unwrap_module(bundle.guidance_generator)
@@ -220,3 +258,16 @@ def audit_trainable_parameters(bundle: AdapterBundle) -> dict[str, int]:
             if not parameter.requires_grad
         ),
     }
+
+
+def tensor_state_sha256(payload: dict[str, dict[str, torch.Tensor]]) -> str:
+    digest = hashlib.sha256()
+    for group_name in sorted(payload):
+        for tensor_name in sorted(payload[group_name]):
+            tensor = payload[group_name][tensor_name].detach().cpu().contiguous()
+            header = (
+                f"{group_name}\0{tensor_name}\0{tensor.dtype}\0{tuple(tensor.shape)}\0"
+            ).encode("utf-8")
+            digest.update(header)
+            digest.update(tensor.view(torch.uint8).numpy().tobytes())
+    return digest.hexdigest()

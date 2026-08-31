@@ -1,0 +1,43 @@
+schema_version: 1
+status: draft
+run_name: subject01-selection-v1
+run_kind: selection
+subject: 1
+protocol_commit: TO_BE_FROZEN
+
+paths:
+  stable_diffusion: /data/matengyu/geyugong/neuroadapter-subject1-research/models/stable-diffusion-v1-5
+  model_manifest: /data/matengyu/geyugong/neuroadapter-subject1-research/data/fingerprints/model_assets_sha256.json
+  training_cache: /data/matengyu/geyugong/neuroadapter-subject1-research/data/derived/training/subject01_train_pool_top100.h5
+  training_cache_manifest: /data/matengyu/geyugong/neuroadapter-subject1-research/data/fingerprints/training_cache_manifest.json
+  stimuli: /data/matengyu/geyugong/neuroadapter-subject1-research/data/raw/nsd/stimuli/nsd_stimuli.hdf5
+  split_ids: /data/matengyu/geyugong/neuroadapter-subject1-research/data/derived/splits/selection_train_ids.txt
+  canonical_initialization: /data/matengyu/geyugong/neuroadapter-subject1-research/models/canonical/subject01_adapter_init.pt
+  canonical_manifest: /data/matengyu/geyugong/neuroadapter-subject1-research/models/canonical/subject01_adapter_init.json
+  data_fingerprint: /data/matengyu/geyugong/neuroadapter-subject1-research/data/fingerprints/data_fingerprint.json
+  split_manifest: /data/matengyu/geyugong/neuroadapter-subject1-research/data/derived/splits/split_manifest.json
+  source_manifest: /data/matengyu/geyugong/neuroadapter-subject1-research/repo/manifests/upstream_sources.json
+  environment_lock: /data/matengyu/geyugong/neuroadapter-subject1-research/data/fingerprints/requirements-freeze-candidate.txt
+  output_dir: /data/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-v1
+
+training:
+  max_updates: 265625
+  world_size: 2
+  global_batch_size: 16
+  micro_batch_size: 8
+  gradient_accumulation_steps: 1
+  dataloader_workers: 4
+  learning_rate: 0.0001
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_epsilon: 0.00000001
+  weight_decay: 0.000001
+  max_grad_norm: 1.0
+  min_snr_gamma: 5.0
+  precision: bf16
+  allow_tf32: true
+  base_seed: 20260901
+  sampler_seed: 20260901
+  log_every_updates: 10
+  checkpoint_every_updates: 5000
+  checkpoint_reference_epochs: 25
