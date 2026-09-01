@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_ROOT=${PROJECT_ROOT:-/data/matengyu/geyugong/neuroadapter-subject1-research}
+: "${PROJECT_ROOT:?set PROJECT_ROOT to the experiment root}"
 REVISION=35b5664bec8822e2f77da5e090e96f91d0095be6
 BASE_URL="https://raw.githubusercontent.com/ThomasYeoLab/CBIG/$REVISION/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/FreeSurfer5.3/fsaverage/label"
 TARGET_DIR="$PROJECT_ROOT/data/raw/schaefer/fsaverage/label"
@@ -20,4 +20,3 @@ done
 
 printf '%s\n' "$REVISION" > "$TARGET_DIR/CBIG_REVISION"
 sha256sum "$TARGET_DIR"/*.annot > "$TARGET_DIR/SHA256SUMS"
-

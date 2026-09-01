@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "subject": 1,
+  "unit": "unique_nsd_image_id_zero_based",
+  "algorithm": "numpy.random.Generator(PCG64)",
+  "seed": 20260901,
+  "counts": {
+    "selection_train": 8500,
+    "validation": 500,
+    "test": 1000
+  },
+  "sha256": {
+    "selection_train": "4681431e4f9fc3054f1d758bf0a95f485082f29eea1674b78a72f93c769d74c4",
+    "validation": "1eb801c0460754e803c9d86f6c60aec0512da0a49205971d1efb0fef1cc256ad",
+    "test": "d1afe140491cd887f7b8c612e144d104e56e412a33956f99bfefa3e27aac6605"
+  },
+  "train_pool_sha256": "11e107c402acfffea891215e39375312f3e98cce5a2d332811dc2181a2953f4e"
+}

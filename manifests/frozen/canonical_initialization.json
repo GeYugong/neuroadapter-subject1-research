@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "subject": 1,
+  "architecture": "linear_projection",
+  "seed": 20260901,
+  "num_parcels": 200,
+  "max_voxels": 626,
+  "condition_dim": 768,
+  "initialization_sha256": "dc363931727f5f5e445d267f9b31e1a366b134b2e62a34dc72ae12693d875fca",
+  "initialization_size": 464285745,
+  "data_fingerprint_sha256": "16a6e610670f0d91e0cc063ab375b93276a62838b73e25fcae24e5f4932042cc",
+  "model_manifest_sha256": "e59cb74a2269b9a49c8eaf76f33c7945ec4ed963c1a203acee2864085e05ce62",
+  "parameter_audit": {
+    "trainable_tensors": 38,
+    "trainable_parameters": 116068608,
+    "frozen_parameters": 859520964
+  },
+  "reload_bitwise_equal": true
+}

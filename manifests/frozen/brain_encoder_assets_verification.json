@@ -1,0 +1,525 @@
+{
+  "schema_version": 1,
+  "status": "verified",
+  "subject": 1,
+  "backbone": "dinov2_q_transformer",
+  "parcel_strategy": "schaefer",
+  "layers": [
+    1,
+    3,
+    5,
+    7
+  ],
+  "runs": [
+    1,
+    2
+  ],
+  "hemispheres": [
+    "lh",
+    "rh"
+  ],
+  "ensemble_member_count": 16,
+  "checkpoint_args_verified": true,
+  "ensemble_confidence_weighting_verified": true,
+  "ensemble_confidence": {
+    "lh": {
+      "member_count": 8,
+      "vertex_count": 163842,
+      "softmax_temperature_multiplier": 20,
+      "weights_minimum": 0.011775029823184013,
+      "weights_maximum": 0.5053264498710632,
+      "weights_sum_max_abs_error": 2.384185791015625e-07
+    },
+    "rh": {
+      "member_count": 8,
+      "vertex_count": 163842,
+      "softmax_temperature_multiplier": 20,
+      "weights_minimum": 0.007458805106580257,
+      "weights_maximum": 0.45723575353622437,
+      "weights_sum_max_abs_error": 2.384185791015625e-07
+    }
+  },
+  "full_forward_verified": false,
+  "entries": [
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_1/run_1/lh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "4f3b41d591a68038797897a77d1e571a16d749f5c361c06f57ae42a5eca5347e",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 1,
+        "run": 1,
+        "hemi": "lh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_1/run_1/lh/lh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "7c649fe2785bf5f03c4e8f2efd1a4a2c732587ec911cc9b28b242913dce706a3",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.0925704836845398,
+      "correlation_maximum": 0.7949475049972534,
+      "correlation_mean": 0.10593151895934041,
+      "encoder_layer": 1,
+      "run": 1,
+      "hemisphere": "lh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_1/run_1/rh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "1d7db17076bb1ae6cedc45450dd4c9ea6a7dad81ea3126c6dd6a3830202f4064",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 1,
+        "run": 1,
+        "hemi": "rh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_1/run_1/rh/rh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "a07fc09feb8e61256874e4804657257308a5fae0adc14f5311be5c5db986b73e",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.10354850441217422,
+      "correlation_maximum": 0.756784200668335,
+      "correlation_mean": 0.10993542697422744,
+      "encoder_layer": 1,
+      "run": 1,
+      "hemisphere": "rh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_1/run_2/lh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "01d70d681de44019ddc5df692630d44be79a4c94c33ffcc69630da5d43d91a0e",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 1,
+        "run": 2,
+        "hemi": "lh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_1/run_2/lh/lh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "e79dcb8c5f0374f5ca7b66ff5e5d151d500b7d66101af2c55dd0154f4fefa99a",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.10582796484231949,
+      "correlation_maximum": 0.7895193696022034,
+      "correlation_mean": 0.10509382099315252,
+      "encoder_layer": 1,
+      "run": 2,
+      "hemisphere": "lh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_1/run_2/rh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "4afdb5e7dc89c9fc62f254331625f7b1c17d9af72a8e1119668b9e5065de44a8",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 1,
+        "run": 2,
+        "hemi": "rh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_1/run_2/rh/rh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "a6db89c0eecf1ad382514dba14c38c68d8768efc4ef115cacfbf9bb19261868e",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.11811785399913788,
+      "correlation_maximum": 0.7523288130760193,
+      "correlation_mean": 0.10908224021932543,
+      "encoder_layer": 1,
+      "run": 2,
+      "hemisphere": "rh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_3/run_1/lh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "4237c9bf2a8186a235860e923e30a092c3b041ab13086aa9461313d79d1c0a52",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 3,
+        "run": 1,
+        "hemi": "lh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_3/run_1/lh/lh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "52c1af0bd0983b29f07a65a88c405d2e767c9b88a96436816d6851716c6c38fa",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.12533898651599884,
+      "correlation_maximum": 0.7940881848335266,
+      "correlation_mean": 0.10564140223093972,
+      "encoder_layer": 3,
+      "run": 1,
+      "hemisphere": "lh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_3/run_1/rh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "aaa0bceef24f9dc1bd239021cbe4d30bbf40f6ac3290ba6eca7e1862502a745d",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 3,
+        "run": 1,
+        "hemi": "rh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_3/run_1/rh/rh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "26824e86f7da1dffc27d6073cb12e26f5ac45dea29f82359d1a45b2bf8e8d0dc",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.10791508108377457,
+      "correlation_maximum": 0.744975745677948,
+      "correlation_mean": 0.10961644483038332,
+      "encoder_layer": 3,
+      "run": 1,
+      "hemisphere": "rh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_3/run_2/lh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "449b0c7afbbe54f60b8a3d79ab73b7cdd28c710731f0c3267b88ef2dc39d09d2",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 3,
+        "run": 2,
+        "hemi": "lh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_3/run_2/lh/lh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "c58b00a13313b3c834ab58d5636704226202c7316258df9838a202cd5ad653ac",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.09813454747200012,
+      "correlation_maximum": 0.7939627766609192,
+      "correlation_mean": 0.10438107511207338,
+      "encoder_layer": 3,
+      "run": 2,
+      "hemisphere": "lh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_3/run_2/rh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "a2a227d53c12476cb1b11d1405c8922f1670d35020098a18c4f1a22d05f69b3a",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 3,
+        "run": 2,
+        "hemi": "rh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_3/run_2/rh/rh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "535cda5d699b191b744bacbf4bf05336368b203db3de5f148cbd536b7d577917",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.1009143516421318,
+      "correlation_maximum": 0.7501257658004761,
+      "correlation_mean": 0.11054530610161971,
+      "encoder_layer": 3,
+      "run": 2,
+      "hemisphere": "rh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_5/run_1/lh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "0d7a7e7b8ba4f1c6864c0d2baa7dcda16645e7217c8bcead3853915049409e70",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 5,
+        "run": 1,
+        "hemi": "lh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_5/run_1/lh/lh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "4888821111c75f09c5332a4f49969841bb5e9cfefc662a7101118ea43d754abf",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.09181132167577744,
+      "correlation_maximum": 0.7851852774620056,
+      "correlation_mean": 0.10135716272069224,
+      "encoder_layer": 5,
+      "run": 1,
+      "hemisphere": "lh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_5/run_1/rh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "48dc4cce4033ac15a081e5e8a2b79340bccbdf6a2fa35ed2dca0331e3ee4bae7",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 5,
+        "run": 1,
+        "hemi": "rh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_5/run_1/rh/rh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "d8dbf082a631eb82ef35e163c5b71094787b2f18a56633159461caa83e0f0392",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.09622030705213547,
+      "correlation_maximum": 0.742762565612793,
+      "correlation_mean": 0.10779741262031413,
+      "encoder_layer": 5,
+      "run": 1,
+      "hemisphere": "rh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_5/run_2/lh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "4e532fc4e476e40c2523093f3fa6c1d78c03e7cdc4087f4aff4a3ec41b6260b5",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 5,
+        "run": 2,
+        "hemi": "lh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_5/run_2/lh/lh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "53255fb1e943dba8ea66150cd7209d34414a11f6b674a634f326dac9cd562b07",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.10350701957941055,
+      "correlation_maximum": 0.7812727689743042,
+      "correlation_mean": 0.10117002186452015,
+      "encoder_layer": 5,
+      "run": 2,
+      "hemisphere": "lh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_5/run_2/rh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "ec93ea674190c1d1c22457e52f2378b25fa9b921b809f4166fed534eb2e76128",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 5,
+        "run": 2,
+        "hemi": "rh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_5/run_2/rh/rh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "c90e2394bdeb76b72fa3d2849a7af71bf083e68fbbcd7f892c4c93345d6bbe00",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.1034751906991005,
+      "correlation_maximum": 0.74982088804245,
+      "correlation_mean": 0.10726592371721606,
+      "encoder_layer": 5,
+      "run": 2,
+      "hemisphere": "rh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_7/run_1/lh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "7871f4712843363632d89b9e6543d77490a051f4d7840d93f3da43702d84849b",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 7,
+        "run": 1,
+        "hemi": "lh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_7/run_1/lh/lh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "83f6ec279d5d51e2e6840c7523601000ebb57d95e43aff97e368a9c9987b3ac8",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.0954817533493042,
+      "correlation_maximum": 0.7518402338027954,
+      "correlation_mean": 0.09403128491879288,
+      "encoder_layer": 7,
+      "run": 1,
+      "hemisphere": "lh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_7/run_1/rh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "e68a263dab39bcba13d994d595dac58634c643f03fde5aca08ee0c9a6d519552",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 7,
+        "run": 1,
+        "hemi": "rh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_7/run_1/rh/rh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "c6aeaf99bd89e8bbe37ab4f6303e7d0142f6759761dbc71572485670a3839695",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.10196997970342636,
+      "correlation_maximum": 0.7415799498558044,
+      "correlation_mean": 0.09804648534955697,
+      "encoder_layer": 7,
+      "run": 1,
+      "hemisphere": "rh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_7/run_2/lh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "3c6d59dae283b22ff3aae22263fd0a3449e1542da8464ff23cd9c8f5aeb26961",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 7,
+        "run": 2,
+        "hemi": "lh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_7/run_2/lh/lh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "39bea618fceea427e02290db73a4beffaff4400f778298818d1339e8f1ccaaee",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.1005527451634407,
+      "correlation_maximum": 0.750522792339325,
+      "correlation_mean": 0.09283510071436857,
+      "encoder_layer": 7,
+      "run": 2,
+      "hemisphere": "lh"
+    },
+    {
+      "checkpoint_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_7/run_2/rh/checkpoint_nonavg.pth",
+      "checkpoint_size": 530946861,
+      "checkpoint_sha256": "0418d86cd8fd4e2758af38d01526c0c5dc6e2121855150b5ba322a959a638ebe",
+      "model_tensor_count": 25,
+      "model_value_count": 132734018,
+      "checkpoint_args": {
+        "subj": "01",
+        "enc_output_layer": 7,
+        "run": 2,
+        "hemi": "rh",
+        "backbone_arch": "dinov2_q",
+        "encoder_arch": "transformer",
+        "readout_res": "parcels"
+      },
+      "correlation_path": "../models/brain-encoder/dinov2_q_transformer/schaefer/subj_01/enc_7/run_2/rh/rh_val_corr_nonavg.npy",
+      "correlation_size": 655496,
+      "correlation_sha256": "caef33512ff99f2d8edca9bfa50d145e575b54ea867b711c93983f92237966ea",
+      "correlation_shape": [
+        163842
+      ],
+      "correlation_dtype": "float32",
+      "correlation_nonfinite_count": 0,
+      "correlation_minimum": -0.10148932784795761,
+      "correlation_maximum": 0.7389557361602783,
+      "correlation_mean": 0.09801112022930758,
+      "encoder_layer": 7,
+      "run": 2,
+      "hemisphere": "rh"
+    }
+  ]
+}

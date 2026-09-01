@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "title": "Towards Interpretable Visual Decoding with Attention to Brain Representations",
+  "arxiv_id": "2509.23566",
+  "arxiv_version": "v2",
+  "arxiv_abstract_url": "https://arxiv.org/abs/2509.23566v2",
+  "arxiv_pdf_url": "https://arxiv.org/pdf/2509.23566v2",
+  "openreview_url": "https://openreview.net/forum?id=YWlYITAhMC",
+  "project_url": "https://kriegeskorte-lab.github.io/NeuroAdapter-Web/",
+  "reporting_venue": "ICLR 2026"
+}

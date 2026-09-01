@@ -41,6 +41,7 @@
 其他文档只承担固定职责：
 
 - `docs/PHASE1_TRAINING_PROTOCOL.md`：当前训练阶段的冻结协议；
+- `docs/FORMAL_EXECUTION.md`：正式门禁、selection、final 与模型锁的执行顺序；
 - `docs/DEVIATIONS.md`：相对论文或上游实现的已知差异；
 - `docs/TEST_ACCESS_POLICY.md`：标准测试集访问规则；
 - `manifests/`：来源、文件、环境、数据和模型哈希。
@@ -49,3 +50,23 @@
 
 Git 只跟踪代码、配置、小型清单、统计摘要和文档。原始数据、转换数据、模型缓存、训练 checkpoint、完整重建图片和私密凭据均不得提交到 Git。
 
+## 可公开复核的冻结证据
+
+`manifests/frozen/` 保存服务器丢失后仍需保留的完整小型证据，包括：9000/1000 与 8500/500 实际 ID、parcel token map、原始 NSD 文件 SHA、数据指纹、训练缓存清单、模型资产树、brain encoder 资产审计、canonical initialization manifest、非有限值审计和 NSD 图像映射审计。所有服务器绝对路径均已转换为项目相对路径；beta、HDF5、模型权重和 checkpoint 不进入 Git。
+
+`manifests/frozen/INDEX.json` 固定每个公开清单的来源与 SHA-256。服务器上的运行清单是正式训练输入，Git 中的副本用于长期审计；每次正式输入变化后必须重新导出并提交。
+
+## 可迁移运行方式
+
+仓库不保存个人服务器路径。shell 脚本要求调用者显式设置实验根目录：
+
+```bash
+export PROJECT_ROOT=/absolute/path/to/neuroadapter-subject1-research
+bash "$PROJECT_ROOT/repo/scripts/download_nsd_subj01.sh"
+```
+
+Python 下载脚本同样要求 `--project-root "$PROJECT_ROOT"`。训练 YAML 只在顶层设置一次绝对 `project_root`，其余路径全部相对于该目录。
+
+## 当前正式训练状态
+
+正式配置仍为 `draft`，两张 RTX 5090 门禁尚未执行，正式训练未启动。新增 atlas 审计还发现：LH 顶点集合等价但 token 顺序不同，RH 与 CBIG 派生 atlas 不匹配，且公开上游 RH 资产与其 LH 资产集合相同。在作者实际 token 顺序和 RH 资产来源明确、相关数据指纹重新确认以及全部 approval 门禁通过之前，训练器不得进入 formal mode。

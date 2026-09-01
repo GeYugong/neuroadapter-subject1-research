@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_ROOT=${PROJECT_ROOT:-/data/matengyu/geyugong/neuroadapter-subject1-research}
-CONDA_BIN=${CONDA_BIN:-/data/matengyu/miniconda3/bin/conda}
+: "${PROJECT_ROOT:?set PROJECT_ROOT to the experiment root}"
+export PROJECT_ROOT
+CONDA_BIN=${CONDA_BIN:-$(command -v conda)}
 PREFIX=${PREFIX:-$PROJECT_ROOT/envs/neuroadapter}
 
 export CONDA_PKGS_DIRS="$PROJECT_ROOT/cache/conda"
@@ -33,6 +34,7 @@ PYTHON="$PREFIX/bin/python"
 
 "$PYTHON" - <<'PY'
 import json
+import os
 import platform
 from pathlib import Path
 
@@ -43,7 +45,7 @@ import torch
 import torchvision
 import transformers
 
-root = Path("/data/matengyu/geyugong/neuroadapter-subject1-research")
+root = Path(os.environ["PROJECT_ROOT"])
 payload = {
     "python": platform.python_version(),
     "platform": platform.platform(),

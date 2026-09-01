@@ -9,6 +9,7 @@ import json
 import math
 import os
 import random
+import re
 import signal
 import subprocess
 import time
@@ -24,9 +25,23 @@ from torch.nn.parallel import DistributedDataParallel
 from torch.utils.data import DataLoader
 
 from .atomic import sha256_file, write_json_atomic
-from .checkpoint import load_distributed_checkpoint, save_distributed_checkpoint
+from .backend import configure_torch_backend
+from .checkpoint import (
+    load_distributed_checkpoint,
+    prune_full_checkpoints,
+    save_distributed_checkpoint,
+    save_inference_snapshot,
+)
 from .config import LoadedTrainingConfig, verify_config_inputs
 from .data import Subject1TrainingDataset
+from .integrity import (
+    load_json_mapping,
+    validate_gate_artifact,
+    validate_subject1_audits,
+    verify_file_against_manifest,
+    verify_submodule_heads,
+    verify_tree_against_manifest,
+)
 from .modeling import (
     NeuroAdapterTrainingModule,
     audit_trainable_parameters,
@@ -117,20 +132,41 @@ def collect_input_hashes(
     names = (
         "training_cache",
         "training_cache_manifest",
+        "training_cache_verification",
         "model_manifest",
+        "raw_nsd_manifest",
         "split_ids",
         "canonical_initialization",
         "canonical_manifest",
         "data_fingerprint",
+        "nsd_image_mapping",
+        "schaefer_equivalence",
         "split_manifest",
         "source_manifest",
         "environment_lock",
     )
     payload: list[dict[str, str] | None] = [None]
     if context.is_main:
+        stimulus = verify_file_against_manifest(
+            config.paths["stimuli"],
+            config.paths["raw_nsd_manifest"],
+            "stimuli/nsd_stimuli.hdf5",
+        )
+        stable_diffusion = verify_tree_against_manifest(
+            config.paths["stable_diffusion"],
+            config.paths["model_manifest"],
+            manifest_prefix="stable-diffusion-v1-5",
+            ignored_extra_prefixes=(".cache/huggingface",),
+        )
+        vendor = verify_submodule_heads(
+            Path(__file__).resolve().parents[2], config.paths["source_manifest"]
+        )
         payload[0] = {
             "config": config.sha256,
             **{name: sha256_file(config.paths[name]) for name in names},
+            "stimuli": stimulus["sha256"],
+            "stable_diffusion_tree": stable_diffusion["tree_sha256"],
+            "vendor_submodule_heads": vendor["submodule_heads_sha256"],
         }
     dist.broadcast_object_list(payload, src=0, device=context.device)
     if payload[0] is None:
@@ -138,8 +174,14 @@ def collect_input_hashes(
     return payload[0]
 
 
-def validate_canonical_initialization(config: LoadedTrainingConfig) -> dict[str, Any]:
-    manifest = json.loads(config.paths["canonical_manifest"].read_text(encoding="utf-8"))
+def validate_canonical_initialization(
+    config: LoadedTrainingConfig, *, require_frozen: bool
+) -> dict[str, Any]:
+    manifest = load_json_mapping(config.paths["canonical_manifest"])
+    if require_frozen and manifest.get("status") != "frozen":
+        raise ValueError("formal canonical initialization is not bound to a frozen environment")
+    if manifest.get("status") not in {"candidate", "frozen"}:
+        raise ValueError("canonical initialization has an invalid environment status")
     observed = sha256_file(config.paths["canonical_initialization"])
     if manifest["initialization_sha256"] != observed:
         raise ValueError("canonical initialization hash mismatch")
@@ -153,18 +195,69 @@ def validate_canonical_initialization(config: LoadedTrainingConfig) -> dict[str,
         config.paths["model_manifest"]
     ):
         raise ValueError("canonical initialization uses a different model manifest")
+    if manifest["environment_lock_sha256"] != sha256_file(
+        config.paths["environment_lock"]
+    ):
+        raise ValueError("canonical initialization uses a different environment lock")
+    repository = Path(__file__).resolve().parents[2]
+    if manifest["modeling_sha256"] != sha256_file(
+        repository / "src/neuroadapter_research/modeling.py"
+    ):
+        raise ValueError("canonical initialization uses different model construction code")
+    if manifest["source_manifest_sha256"] != sha256_file(
+        config.paths["source_manifest"]
+    ):
+        raise ValueError("canonical initialization uses a different source manifest")
+    repository_commit = manifest.get("repository_commit")
+    if not isinstance(repository_commit, str) or not re.fullmatch(
+        r"[0-9a-f]{40}", repository_commit
+    ):
+        raise ValueError("canonical initialization has no generating repository commit")
     return manifest
 
 
 def validate_formal_approval(config: LoadedTrainingConfig, approval_path: Path) -> None:
-    approval = json.loads(Path(approval_path).read_text(encoding="utf-8"))
+    approval = load_json_mapping(Path(approval_path))
+    gate_fields = {
+        "environment_lock_sha256": "environment_lock",
+        "hardware_gate_sha256": "hardware_gate",
+        "forward_alignment_sha256": "forward_alignment",
+        "batch_gate_sha256": "batch_gate",
+        "resume_equivalence_sha256": "resume_equivalence",
+        "decode_determinism_sha256": "decode_determinism",
+        "evaluator_repeatability_sha256": "evaluator_repeatability",
+        "data_fingerprint_sha256": "data_fingerprint",
+        "model_assets_manifest_sha256": "model_manifest",
+        "canonical_initialization_sha256": "canonical_initialization",
+        "training_cache_verification_sha256": "training_cache_verification",
+        "nsd_image_mapping_sha256": "nsd_image_mapping",
+        "schaefer_equivalence_sha256": "schaefer_equivalence",
+    }
     expected = {
         "approved": True,
         "config_sha256": config.sha256,
         "protocol_commit": config.raw["protocol_commit"],
+        **{
+            field: sha256_file(config.paths[path_name])
+            for field, path_name in gate_fields.items()
+        },
     }
     if approval != expected:
         raise ValueError("formal approval file does not match the frozen config")
+    for path_name in (
+        "hardware_gate",
+        "forward_alignment",
+        "batch_gate",
+        "resume_equivalence",
+        "decode_determinism",
+        "evaluator_repeatability",
+    ):
+        validate_gate_artifact(
+            config.paths[path_name],
+            expected_gate=path_name,
+            config_sha256=config.sha256,
+        )
+    validate_subject1_audits(config.paths)
     repository = Path(__file__).resolve().parents[2]
     head = subprocess.check_output(
         ["git", "-C", str(repository), "rev-parse", "HEAD"], text=True
@@ -286,15 +379,14 @@ def run_training(
             raise ValueError("formal mode requires an approval file")
         validate_formal_approval(config, approval_path)
 
-    verify_config_inputs(config)
+    verify_config_inputs(config, require_gate_artifacts=run_mode == "formal")
     training = config.training
     context = initialize_distributed(training["world_size"])
     termination = TerminationFlag()
     signal.signal(signal.SIGTERM, termination.handler)
     signal.signal(signal.SIGINT, termination.handler)
     set_process_seed(training["base_seed"], context.rank)
-    torch.backends.cuda.matmul.allow_tf32 = training["allow_tf32"]
-    torch.backends.cudnn.allow_tf32 = training["allow_tf32"]
+    backend_settings = configure_torch_backend(training)
 
     output_dir = (
         Path(output_override).resolve()
@@ -339,7 +431,9 @@ def run_training(
     )
     if cache_manifest["cache_sha256"] != input_hashes["training_cache"]:
         raise ValueError("training cache hash differs from its frozen manifest")
-    canonical_manifest = validate_canonical_initialization(config)
+    canonical_manifest = validate_canonical_initialization(
+        config, require_frozen=run_mode == "formal"
+    )
     if int(canonical_manifest["max_voxels"]) != dataset.max_voxels:
         raise ValueError("canonical initialization max_voxels differs from the dataset")
 
@@ -394,6 +488,8 @@ def run_training(
         betas=(training["adam_beta1"], training["adam_beta2"]),
         eps=training["adam_epsilon"],
         weight_decay=training["weight_decay"],
+        fused=training["adamw_fused"],
+        foreach=training["adamw_foreach"],
     )
     if resume_payload is not None:
         optimizer.load_state_dict(resume_payload["optimizer"])
@@ -442,6 +538,19 @@ def run_training(
             ],
             "torch": torch.__version__,
             "cuda_runtime": torch.version.cuda,
+            "backend": {
+                **backend_settings,
+                "cudnn_deterministic": torch.backends.cudnn.deterministic,
+            },
+            "batch_geometry": {
+                name: training[name]
+                for name in (
+                    "world_size",
+                    "global_batch_size",
+                    "micro_batch_size",
+                    "gradient_accumulation_steps",
+                )
+            },
         }
         write_json_atomic(output_dir / "effective_run.json", effective)
     dist.barrier()
@@ -453,8 +562,10 @@ def run_training(
         training["checkpoint_reference_epochs"],
         max_updates,
     )
-    checkpoint_updates = interval_checkpoints | epoch_checkpoints | {max_updates}
+    full_checkpoint_updates = interval_checkpoints | {max_updates}
+    snapshot_updates = epoch_checkpoints | {max_updates}
     log_path = output_dir / "training.jsonl"
+    trace_path = output_dir / "traces" / f"trace-rank-{context.rank:05d}.jsonl"
     started = time.perf_counter()
     last_saved_update: int | None = None
     exit_after_checkpoint = False
@@ -525,6 +636,7 @@ def run_training(
                         "micro_step": micro_step,
                         "image_ids": [int(value) for value in image_ids.tolist()],
                         "timesteps_sha256": tensor_sha256(timesteps),
+                        "vae_latent_sha256": tensor_sha256(latents),
                         "noise_sha256": tensor_sha256(noise),
                         "dropout_sha256": tensor_sha256(keep_mask),
                     }
@@ -537,6 +649,15 @@ def run_training(
             raise FloatingPointError(f"non-finite gradient at update {update}")
         optimizer.step()
         next_update = update + 1
+        if update < trace_updates:
+            append_json_line(
+                trace_path,
+                {
+                    "optimizer_update": next_update,
+                    "rank": context.rank,
+                    "microbatches": trace,
+                },
+            )
 
         mean_loss = torch.stack(micro_losses).mean()
         dist.all_reduce(mean_loss, op=dist.ReduceOp.SUM)
@@ -563,7 +684,9 @@ def run_training(
                     "max_memory_reserved_bytes": torch.cuda.max_memory_reserved(
                         context.device
                     ),
-                    "trace": trace,
+                    "trace_file": trace_path.relative_to(output_dir).as_posix()
+                    if update < trace_updates
+                    else None,
                 },
             )
 
@@ -574,7 +697,25 @@ def run_training(
         )
         dist.all_reduce(local_stop, op=dist.ReduceOp.MAX)
         exit_after_checkpoint = bool(local_stop.item())
-        if next_update in checkpoint_updates or exit_after_checkpoint:
+        if next_update in snapshot_updates:
+            training_module = unwrap_training_module(distributed_module)
+            if context.is_main:
+                save_inference_snapshot(
+                    output_dir / "snapshots",
+                    next_update,
+                    trainable_state_dict(training_module.as_bundle()),
+                    {
+                        "schema_version": 1,
+                        "optimizer_update": next_update,
+                        "images_seen": next_update * training["global_batch_size"],
+                        "reference_epoch": next_update
+                        * training["global_batch_size"]
+                        / len(dataset),
+                        "input_hashes": input_hashes,
+                    },
+                )
+            dist.barrier()
+        if next_update in full_checkpoint_updates or exit_after_checkpoint:
             training_module = unwrap_training_module(distributed_module)
             state = (
                 trainable_state_dict(training_module.as_bundle())
@@ -608,6 +749,9 @@ def run_training(
                 rank_state=rank_state,
                 barrier=dist.barrier,
             )
+            if context.is_main:
+                prune_full_checkpoints(output_dir / "checkpoints", keep_latest=2)
+            dist.barrier()
             last_saved_update = next_update
         if exit_after_checkpoint:
             break

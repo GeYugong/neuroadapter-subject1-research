@@ -23,7 +23,11 @@ class LoadedTrainingConfig:
 
     @property
     def paths(self) -> dict[str, Path]:
-        return {name: Path(value) for name, value in self.raw["paths"].items()}
+        root = Path(self.raw["project_root"])
+        return {
+            name: Path(value) if Path(value).is_absolute() else root / value
+            for name, value in self.raw["paths"].items()
+        }
 
     @property
     def training(self) -> dict[str, Any]:
@@ -55,6 +59,7 @@ def load_training_config(path: Path, *, require_frozen: bool) -> LoadedTrainingC
             "run_kind",
             "subject",
             "protocol_commit",
+            "project_root",
             "paths",
             "training",
         },
@@ -64,6 +69,8 @@ def load_training_config(path: Path, *, require_frozen: bool) -> LoadedTrainingC
         raise ValueError("only Subject 1 training schema version 1 is supported")
     if payload["run_kind"] not in {"selection", "final"}:
         raise ValueError("run_kind must be selection or final")
+    if not Path(payload["project_root"]).is_absolute():
+        raise ValueError("project_root must be absolute")
     if require_frozen:
         if payload["status"] != "frozen":
             raise ValueError("formal training requires status: frozen")
@@ -76,24 +83,36 @@ def load_training_config(path: Path, *, require_frozen: bool) -> LoadedTrainingC
         {
             "stable_diffusion",
             "model_manifest",
+            "raw_nsd_manifest",
             "training_cache",
             "training_cache_manifest",
+            "training_cache_verification",
             "stimuli",
             "split_ids",
             "canonical_initialization",
             "canonical_manifest",
             "data_fingerprint",
+            "nsd_image_mapping",
+            "schaefer_equivalence",
             "split_manifest",
             "source_manifest",
             "environment_lock",
+            "hardware_gate",
+            "forward_alignment",
+            "batch_gate",
+            "resume_equivalence",
+            "decode_determinism",
+            "evaluator_repeatability",
             "output_dir",
         },
         "paths",
     )
     for name, value in paths.items():
-        candidate = Path(value)
-        if not candidate.is_absolute():
-            raise ValueError(f"paths.{name} must be absolute")
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError(f"paths.{name} must be a non-empty string")
+        candidate = Path(value.replace("\\", "/"))
+        if candidate.is_absolute() or ".." in candidate.parts:
+            raise ValueError(f"paths.{name} must be relative to project_root")
     if "test" in Path(paths["split_ids"]).name.lower():
         raise ValueError("training config may not point to the standard test split")
 
@@ -116,6 +135,10 @@ def load_training_config(path: Path, *, require_frozen: bool) -> LoadedTrainingC
             "min_snr_gamma",
             "precision",
             "allow_tf32",
+            "cudnn_benchmark",
+            "deterministic_algorithms",
+            "adamw_fused",
+            "adamw_foreach",
             "base_seed",
             "sampler_seed",
             "log_every_updates",
@@ -169,15 +192,35 @@ def load_training_config(path: Path, *, require_frozen: bool) -> LoadedTrainingC
     for name, expected in expected_scalars.items():
         if float(training[name]) != expected:
             raise ValueError(f"training.{name} differs from the frozen method")
-    if not isinstance(training["allow_tf32"], bool):
-        raise ValueError("training.allow_tf32 must be boolean")
+    boolean_fields = (
+        "allow_tf32",
+        "cudnn_benchmark",
+        "deterministic_algorithms",
+        "adamw_fused",
+        "adamw_foreach",
+    )
+    for name in boolean_fields:
+        if not isinstance(training[name], bool):
+            raise ValueError(f"training.{name} must be boolean")
 
     return LoadedTrainingConfig(path=path, sha256=sha256_file(path), raw=payload)
 
 
-def verify_config_inputs(config: LoadedTrainingConfig) -> None:
+def verify_config_inputs(
+    config: LoadedTrainingConfig, *, require_gate_artifacts: bool = False
+) -> None:
     directory_names = {"stable_diffusion", "output_dir"}
+    gate_names = {
+        "hardware_gate",
+        "forward_alignment",
+        "batch_gate",
+        "resume_equivalence",
+        "decode_determinism",
+        "evaluator_repeatability",
+    }
     for name, path in config.paths.items():
+        if name in gate_names and not require_gate_artifacts:
+            continue
         if name == "output_dir":
             path.parent.mkdir(parents=True, exist_ok=True)
             continue

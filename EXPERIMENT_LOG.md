@@ -744,3 +744,158 @@ formal train process  absent
 离线评价模型加载曾在`vendor/swav`生成一个未跟踪的`__pycache__/hubconf.cpython-311.pyc`。确认该文件为本次导入产生的Python字节码后，仅删除该文件和空缓存目录；所有vendor源码和固定submodule提交保持不变。清理后服务器Git工作树重新为clean。
 
 停止审计时，本地`main`、GitHub`origin/main`与服务器`main`均指向同一提交，关键数据、模型和canonical初始化产物全部存在。两张GPU仍由既有任务占用，因此按协议不执行任何GPU门禁。下一次工作应从“等待两张GPU同时空闲并执行训练前GPU门禁”开始，而不是直接启动正式selection训练。
+
+---
+
+## 2026-09-01 正式训练基础设施完整性加固
+
+### 仓库与执行边界
+
+GitHub 仓库当前保持 public：
+
+```text
+https://github.com/GeYugong/neuroadapter-subject1-research
+```
+
+本轮只执行 CPU、磁盘与代码审计，没有启动训练，也没有占用或修改服务器上既有 GPU 任务。检查时两张 RTX 5090 仍分别占用约 17.2 GiB 和 18.1 GiB，利用率为 79% 和 100%。
+
+### Git 冻结证据
+
+新增 `manifests/frozen/`，导出并公开保存 19 份小型证据文件及 `INDEX.json`，包括：
+
+```text
+9000/1000 与 8500/500 实际 image IDs
+parcel token map
+原始 NSD SHA-256 inventory
+源非有限值审计
+data fingerprint
+training cache manifest 与 verification
+Stable Diffusion、评价模型和 brain encoder 资产清单
+canonical initialization manifest
+NSD 图像映射 JSON/CSV
+Schaefer 上游等价性审计
+论文固定入口
+```
+
+导出脚本会把 `$PROJECT_ROOT` 下的绝对路径改写成项目相对路径，并拒绝实验根路径、个人 Windows 路径或既有服务器前缀残留。Git 中不保存 beta、HDF5、模型权重或 checkpoint。
+
+### NSD 图像映射第二证据链
+
+新增 `audit_nsd_image_mapping.py`，用官方 `nsd_expdesign.mat` 的 `masterordering -> subjectim` 映射，独立核对本地 metadata 与 `nsd_stim_info_merged.csv`。结果：
+
+```text
+presentation trials             30000
+Subject 1 unique train images    9000
+Subject 1 unique test images     1000
+train shared1000=False           9000 / 9000
+test shared1000=True             1000 / 1000
+all subject1=True               10000 / 10000
+metadata presentation order      exact match
+```
+
+完整 trial 级 CSV 已进入 frozen manifests。
+
+### Schaefer membership 审计与正式阻断
+
+逐顶点集合比较当前 CBIG-derived 资产与固定 `whole_brain_encoder/parcels/schaefer` 后得到：
+
+```text
+LH indexed equal                   7 / 501
+LH unordered set intersection    501 / 501
+LH relationship                  permuted_equivalent
+RH indexed equal                   0 / 501
+RH unordered set intersection      0 / 501
+RH relationship                  different_memberships
+upstream LH/RH set intersection  501 / 501
+upstream LH/RH sets equal         true
+```
+
+因此，LH 使用相同的 501 个顶点集合但 label/token 顺序发生置换；RH 不只是顺序不同，公开上游 RH 文件包含的 501 个集合与其 LH 文件完全相同，并不匹配 CBIG-derived RH。当前 cache 仍保持原样，没有在证据不足时重建。
+
+该审计已成为代码级 formal gate：`schaefer_upstream_equivalence.json` 不是 `indexed_equivalent` 时，`create_formal_approval.py` 和 formal trainer 都会拒绝。正式训练当前明确阻断，必须先确定作者实际 token 顺序和 RH membership 来源。
+
+### 输入完整性与 canonical 绑定
+
+训练配置改为只设置一个绝对 `project_root`，其余路径必须是无 `..` 的项目相对路径。正式 fresh run 和 resume 均执行：
+
+```text
+完整 nsd_stimuli.hdf5 文件大小和 SHA-256
+Stable Diffusion 运行时文件逐文件 size/SHA-256
+NeuroAdapter、whole_brain_encoder、CLIP、SwAV、DINOv2 HEAD
+training cache verification 与实际 cache/manifest/fingerprint 绑定
+NSD 图像映射四项检查
+Schaefer indexed equivalence
+```
+
+canonical manifest 新增 environment lock、upstream source manifest、`modeling.py` SHA 和生成 Git commit。若环境或模型构造发生变化，旧初始化不得直接沿用。
+
+真实服务器资产验证首次运行时，39 GB stimuli 已通过，但 Stable Diffusion tree 因 Hugging Face 自动生成的 `.cache/huggingface/*` 元数据被误判为额外模型文件。修正后只白名单排除该非运行时缓存前缀，其他额外文件仍被拒绝。重跑结果：
+
+```text
+stimuli SHA-256          a1a801da16f55bc6fbc9875ca7fec0666ac95eb333919e4a078f2a487a4e7031
+SD runtime files         13
+SD runtime bytes         4266679766
+SD tree SHA-256          3191726b025fe6d3a182f7a763277d8993c2eece44299c9d9e36ff0ea603e75a
+vendor HEADs             5 / 5 exact
+vendor heads digest      0e8a66ace3ae92504c507559854f4ea502c75fc5b45d6f741c030ba621c2583b
+```
+
+### 训练、checkpoint 与随机轨迹
+
+协议不再声称 `8/GPU x 1` 与 `4/GPU x 2` 权重严格等价。两种方案只分别验证稳定性和显存，并在 selection 前冻结一种；selection 与 final 不得切换。
+
+训练器新增：
+
+```text
+显式 TF32、cuDNN benchmark/deterministic、AdamW fused/foreach 配置
+每 rank 独立 trace-rank-XXXXX.jsonl
+image IDs、timestep、VAE latent、diffusion noise、token mask SHA
+崩溃残留 .incomplete 原子隔离到 corrupt/
+完整 resume checkpoint 只保留最近 2 个
+每 25 reference epochs 保存 inference-only snapshot
+```
+
+### Validation、选择与最终模型锁
+
+正式 selection 所需工具已在训练前实现：
+
+```text
+validation_loss.py          500 图、每图 1 个固定 draw、VAE mean、dropout off、Min-SNR
+decode_validation.py        每图固定 2/8 candidate seed、50 steps、guidance 4.0
+evaluate_validation.py      完整八指标、固定 500 图负样本池、image 内 seed mean
+select_checkpoint.py        shortlist 与 paired-bootstrap one-SE 选择
+export_final_model.py       PT/safetensors 位级重载与 MODEL_LOCK
+authorize_test_access.py    Git tag、模型 SHA 与 brain encoder full-forward 门禁
+```
+
+评价结果强制绑定同一 config、snapshot 和 validation ID SHA。shortlist 只接受 2-candidate 结果；final selector 只接受恰好 5 个 8-candidate checkpoint。LowLevelRank、HighLevelRank、Eff/SwAV 方向、average ties 和 one-SE 集合内 BalancedRank 均已在协议与代码中固定。
+
+### GPU 门禁实现状态
+
+已实现但尚未执行：
+
+```text
+gate_hardware.py               双 5090、sm_120、NCCL、BF16
+gate_forward_alignment.py      固定上游与新 forward/loss 对齐
+verify_batch_gate.py           preferred/fallback 稳定性与配置冻结
+verify_repeatability_gate.py   100 vs 50+50、解码和 evaluator 内容重复性
+verify_brain_encoder_forward.py 16-member 完整 forward 与 confidence ensemble
+```
+
+静态 brain encoder 审计已验证 16/16 checkpoint args、状态有限性、163842 顶点置信度与 8-member/hemisphere softmax 权重和；`full_forward_verified` 仍为 false，不能代替 GPU forward gate。
+
+固定上游 `train_brain_adapter.py` 的整体导入检查还发现，它引用了当前仓库中不存在的 `nsd_groupwise_topk_parcel_dataset`。forward gate 因此改为从固定文件 AST 中提取唯一的原始 `setup_ip_adapter()` 函数体，并把完整文件与函数体 SHA 写入 gate，避免把无关坏 import 隐藏为本项目实现差异。
+
+### 测试结果与当前结论
+
+服务器项目环境最终 CPU 测试：
+
+```text
+48 passed
+14 个固定上游 matplotlib/pyparsing deprecation warnings
+10 个新增 CLI 均可离线 import 并显示 --help
+python compileall passed
+git diff --check passed
+```
+
+`ruff` 未安装在冻结候选环境中，因此未临时安装或修改环境。当前没有 formal approval、formal training process 或 `MODEL_LOCK.json`。下一步不是直接训练，而是先解决 Schaefer token/RH 资产来源，再在两张 GPU 同时空闲时执行全部 GPU 门禁。

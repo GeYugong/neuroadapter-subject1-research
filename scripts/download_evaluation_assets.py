@@ -37,7 +37,7 @@ def main() -> None:
     parser.add_argument(
         "--project-root",
         type=Path,
-        default=Path("/data/matengyu/geyugong/neuroadapter-subject1-research"),
+        required=True,
     )
     parser.add_argument("--verify-only", action="store_true")
     args = parser.parse_args()

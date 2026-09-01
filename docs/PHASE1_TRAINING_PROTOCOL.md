@@ -123,6 +123,8 @@ vertex-list SHA-256
 
 `ncsnr.mgh` 是固定的扫描质量/可靠性元数据，不从新划出的 8500/500 split 重新估计。该选择复现公开数据管线，只用于固定输入维度，不参与 checkpoint 比较。
 
+CBIG annotation 派生 membership 还必须与固定 `whole_brain_encoder` 资产逐 hemisphere、逐 label 比较。当前审计发现：LH 的 501 个顶点集合完全相同但 label 顺序发生置换，只有 7/501 个位置直接相同；RH 与 CBIG 派生集合无一匹配，而公开上游的 RH 文件在顶点集合层面与其 LH 文件完全相同。该结果说明至少存在 token 顺序和 RH atlas 来源两项未决问题；口径解决并重新生成相关数据指纹前，正式训练保持阻断。
+
 ## 4. 环境与硬件门禁
 
 初始候选环境为：
@@ -173,11 +175,18 @@ global batch              16
 preferred micro batch     8/GPU, accumulation 1
 OOM fallback              4/GPU, accumulation 2
 selection upper bound     500 reference epochs
+allow TF32                true（待门禁）
+cuDNN benchmark           false
+deterministic algorithms  false
+AdamW fused               false
+AdamW foreach             false
 ```
 
 global batch 16 以论文 reproducibility statement 为优先。官方 shell 在双进程和 `split_batches=False` 下可能形成 global batch 32，该差异写入 `docs/DEVIATIONS.md`。
 
 OOM fallback 只能在正式 selection run 前决定一次。selection 和 final 必须使用相同 GPU 数、global batch、micro batch、accumulation、精度和 optimizer 实现。
+
+两种 microbatch 配置只要求样本流和 global batch 一致，不声明逐样本随机输入或权重更新严格等价。两者分别完成稳定性测试后，只能冻结其中一种；正式 selection 与 final 不得切换。
 
 ## 6. 随机性与初始化
 
@@ -213,20 +222,24 @@ checkpoint 只在 optimizer update 边界保存。收到 SIGTERM 时只设置退
 
 保存采用临时目录、fsync、重新加载验证、哈希计算和原子 rename。任何缺少 `COMPLETE` 的目录均不得恢复。
 
+存储策略固定为：完整 resume checkpoint 每 5000 updates 保存一次但只保留最近 2 个；每 25 reference epochs 保存全部 inference-only snapshot；max update 同时保存最终 snapshot 和完整 resume。崩溃遗留的 `.incomplete` 目录先原子移动到 `corrupt/`，随后才允许重试同一 update。
+
 ## 8. 正式训练前验证
 
 正式训练前必须全部通过：
 
 1. 冻结模块与可训练模块审计；
 2. 新训练器和固定上游 forward/loss 对齐；
-3. `8/GPU x 1` 与 `4/GPU x 2` 的有效 global batch 等价测试；
+3. `8/GPU x 1` 与 `4/GPU x 2` 分别完成数值稳定性和显存测试，并冻结其中一种；
 4. 连续 100 updates 与 `50 + save + 新进程恢复 + 50` 等价测试；
 5. 一个完整 reference epoch 的吞吐和显存测试；
 6. 8 张固定 validation 图片、每张 8 candidates 的端到端解码；
 7. 同进程重跑、进程重启和图片顺序改变后的 PNG SHA 一致性；
 8. 固定 20 对 GT/prediction 的 evaluator 重跑一致性。
 
-样本 ID、timestep、noise 和 dropout checksum 必须完全一致。BF16/DDP 权重若不能 bitwise 一致，必须在正式运行前冻结严格数值容差。所有门禁权重在验证后删除，不得进入正式结果。
+恢复测试必须比较两个 rank 各自的 `trace-rank-XXXXX.jsonl`；样本 ID、VAE latent、timestep、noise 和 dropout checksum 必须完全一致。BF16/DDP 权重若不能 bitwise 一致，必须在正式运行前冻结严格数值容差。所有门禁权重在验证后删除，不得进入正式结果。
+
+正式 approval 必须逐项绑定 config、protocol commit、environment lock、hardware、forward alignment、batch、resume、decode、evaluator、data fingerprint、training cache verification、NSD 图像映射、Schaefer indexed-equivalence、model assets 和 canonical initialization 的 SHA-256。训练器还会重新全量哈希 `nsd_stimuli.hdf5`，逐文件验证 Stable Diffusion tree，并核对五个 vendor submodule HEAD；只验证 manifest 文件本身不构成通过。Schaefer 审计不是 `indexed_equivalent` 时，approval 无法生成且 formal trainer 会再次拒绝。
 
 ## 9. Selection run
 
@@ -244,14 +257,15 @@ optimizer state      new and continuous
 
 ### 9.2 一级验证
 
-- 每 5 reference epochs 计算固定随机输入的 deterministic validation loss；
-- 每 25 reference epochs 保存 inference snapshot；
+- 每 25 reference epochs 保存 inference snapshot，并对该 snapshot 计算固定随机输入的 deterministic validation loss；
 - 对全部 500 张 validation 图片生成 2 个固定 candidate；
 - 使用 50 denoising steps、guidance scale 4.0；
 - 计算完整八项官方图像指标；
 - 不使用 whole-brain encoder 选择候选。
 
 两个 candidate index 分别形成完整的 500 图评价集，再对两套指标求平均。该设计避免单一扩散随机状态主导一级排序，同时将生成成本限制在完整八候选评价的四分之一。
+
+deterministic validation loss 使用固定的 500 张图，每图恰好 1 组由 image ID 派生的 timestep/noise；VAE 使用 posterior mean，token dropout 关闭，保留训练同款 Min-SNR gamma=5 权重。先得到每图 loss，再对 500 图等权平均。所有 checkpoint 复用完全相同的随机输入，不因执行顺序变化。
 
 ### 9.3 Shortlist
 
@@ -266,10 +280,10 @@ SemanticScore 前 3 名
 其中：
 
 ```text
-LowLevelRank = mean(rank(PixCorr), rank(SSIM), rank(AlexNet-2))
+LowLevelRank = mean(rank_desc(PixCorr), rank_desc(SSIM), rank_desc(AlexNet-2))
 ```
 
-所有 rank 均按“越高越好”的方向计算。若低层或 loss 候选已在前三，则按 SemanticScore 顺序补足到 5 个，候选不得少于 5 个。
+`rank_desc` 将较高指标赋予较小 rank；使用 `scipy.stats.rankdata(method="average")` 处理并列，并在全部一级候选 snapshot 内计算。若低层或 loss 候选已在前三，则按 SemanticScore 顺序补足到 5 个，候选不得少于 5 个。
 
 ### 9.4 二级验证
 
@@ -281,6 +295,8 @@ LowLevelRank = mean(rank(PixCorr), rank(SSIM), rank(AlexNet-2))
 
 每个 candidate index 单独形成一套完整的 500 图评价集，随后对 8 套指标求平均。统计单位为图片，8 个 seed 是同一图片内重复，使用 image-level paired cluster bootstrap。
 
+AlexNet-2、AlexNet-5、Inception 和 CLIP 的 two-way identification 固定使用同一 500 图负样本池。先在完整且无重复的池上计算每图 identification accuracy，再在同一图内平均 8 个 candidate seed。paired bootstrap 只重采样 image ID 及其已计算分数，不在含重复样本的 bootstrap 列表上重建相关矩阵。
+
 whole-brain encoder 可以生成附加诊断，但不得参与 shortlist、主分数或最终 checkpoint 选择。
 
 ### 9.5 选择规则
@@ -290,6 +306,24 @@ whole-brain encoder 可以生成附加诊断，但不得参与 shortlist、主�
 ```text
 SemanticScore = mean(AlexNet-5, Inception, CLIP)
 ```
+
+one-SE 集合内的次级排序固定为：
+
+```text
+LowLevelRank = mean(rank_desc(PixCorr),
+                    rank_desc(SSIM),
+                    rank_desc(AlexNet-2))
+
+HighLevelRank = mean(rank_desc(AlexNet-5),
+                     rank_desc(Inception),
+                     rank_desc(CLIP),
+                     rank_asc(EffCorrDistance),
+                     rank_asc(SwAVCorrDistance))
+
+BalancedRank = 0.5 * LowLevelRank + 0.5 * HighLevelRank
+```
+
+所有 rank 只在 one-SE 集合内计算，均使用 `scipy.stats.rankdata(method="average")`；较小的 BalancedRank 更优。Eff 和 SwAV 是 correlation distance，因此使用升序 rank。
 
 选择顺序：
 

@@ -60,14 +60,19 @@ def scan_brain_dataset(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--cache", type=Path, required=True)
+    parser.add_argument("--project-root", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--data-fingerprint", type=Path, required=True)
     parser.add_argument("--metadata", type=Path, required=True)
     parser.add_argument("--selection-train-ids", type=Path, required=True)
     parser.add_argument("--validation-ids", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    project_root = args.project_root.resolve()
 
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
+    data_fingerprint = json.loads(args.data_fingerprint.read_text(encoding="utf-8"))
+    expected_max_voxels = int(data_fingerprint["max_voxels"])
     metadata = np.load(args.metadata, allow_pickle=True).item()
     train_pool = np.sort(np.asarray(metadata["train_img_num"], dtype=np.int64))
     test = np.asarray(metadata["test_img_num"], dtype=np.int64)
@@ -94,9 +99,9 @@ def main() -> None:
             raise ValueError("training cache image IDs differ from the sorted train pool")
         if np.intersect1d(image_ids, test).size:
             raise ValueError("standard test image IDs appear in the training cache")
-        if brain.shape != (9000, 200, 626) or brain.dtype != np.dtype("float32"):
+        if brain.shape != (9000, 200, expected_max_voxels) or brain.dtype != np.dtype("float32"):
             raise ValueError(f"unexpected training cache brain dataset: {brain.shape}, {brain.dtype}")
-        if valid_mask.shape != (200, 626) or valid_mask.dtype != np.dtype("bool"):
+        if valid_mask.shape != (200, expected_max_voxels) or valid_mask.dtype != np.dtype("bool"):
             raise ValueError(f"unexpected parcel valid mask: {valid_mask.shape}, {valid_mask.dtype}")
         statistics = scan_brain_dataset(brain, valid_mask)
 
@@ -107,7 +112,7 @@ def main() -> None:
         raise ValueError("training cache size differs from the build manifest")
     if int(manifest["image_count"]) != 9000 or int(manifest["parcel_count"]) != 200:
         raise ValueError("training cache manifest has unexpected dimensions")
-    if int(manifest["max_voxels"]) != 626:
+    if int(manifest["max_voxels"]) != expected_max_voxels:
         raise ValueError("training cache manifest max_voxels differs from the data fingerprint")
     if manifest["metadata_sha256"] != sha256_file(args.metadata):
         raise ValueError("training cache manifest metadata hash mismatch")
@@ -115,18 +120,22 @@ def main() -> None:
     payload = {
         "schema_version": 1,
         "status": "verified",
-        "cache_path": str(args.cache),
+        "cache_path": args.cache.resolve().relative_to(project_root).as_posix(),
         "cache_size": args.cache.stat().st_size,
         "cache_sha256": cache_sha256,
         "image_count": 9000,
         "selection_train_count": 8500,
         "validation_count": 500,
         "standard_test_overlap": 0,
-        "brain_shape": [9000, 200, 626],
+        "brain_shape": [9000, 200, expected_max_voxels],
         "brain_dtype": "float32",
+        "max_voxels_source": "data_fingerprint.json",
+        "historical_reference_max_voxels": 626,
+        "matches_historical_reference": expected_max_voxels == 626,
         "padding_policy": "zero outside parcel_valid_mask",
         "statistics_over_valid_values": statistics,
         "build_manifest_sha256": sha256_file(args.manifest),
+        "data_fingerprint_sha256": sha256_file(args.data_fingerprint),
     }
     write_json_atomic(args.output, payload)
     print(json.dumps(payload, indent=2))

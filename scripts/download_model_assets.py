@@ -22,7 +22,7 @@ def main() -> None:
     parser.add_argument(
         "--project-root",
         type=Path,
-        default=Path("/data/matengyu/geyugong/neuroadapter-subject1-research"),
+        required=True,
     )
     parser.add_argument("--asset", choices=("all", "sd15", "brain_encoder"), default="all")
     args = parser.parse_args()

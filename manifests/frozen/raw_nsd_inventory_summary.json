@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "subject": 1,
+  "source": "s3://natural-scenes-dataset",
+  "beta_object_count": 86,
+  "session_beta_count": 80,
+  "ncsnr_count": 6,
+  "beta_total_bytes": 39326038008,
+  "all_local_file_count": 90,
+  "all_local_total_bytes": 78919016728,
+  "core_file_sizes": {
+    "experiments/nsd/nsd_expdesign.mat": 261803,
+    "experiments/nsd/nsd_stim_info_merged.csv": 11310098,
+    "experiments/nsd/nsd_stim_info_merged.pkl": 24529771,
+    "stimuli/nsd_stimuli.hdf5": 39556877048
+  },
+  "s3_inventory_sha256": "85a388645bf65e6b1cdab1b22c741b3553abcb0497455f1b35f5b36a672d8ee3",
+  "local_inventory_sha256": "5eac93c452152b7cf4ebc4eec84b9c8d643717829c230f80218a244ac61f0548",
+  "status": "sizes_match_official_inventory"
+}

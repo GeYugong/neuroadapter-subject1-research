@@ -1,0 +1,456 @@
+{
+  "root": "data/raw/nsd",
+  "files": [
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session01.mgh",
+      "size": 491526300,
+      "sha256": "4e5d0342924fa9c5a73d3cba72f4d3a769a3ccf2b2814cc1329a3d21869c0377"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session02.mgh",
+      "size": 491526300,
+      "sha256": "cc42c3880bc25022e4fdfb1d443bd1869a158707d2f14adc5ea06b5f0fcc6625"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session03.mgh",
+      "size": 491526300,
+      "sha256": "d3fd3855afdf410e2d85dc9f015e5408fc6993c04c2f2b172dc75b2365c190d8"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session04.mgh",
+      "size": 491526300,
+      "sha256": "29630d0ea7c02ed21ffb24204203f82ed21b55dc7885daac983a9830c9ef2807"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session05.mgh",
+      "size": 491526300,
+      "sha256": "a441e653b4877ada6311360d16ffffda649ba3db6c128a927054e98edd1c296a"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session06.mgh",
+      "size": 491526300,
+      "sha256": "3f8cbb914dcdbf9e2d23237ddc2a274cd0f2b22f9f8f891834e643e1f17e9fed"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session07.mgh",
+      "size": 491526300,
+      "sha256": "a381edafd081b040694f17be9ebb0c986e2be310736fa9843f8d71d2b71718b4"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session08.mgh",
+      "size": 491526300,
+      "sha256": "09b5178bf498d5847b338091033e7a37ac8fb8f253d6323026b5f4bd13d67c35"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session09.mgh",
+      "size": 491526300,
+      "sha256": "d52674ad02b820c3cbb4f12a1ce828822d281a528aa9e7a08518ad8cba2de889"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session10.mgh",
+      "size": 491526300,
+      "sha256": "1f7a14d061db9dbcc76e02b3cb255c3a60ddf032052923fc6ffa5ca2ccf56202"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session11.mgh",
+      "size": 491526300,
+      "sha256": "d9a60abd79ed6c6d218cc87d2b60259bc5b3a445057d3c8a4bc922712da061cf"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session12.mgh",
+      "size": 491526300,
+      "sha256": "95ca5fb260089163b632ddd7702f4417c6ef82dac4ee42183222baffccb6efea"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session13.mgh",
+      "size": 491526300,
+      "sha256": "dab8dc88b243e181b43559540e3026131f5581e6f7df85e925cbe82b4b44445f"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session14.mgh",
+      "size": 491526300,
+      "sha256": "b9738bd298375df61d0d00df80a81174ed6beb7428e994653690e2cfe52a3f25"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session15.mgh",
+      "size": 491526300,
+      "sha256": "2aca5185fc76fc9b8b5304c708b3b9e962fb5742784c2bdc2dca59e83603a228"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session16.mgh",
+      "size": 491526300,
+      "sha256": "6d3c77fad6206fa0e9d4d9ccdd8d521f1f246d27dbb098a9099cfc14c9fd1658"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session17.mgh",
+      "size": 491526300,
+      "sha256": "f6ef45b4e409a3433a0a772d63c7eb5951c8322f163a5bf2dd08a31f5d4b2317"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session18.mgh",
+      "size": 491526300,
+      "sha256": "04efc0bef8dd70024aa730fcdf4d77d957581a763a581a37996d8ea3a475af2d"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session19.mgh",
+      "size": 491526300,
+      "sha256": "510ea05a22afaefc64577fe344e6a9cbca4efefc15e3ee84ce89b065fdf83f78"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session20.mgh",
+      "size": 491526300,
+      "sha256": "7743465348efae5deb99aa0a7972473000d820a728b1a94ff8b5822127693b18"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session21.mgh",
+      "size": 491526300,
+      "sha256": "551fc2012e66d20c7cfa705b957d0c4f5e351cb407bae4cf96314741ab1e41a7"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session22.mgh",
+      "size": 491526300,
+      "sha256": "7198eefaf277df718d062c3fcfa761a98903438eb8741176991fcda26fd98eb4"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session23.mgh",
+      "size": 491526300,
+      "sha256": "aaff69bcd6ef870ffa8a4e43188148f994b640e3a30302e7d02c72dcef6d55f2"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session24.mgh",
+      "size": 491526300,
+      "sha256": "9de21fc64b7d5e587f0c16f9e7075e21b25f9ac17d50ca5ca107fe525aba4ee4"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session25.mgh",
+      "size": 491526300,
+      "sha256": "6e644cc8734618b6e7b2cede3434feee2c60056f6a04442b9516aba0dab86308"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session26.mgh",
+      "size": 491526300,
+      "sha256": "d33f3bd3966f56c837a07f45e4f95b43efe5adf34330b46b4709921f9443a57d"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session27.mgh",
+      "size": 491526300,
+      "sha256": "c0dfdadf0e25a00b7dace02cc462556d0504fad4924e66e20b2b5be2c53ae59f"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session28.mgh",
+      "size": 491526300,
+      "sha256": "0a0fa11e511363e5c10b90ec87433fa53fd4726ee13ce96ca00b32c260c62468"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session29.mgh",
+      "size": 491526300,
+      "sha256": "1f608e7578375c0a964c454916a20e9a7bf93c58770932f7a73c4695e294cb91"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session30.mgh",
+      "size": 491526300,
+      "sha256": "b74148eccc06a76421dd1373c91d301155c51ad35da7ce9f74d543fd29a90ae3"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session31.mgh",
+      "size": 491526300,
+      "sha256": "1f1a09988a2e6665eefd807946c23bfa235744c44121d6feefa17e2b83dab7ff"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session32.mgh",
+      "size": 491526300,
+      "sha256": "431476d1e23e405603205689019dab1f41394539dba9543bbb5c1ce63031bb0c"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session33.mgh",
+      "size": 491526300,
+      "sha256": "c352fa3220325138afa7b6f793fd6c7c81723bab315367aa08f9f3f6d841e62d"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session34.mgh",
+      "size": 491526300,
+      "sha256": "43f786cd94a03159f1d3b8dd7d07daa8a074184ca9cc93099e5baeabe7007669"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session35.mgh",
+      "size": 491526300,
+      "sha256": "9e03d75b4a771dbe53e410b3b11388a947bf0cd8560c3806df3a6ac169617397"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session36.mgh",
+      "size": 491526300,
+      "sha256": "1f51d4eacf18519bc230d3e386ebb25d19742e74fc38265df3185b48f3b65c39"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session37.mgh",
+      "size": 491526300,
+      "sha256": "20f27162bc54c3fea3070bcf1d34dc7bdf7df1851762ecc8c656ba205c423ef5"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session38.mgh",
+      "size": 491526300,
+      "sha256": "e62c9f80760ca422a54a651f3a3222ae8c60c35277e9ae129d3e397732e6a600"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session39.mgh",
+      "size": 491526300,
+      "sha256": "fc5d8218369810bc75de63a7970a14e777624cc813841808a0154af19d01fe81"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.betas_session40.mgh",
+      "size": 491526300,
+      "sha256": "e093afbd365d87dfe375eacf9b0fcf352dd88be04e2e2cb904958664a012d94d"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.ncsnr.mgh",
+      "size": 655668,
+      "sha256": "ecc77f63cb4f68766237021caa977851a22f77117a39dfcd6b8947daaba5e971"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.ncsnr_split1.mgh",
+      "size": 655668,
+      "sha256": "0d2c9816ec1e0aa5eb4427ac9bdd34130330ad493dbe4624eeb104ad8a962942"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/lh.ncsnr_split2.mgh",
+      "size": 655668,
+      "sha256": "b35584b736d477a7a70be7eb9cdef7b5d0609abf802254f645db6ed4f3af936e"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session01.mgh",
+      "size": 491526300,
+      "sha256": "0dbbefc01dea7ecb46831835dd410db43c2e32a72c55abb001cb0dfcdb9f09df"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session02.mgh",
+      "size": 491526300,
+      "sha256": "bf1f66a9a2666b910d8e960d78e47bb254b483e605470e05d426ae052296fbb8"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session03.mgh",
+      "size": 491526300,
+      "sha256": "55116c41f7c5e1981d07d58e5f313a4ac43f16f396fd7f27e2313f5dc19e7688"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session04.mgh",
+      "size": 491526300,
+      "sha256": "3529fdbe6f2bf351e16736d6cf791a1617e6be84ed58fce2a2677a2f86056ca3"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session05.mgh",
+      "size": 491526300,
+      "sha256": "28d78756938dae1ea8474163d4474ee4497123bd9e9804a2e7f50919cb66a653"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session06.mgh",
+      "size": 491526300,
+      "sha256": "8ee87a088a0491cb2f0ecda08401cd2bcfa18ea8b2484ffa6d3ad44ee7a4a616"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session07.mgh",
+      "size": 491526300,
+      "sha256": "a3aee0c2917e98751bd2fc8af6bc646b83e08bedb5ee6d23626561dea47e4bc5"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session08.mgh",
+      "size": 491526300,
+      "sha256": "51707ea41ade2255df857c24d2e42fb35059ac0cdc07b6ec91a53bcb0f7554e0"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session09.mgh",
+      "size": 491526300,
+      "sha256": "61feed0dadccdfe1319c28925edb9479229d98d7ad19b48259504dfe4ba8d93a"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session10.mgh",
+      "size": 491526300,
+      "sha256": "96140982d621dc12d661270e3cf79000e7d996994acb313f424cfe525111f931"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session11.mgh",
+      "size": 491526300,
+      "sha256": "889d4f4d9cde71be4a1daaa2f98d143840fb95b5633ae8d4cb568ae882edfa71"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session12.mgh",
+      "size": 491526300,
+      "sha256": "ee2a531068d05a0604d5765a33e8c0bcdd2e3aece1008fda999c677fdd187c1b"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session13.mgh",
+      "size": 491526300,
+      "sha256": "298ae085e390f265aaa5421b12d4ca96505d45c51b37057d0e1ffcb1b888e89a"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session14.mgh",
+      "size": 491526300,
+      "sha256": "5dd7b6a5c8fad5437560c63a1110d08031b56633e83b397dd4b7526ae6bb48c0"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session15.mgh",
+      "size": 491526300,
+      "sha256": "526e44e71b3636a13cc8c9908299af6a8588bb44b7e3cd32cbc880396fa54a70"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session16.mgh",
+      "size": 491526300,
+      "sha256": "3b65dcbfee491c76e66d8bf0b979b66ee6d6cb32e7f82c915c5e5c1f5b700ce0"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session17.mgh",
+      "size": 491526300,
+      "sha256": "528babe5a148519676d121fd15516315893425ec1acc4d4ac470eb0d24938306"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session18.mgh",
+      "size": 491526300,
+      "sha256": "429a5bd3db935ed840a8f5a68966e3cc797397e2ecd203b33d3a0a828b290a7f"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session19.mgh",
+      "size": 491526300,
+      "sha256": "339aa9448a54929b28afaf650ecef1f8450f795fcf8a311f9990f47ed9d16307"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session20.mgh",
+      "size": 491526300,
+      "sha256": "ccbab47350861985fc8a275f3ec7332bf47758066359e55429f9af3529b6a53c"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session21.mgh",
+      "size": 491526300,
+      "sha256": "334a65a340888433a8d9ac331700677e5a8a6bd50fddf3f78e787f916a7b0c87"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session22.mgh",
+      "size": 491526300,
+      "sha256": "6fc9cd3bb65a9e3223103b12fcebabf72e31fed94cac5190bfdf031638972a5d"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session23.mgh",
+      "size": 491526300,
+      "sha256": "45c523a9d2203dc659b167465124d468fcd78b282122f03eaa50ef570f4932d4"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session24.mgh",
+      "size": 491526300,
+      "sha256": "b39d11499d05839676ada44d3645b57f1d6586eef348d7c38b8161b3ab2a4592"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session25.mgh",
+      "size": 491526300,
+      "sha256": "b9e0588a9f388b2d2bd857003e3217efb94ea1573d1ca87c8898a9d6a4d921d9"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session26.mgh",
+      "size": 491526300,
+      "sha256": "b8b57e01eca8acee1d050060260d6bbee1f32d90ad8136a497440d182f3f51fb"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session27.mgh",
+      "size": 491526300,
+      "sha256": "48fca69f9cbe0563fef4f11bdf4264baf253329edd4b56c82d872343db867d1f"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session28.mgh",
+      "size": 491526300,
+      "sha256": "c02cf688144406616fb8826bff5de9296278b4075d7c5fa84b133f2d9a699709"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session29.mgh",
+      "size": 491526300,
+      "sha256": "d25e9734cf0ddac04666cd7754988c37d6646d5d5ae20236bfbbd43ea2a82aae"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session30.mgh",
+      "size": 491526300,
+      "sha256": "be8d9aaa6199a88954b0e3c7e17337d65e9bcc9aff25b9c0acc061f677586569"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session31.mgh",
+      "size": 491526300,
+      "sha256": "2309b7b72fd125330797064fa469732a8b72bf3f6075a437028e9e54cbdaefd4"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session32.mgh",
+      "size": 491526300,
+      "sha256": "7fbfe0a061486f30afd91134698bb8c0dcf5465792b33fb81757c064e14caf9a"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session33.mgh",
+      "size": 491526300,
+      "sha256": "88522c828937b871801e13d45bc51d0af4b8a9129244fec2191e28eb2da3379d"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session34.mgh",
+      "size": 491526300,
+      "sha256": "5c9b0f37b8bbd0aa3a46d88b6e2042ac0c998d66a0a19dbb5403ccd6071308a7"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session35.mgh",
+      "size": 491526300,
+      "sha256": "4dbbb71882d521d80dbfdea1c55f42be5ed855a4ae2282545533400eb90a477d"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session36.mgh",
+      "size": 491526300,
+      "sha256": "f379fda488506275a204f80c123e6f9fc616a01b0a065b1142e3140365c8388c"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session37.mgh",
+      "size": 491526300,
+      "sha256": "8decee268849db8fa2846a0285334a994ddf98a18b138e185ca24355c492bf39"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session38.mgh",
+      "size": 491526300,
+      "sha256": "90bdcc670c84ca2aa77aba9d749421651291725e70e49bcaffdf1df2d2bff605"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session39.mgh",
+      "size": 491526300,
+      "sha256": "aea61893edadfef4dbb08116350c5abd6a93fb31ee08a4ce34516754a2d6f34d"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.betas_session40.mgh",
+      "size": 491526300,
+      "sha256": "5fd24f7e2361d0012baeca2fc67bb7fe2bcd279c8c9b61d2b3830e5a2de8ace9"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.ncsnr.mgh",
+      "size": 655668,
+      "sha256": "7834dd31be9aeb0d2e4ed3c752f59a79ae83a7655415019e7584d7fadf5d220a"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.ncsnr_split1.mgh",
+      "size": 655668,
+      "sha256": "f7814906bd067d5fcaacb8a04be00dd54320a84819d4eee180ace9d21affa441"
+    },
+    {
+      "path": "betas/subj01/fsaverage/betas_fithrf_GLMdenoise_RR/rh.ncsnr_split2.mgh",
+      "size": 655668,
+      "sha256": "ef52848131ee33a79dadb58a504cdef4ca9952d62fcee06e04fe1670de83ffc5"
+    },
+    {
+      "path": "experiments/nsd/nsd_expdesign.mat",
+      "size": 261803,
+      "sha256": "4cf4901ecf736c525ce534c4466030ec8d13c2fc0c8b31ddf86f17c55faadf89"
+    },
+    {
+      "path": "experiments/nsd/nsd_stim_info_merged.csv",
+      "size": 11310098,
+      "sha256": "e46fca15901196541b8921aa8c03ee9d662e7da085d852e13ebb01f89c7623c6"
+    },
+    {
+      "path": "experiments/nsd/nsd_stim_info_merged.pkl",
+      "size": 24529771,
+      "sha256": "ffdc70e7fa21f5f91daad0b237932dbc50d9c8c8eebd584fe6d07310b5646a09"
+    },
+    {
+      "path": "stimuli/nsd_stimuli.hdf5",
+      "size": 39556877048,
+      "sha256": "a1a801da16f55bc6fbc9875ca7fec0666ac95eb333919e4a078f2a487a4e7031"
+    }
+  ],
+  "total_bytes": 78919016728
+}

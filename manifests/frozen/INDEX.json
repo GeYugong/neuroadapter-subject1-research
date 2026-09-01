@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "policy": "Git tracks manifests, IDs, hashes, and statistics only; no data or weights.",
+  "files": [
+    {
+      "path": "brain_encoder_assets_verification.json",
+      "source": "data/fingerprints/brain_encoder_assets_verification.json",
+      "sha256": "a7b29ce1e6c0b22c4716247ac740b4a7a37f54598697aa3e6552a3ad19cc845e"
+    },
+    {
+      "path": "canonical_initialization.json",
+      "source": "models/canonical/subject01_adapter_init.json",
+      "sha256": "e71f9b88c092f78169c61c6267c8d36fc68f448fa88c881a40c9029de747abcd"
+    },
+    {
+      "path": "data_fingerprint.json",
+      "source": "data/fingerprints/data_fingerprint.json",
+      "sha256": "16a6e610670f0d91e0cc063ab375b93276a62838b73e25fcae24e5f4932042cc"
+    },
+    {
+      "path": "evaluation_assets.json",
+      "source": "data/fingerprints/evaluation_downloads.json",
+      "sha256": "ddbc8da4e11c766e4e6ac8362d9d22d3e8d246f4072db91fda16c053af2a9e33"
+    },
+    {
+      "path": "model_assets_sha256.json",
+      "source": "data/fingerprints/model_assets_sha256.json",
+      "sha256": "7409f31bbbfa7333b090390cb4b940626abde9fa13a657f030c451cc1424a72a"
+    },
+    {
+      "path": "nsd_image_mapping_subject01.csv",
+      "source": "data/fingerprints/nsd_image_mapping_subject01.csv",
+      "sha256": "7c100d639d137e24e6e485c661c5a3bc3e710a5146b31c40666fdcb32a519875"
+    },
+    {
+      "path": "nsd_image_mapping_subject01.json",
+      "source": "data/fingerprints/nsd_image_mapping_subject01.json",
+      "sha256": "1e74430b4fbb4e23de56653653619f315292d81101aabf82cf53d88f4a216853"
+    },
+    {
+      "path": "paper.json",
+      "source": "manifests/paper.json",
+      "sha256": "44739c72e0a87f8426741c177537801a3e313cab872618559452fbe1a4088dbc"
+    },
+    {
+      "path": "parcel_token_map.csv",
+      "source": "data/fingerprints/parcel_token_map.csv",
+      "sha256": "2764c8c62f1544065267c661b9e33f5aceab818b9ec4ab6dd4be0b299fe7f4a7"
+    },
+    {
+      "path": "raw_nsd_inventory_summary.json",
+      "source": "data/fingerprints/nsd_subj01_raw_verification.json",
+      "sha256": "86b09b540099c09dd62b4f20fbc60c8258479cf6d7eb48b058d9af43f07759d2"
+    },
+    {
+      "path": "raw_nsd_sha256_inventory.json",
+      "source": "data/fingerprints/nsd_subj01_sha256_inventory.json",
+      "sha256": "add09e77dbaef613996be37c2b6b4094f27987ddf35ff6d4ec436ceb589e3c4e"
+    },
+    {
+      "path": "schaefer_upstream_equivalence.json",
+      "source": "data/fingerprints/schaefer_upstream_equivalence.json",
+      "sha256": "f2a45b00fcd07bed0c23a2f47627b73040ff4982d8f9d9ab472a291ce190d745"
+    },
+    {
+      "path": "selection_train_ids.txt",
+      "source": "data/derived/splits/selection_train_ids.txt",
+      "sha256": "a13ad80a744e19c22e8309bc9ffe3cd49bd5ad1a4058921adec37fdd686614ea"
+    },
+    {
+      "path": "source_nonfinite_values.json",
+      "source": "data/derived/neural_data/source_nonfinite_values.json",
+      "sha256": "fc546fbc0b325c0cc3f841583145c4751c9f89a224977cbb9a078e881f375047"
+    },
+    {
+      "path": "split_manifest.json",
+      "source": "data/derived/splits/split_manifest.json",
+      "sha256": "99b3b67775895e642235043aed8cdc29e97826bcc17c7c9ff233d8ea008ff099"
+    },
+    {
+      "path": "test_ids.txt",
+      "source": "data/derived/splits/test_ids.txt",
+      "sha256": "d7ae0a80b9101133df3445b81eecad63cc5b598999f2a6a13d20c65696c63997"
+    },
+    {
+      "path": "training_cache_manifest.json",
+      "source": "data/fingerprints/training_cache_manifest.json",
+      "sha256": "9897447eb45839aa23ff683583432b0ea86d8386dee6d3de1915605b790504c8"
+    },
+    {
+      "path": "training_cache_verification.json",
+      "source": "data/fingerprints/training_cache_verification.json",
+      "sha256": "a4fda1d659731f854b897730dbde309dc240059d6d773903772437857ba49e72"
+    },
+    {
+      "path": "validation_ids.txt",
+      "source": "data/derived/splits/validation_ids.txt",
+      "sha256": "73137068416d3400708e1a3d5bda09600be4ea7b2164f11322a26f4de1b37c55"
+    }
+  ]
+}

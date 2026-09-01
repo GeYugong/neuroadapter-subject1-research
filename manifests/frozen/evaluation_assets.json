@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "verify_only": true,
+  "torchvision": [
+    "AlexNet_IMAGENET1K_V1",
+    "InceptionV3_DEFAULT",
+    "EfficientNetB1_DEFAULT"
+  ],
+  "clip": "ViT-L/14",
+  "swav_source": "repo/vendor/swav",
+  "dinov2_source": "repo/vendor/dinov2",
+  "torch_home": "models/evaluation/torch",
+  "files": {
+    "alexnet": {
+      "path": "models/evaluation/torch/hub/checkpoints/alexnet-owt-7be5be79.pth",
+      "size": 244408911,
+      "sha256": "7be5be791159472b1fbf3c69796f7cb30dca7ad8466c2df70058c37116cdee02"
+    },
+    "inception_v3": {
+      "path": "models/evaluation/torch/hub/checkpoints/inception_v3_google-0cc3c7bd.pth",
+      "size": 108949747,
+      "sha256": "0cc3c7bd75056d25e46cba549dc184522069b81e9787eff6df84f397bd52a5ef"
+    },
+    "efficientnet_b1": {
+      "path": "models/evaluation/torch/hub/checkpoints/efficientnet_b1-c27df63c.pth",
+      "size": 31600329,
+      "sha256": "c27df63ce6eb17ef8bcea58922fd3a254cba910c720f41ee89d64d99fb7a4ddf"
+    },
+    "clip_vit_l_14": {
+      "path": "models/evaluation/clip/ViT-L-14.pt",
+      "size": 932768134,
+      "sha256": "b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836"
+    },
+    "swav_resnet50": {
+      "path": "models/evaluation/torch/hub/checkpoints/swav_800ep_pretrain.pth.tar",
+      "size": 113703565,
+      "sha256": "029d0b8c2e70bcee3f8beb70cc104ef51585c090224d33fb9c6f51d146cfd1eb"
+    },
+    "dinov2_vitb14": {
+      "path": "models/evaluation/torch/hub/checkpoints/dinov2_vitb14_pretrain.pth",
+      "size": 346378731,
+      "sha256": "0b8b82f85de91b424aded121c7e1dcc2b7bc6d0adeea651bf73a13307fad8c73"
+    }
+  }
+}

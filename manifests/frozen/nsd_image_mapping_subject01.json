@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "status": "verified",
+  "subject": 1,
+  "train_image_count": 9000,
+  "test_image_count": 1000,
+  "trial_count": 30000,
+  "checks": {
+    "train_shared1000_false": true,
+    "test_shared1000_true": true,
+    "all_subject1_true": true,
+    "presentation_order_equal": true
+  },
+  "metadata_sha256": "2f8ae875553845254b29031f5fe73a6e008a0d38a7fe4756c7dc3d1539086b72",
+  "expdesign_sha256": "4cf4901ecf736c525ce534c4466030ec8d13c2fc0c8b31ddf86f17c55faadf89",
+  "stim_info_sha256": "e46fca15901196541b8921aa8c03ee9d662e7da085d852e13ebb01f89c7623c6",
+  "mapping_csv_sha256": "7c100d639d137e24e6e485c661c5a3bc3e710a5146b31c40666fdcb32a519875"
+}

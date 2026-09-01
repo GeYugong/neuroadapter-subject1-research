@@ -10,6 +10,7 @@ from pathlib import Path, PosixPath
 
 import numpy as np
 import torch
+from scipy.special import softmax
 
 from neuroadapter_research.atomic import sha256_file, write_json_atomic
 
@@ -23,6 +24,10 @@ FSAVERAGE_VERTEX_COUNT = 163842
 def verify_model_pair(
     checkpoint_path: Path,
     correlation_path: Path,
+    *,
+    expected_layer: int | None = None,
+    expected_run: int | None = None,
+    expected_hemisphere: str | None = None,
     expected_vertices: int = FSAVERAGE_VERTEX_COUNT,
 ) -> dict[str, object]:
     if not checkpoint_path.is_file() or not correlation_path.is_file():
@@ -35,6 +40,26 @@ def verify_model_pair(
     if not isinstance(checkpoint, dict) or "model" not in checkpoint or "args" not in checkpoint:
         raise ValueError(f"unexpected checkpoint structure: {checkpoint_path}")
     model = checkpoint["model"]
+    checkpoint_args = checkpoint["args"]
+    expected_args = None
+    observed_args = None
+    if expected_layer is not None or expected_run is not None or expected_hemisphere is not None:
+        expected_args = {
+            "subj": "01",
+            "enc_output_layer": expected_layer,
+            "run": expected_run,
+            "hemi": expected_hemisphere,
+            "backbone_arch": "dinov2_q",
+            "encoder_arch": "transformer",
+            "readout_res": "parcels",
+        }
+        observed_args = {
+            name: getattr(checkpoint_args, name, None) for name in expected_args
+        }
+        if observed_args != expected_args:
+            raise ValueError(
+                f"checkpoint args mismatch: expected={expected_args}, observed={observed_args}"
+            )
     if not isinstance(model, dict) or not model:
         raise ValueError(f"empty model state: {checkpoint_path}")
     if any(".orig_mod" in name for name in model):
@@ -69,6 +94,7 @@ def verify_model_pair(
         "checkpoint_sha256": sha256_file(checkpoint_path),
         "model_tensor_count": tensor_count,
         "model_value_count": value_count,
+        "checkpoint_args": observed_args,
         "correlation_path": str(correlation_path),
         "correlation_size": correlation_path.stat().st_size,
         "correlation_sha256": sha256_file(correlation_path),
@@ -103,6 +129,9 @@ def main() -> None:
                 entry = verify_model_pair(
                     model_dir / "checkpoint_nonavg.pth",
                     model_dir / f"{hemisphere}_val_corr_nonavg.npy",
+                    expected_layer=layer,
+                    expected_run=run,
+                    expected_hemisphere=hemisphere,
                 )
                 entry.update(
                     {"encoder_layer": layer, "run": run, "hemisphere": hemisphere}
@@ -111,6 +140,28 @@ def main() -> None:
 
     if len(entries) != 16:
         raise AssertionError(f"expected 16 ensemble members, found {len(entries)}")
+    confidence = {}
+    for hemisphere in HEMISPHERES:
+        values = []
+        for entry in entries:
+            if entry["hemisphere"] == hemisphere:
+                values.append(
+                    np.nan_to_num(np.load(entry["correlation_path"], allow_pickle=False))
+                )
+        matrix = np.stack(values)
+        weights = softmax(20 * matrix, axis=0)
+        if matrix.shape != (8, FSAVERAGE_VERTEX_COUNT):
+            raise ValueError(f"unexpected confidence ensemble shape: {matrix.shape}")
+        if not np.isfinite(weights).all() or not np.allclose(weights.sum(axis=0), 1.0):
+            raise ValueError("brain encoder confidence softmax is invalid")
+        confidence[hemisphere] = {
+            "member_count": 8,
+            "vertex_count": FSAVERAGE_VERTEX_COUNT,
+            "softmax_temperature_multiplier": 20,
+            "weights_minimum": float(weights.min()),
+            "weights_maximum": float(weights.max()),
+            "weights_sum_max_abs_error": float(np.abs(weights.sum(axis=0) - 1).max()),
+        }
     payload = {
         "schema_version": 1,
         "status": "verified",
@@ -121,6 +172,10 @@ def main() -> None:
         "runs": list(RUNS),
         "hemispheres": list(HEMISPHERES),
         "ensemble_member_count": len(entries),
+        "checkpoint_args_verified": True,
+        "ensemble_confidence_weighting_verified": True,
+        "ensemble_confidence": confidence,
+        "full_forward_verified": False,
         "entries": entries,
     }
     write_json_atomic(args.output, payload)

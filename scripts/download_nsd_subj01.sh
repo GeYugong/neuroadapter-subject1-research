@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_ROOT=${PROJECT_ROOT:-/data/matengyu/geyugong/neuroadapter-subject1-research}
+: "${PROJECT_ROOT:?set PROJECT_ROOT to the experiment root}"
 DATA_ROOT=${DATA_ROOT:-$PROJECT_ROOT/data/raw/nsd}
 FINGERPRINT_DIR=${FINGERPRINT_DIR:-$PROJECT_ROOT/data/fingerprints}
 AWS_BIN=${AWS_BIN:-$(command -v aws)}
@@ -77,4 +77,3 @@ find "$DATA_ROOT" -type f -printf '%P\t%s\n' | LC_ALL=C sort \
 
 echo "finished_at=$(date --iso-8601=seconds)"
 du -sh "$DATA_ROOT"
-

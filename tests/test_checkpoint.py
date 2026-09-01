@@ -7,8 +7,11 @@ import torch
 
 from neuroadapter_research.checkpoint import (
     load_distributed_checkpoint,
+    prune_full_checkpoints,
+    save_inference_snapshot,
     save_distributed_checkpoint,
     verify_checkpoint,
+    verify_inference_snapshot,
 )
 
 
@@ -73,3 +76,61 @@ def test_checkpoint_refuses_overwrite(tmp_path) -> None:
     save_distributed_checkpoint(**kwargs)
     with pytest.raises(FileExistsError):
         save_distributed_checkpoint(**kwargs)
+
+
+def test_checkpoint_quarantines_stale_incomplete(tmp_path) -> None:
+    stale = tmp_path / ".checkpoint-update-00000003.incomplete"
+    stale.mkdir()
+    (stale / "partial").write_text("incomplete", encoding="utf-8")
+    output = save_distributed_checkpoint(
+        output_dir=tmp_path,
+        update=3,
+        rank=0,
+        world_size=1,
+        model_state={"value": torch.tensor([1.0])},
+        optimizer_state={"state": {}},
+        trainer_state={"next_update": 3},
+        rank_state={"rank": 0},
+        barrier=no_barrier,
+    )
+    assert output.is_dir()
+    assert len(list((tmp_path / "corrupt").iterdir())) == 1
+
+
+def test_inference_snapshot_and_full_retention(tmp_path) -> None:
+    snapshot = save_inference_snapshot(
+        tmp_path / "snapshots",
+        25,
+        {"value": torch.tensor([2.0])},
+        {"optimizer_update": 25},
+    )
+    assert (snapshot / "COMPLETE").is_file()
+    assert verify_inference_snapshot(snapshot)["optimizer_update"] == 25
+
+    checkpoints = tmp_path / "checkpoints"
+    for update in (1, 2, 3):
+        save_distributed_checkpoint(
+            output_dir=checkpoints,
+            update=update,
+            rank=0,
+            world_size=1,
+            model_state={"value": torch.tensor([float(update)])},
+            optimizer_state={"state": {}},
+            trainer_state={"next_update": update},
+            rank_state={"rank": 0},
+            barrier=no_barrier,
+        )
+    removed = prune_full_checkpoints(checkpoints, keep_latest=2)
+    assert [path.name for path in removed] == ["checkpoint-update-00000001"]
+
+
+def test_inference_snapshot_rejects_tampering(tmp_path) -> None:
+    snapshot = save_inference_snapshot(
+        tmp_path / "snapshots",
+        5,
+        {"value": torch.tensor([2.0])},
+        {"optimizer_update": 5},
+    )
+    (snapshot / "metadata.json").write_text("{}\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="size mismatch|hash mismatch"):
+        verify_inference_snapshot(snapshot)
