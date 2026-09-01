@@ -899,3 +899,34 @@ git diff --check passed
 ```
 
 `ruff` 未安装在冻结候选环境中，因此未临时安装或修改环境。当前没有 formal approval、formal training process 或 `MODEL_LOCK.json`。下一步不是直接训练，而是先解决 Schaefer token/RH 资产来源，再在两张 GPU 同时空闲时执行全部 GPU 门禁。
+
+## 2026-09-01：刷新 canonical 初始化证据绑定
+
+在服务器 Git 工作树逐文件确认与提交 `e331389fc52b2bc71e5b274ed77c508a68e226dc` 一致后，使用 CPU 执行：
+
+```bash
+PYTHONPATH=repo envs/neuroadapter/bin/python repo/scripts/create_canonical_initialization.py \
+  --model-path models/stable-diffusion-v1-5 \
+  --model-manifest data/fingerprints/model_assets_sha256.json \
+  --data-fingerprint data/fingerprints/data_fingerprint.json \
+  --environment-lock data/fingerprints/requirements-freeze-candidate.txt \
+  --source-manifest repo/manifests/upstream_sources.json \
+  --repository-root repo \
+  --output models/canonical/subject01_adapter_init.pt \
+  --manifest models/canonical/subject01_adapter_init.json \
+  --seed 20260901 \
+  --environment-status candidate \
+  --refresh-manifest
+```
+
+结果：
+
+```text
+initialization SHA-256  dc363931727f5f5e445d267f9b31e1a366b134b2e62a34dc72ae12693d875fca
+initialization size     464285745 bytes
+reload bitwise equal    true
+repository commit       e331389fc52b2bc71e5b274ed77c508a68e226dc
+environment status      candidate
+```
+
+初始化权重的 SHA-256 与刷新前完全一致；本次只补齐 environment lock、upstream source manifest、`modeling.py` 和 Git commit 的证据绑定，没有生成新权重。随后重新导出 `manifests/frozen/`。由于 Schaefer 等价性门禁尚未通过且 GPU 门禁尚未执行，canonical 状态继续保持 `candidate`，不得用于 formal training。

@@ -10,7 +10,7 @@
     {
       "path": "canonical_initialization.json",
       "source": "models/canonical/subject01_adapter_init.json",
-      "sha256": "e71f9b88c092f78169c61c6267c8d36fc68f448fa88c881a40c9029de747abcd"
+      "sha256": "27fa88a3d8391aa7a5dbeee024387d4869f7db00ed74b38d78e3b1cc368f8ab7"
     },
     {
       "path": "data_fingerprint.json",

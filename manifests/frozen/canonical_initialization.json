@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "status": "candidate",
   "subject": 1,
   "architecture": "linear_projection",
   "seed": 20260901,
@@ -10,6 +11,10 @@
   "initialization_size": 464285745,
   "data_fingerprint_sha256": "16a6e610670f0d91e0cc063ab375b93276a62838b73e25fcae24e5f4932042cc",
   "model_manifest_sha256": "e59cb74a2269b9a49c8eaf76f33c7945ec4ed963c1a203acee2864085e05ce62",
+  "environment_lock_sha256": "ccd7b013e2badaa5ad3275b4e1d1be418c3af37f9200b96d6d0946a87f466c36",
+  "source_manifest_sha256": "18d2f6bd4f5928e2c6b81f9a052e50d33de25b74eaf239b9965a3e49c4ea80a6",
+  "modeling_sha256": "5e15785b00bd3506eb484b0dab938ee5995c452f058834f32150f13bb89f3bb8",
+  "repository_commit": "e331389fc52b2bc71e5b274ed77c508a68e226dc",
   "parameter_audit": {
     "trainable_tensors": 38,
     "trainable_parameters": 116068608,
