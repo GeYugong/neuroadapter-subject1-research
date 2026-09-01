@@ -32,6 +32,14 @@ from neuroadapter_research.backend import configure_torch_backend
 from neuroadapter_research.config import load_training_config
 from neuroadapter_research.integrity import load_json_mapping, verify_file_record
 from neuroadapter_research.metrics import paired_correlation_distance, pixel_metrics
+from neuroadapter_research.protocol import (
+    image_order_sha256,
+    load_selection_plan,
+    method_fingerprint,
+    validate_selection_config_and_plan,
+    validate_selection_plan_inputs,
+    verify_protocol_repository,
+)
 from neuroadapter_research.selection import per_image_two_way_identification
 
 
@@ -154,29 +162,56 @@ def identification_by_seed(original: np.ndarray, candidates: list[np.ndarray]) -
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
-    parser.add_argument("--project-root", type=Path, required=True)
     parser.add_argument("--decode-manifest", type=Path, required=True)
-    parser.add_argument("--stimuli", type=Path, required=True)
-    parser.add_argument("--evaluation-manifest", type=Path, required=True)
     parser.add_argument("--validation-loss", type=Path, required=True)
-    parser.add_argument("--optimizer-update", type=int, required=True)
     parser.add_argument("--output-json", type=Path, required=True)
     parser.add_argument("--output-csv", type=Path, required=True)
     parser.add_argument("--device", default="cuda:0")
-    parser.add_argument("--batch-size", type=int, default=16)
     args = parser.parse_args()
-    config = load_training_config(args.config, require_frozen=False)
+    config = load_training_config(args.config, require_frozen=True)
     configure_torch_backend(config.training)
-    project_root = args.project_root.resolve()
-    if Path(config.raw["project_root"]).resolve() != project_root:
-        raise ValueError("evaluator project root differs from the training config")
-    assets = verify_evaluation_assets(project_root, args.evaluation_manifest)
+    repository = Path(__file__).resolve().parents[1]
+    verify_protocol_repository(repository, config.raw["protocol_commit"])
+    plan = load_selection_plan(config.paths["selection_plan"], require_frozen=True)
+    validate_selection_config_and_plan(config, plan)
+    plan_binding = validate_selection_plan_inputs(
+        plan,
+        validation_ids_path=config.paths["validation_ids"],
+        repository_root=repository,
+    )
+    fingerprint = method_fingerprint(config)
+    project_root = Path(config.raw["project_root"]).resolve()
+    assets = verify_evaluation_assets(project_root, config.paths["evaluation_manifest"])
     os.environ["TORCH_HOME"] = str(project_root / "models/evaluation/torch")
     torch.hub.set_dir(str(project_root / "models/evaluation/torch/hub"))
     device = torch.device(args.device)
     image_ids, originals, reconstructed, decode_manifest = load_decode_set(
-        args.decode_manifest, args.stimuli
+        args.decode_manifest, config.paths["stimuli"]
     )
+    expected_decode = {
+        "config_sha256": config.sha256,
+        "method_fingerprint": fingerprint,
+        **plan_binding,
+        "protocol_namespace": plan.raw["protocol_namespace"],
+        "denoising_steps": plan.raw["denoising_steps"],
+        "guidance_scale": plan.raw["guidance_scale"],
+        "repository_commit": config.raw["protocol_commit"],
+    }
+    for name, expected in expected_decode.items():
+        if decode_manifest.get(name) != expected:
+            raise ValueError(f"decode manifest has invalid frozen binding: {name}")
+    if image_order_sha256(image_ids) != plan.raw["image_order_sha256"]:
+        raise ValueError("decode manifest image order differs from the selection plan")
+    expected_candidates = {
+        "screening": plan.raw["screening_candidates"],
+        "final": plan.raw["final_candidates"],
+    }
+    stage = decode_manifest.get("selection_stage")
+    if stage not in expected_candidates or int(decode_manifest["candidate_count"]) != int(
+        expected_candidates[stage]
+    ):
+        raise ValueError("decode candidate count differs from its selection stage")
+    batch_size = int(plan.raw["evaluation_batch_size"])
     by_metric: dict[str, list[np.ndarray]] = {"PixCorr": [], "SSIM": []}
     for candidate in reconstructed:
         pixcorr, ssim = pixel_metrics(originals, candidate)
@@ -195,7 +230,7 @@ def main() -> None:
             alex,
             alex_transform,
             device=device,
-            batch_size=args.batch_size,
+            batch_size=batch_size,
             output_key=key,
         )
         by_metric[metric_name] = identification_by_seed(original, candidates)
@@ -212,7 +247,7 @@ def main() -> None:
         inception,
         preprocess_transform(342, IMAGENET_MEAN, IMAGENET_STD),
         device=device,
-        batch_size=args.batch_size,
+        batch_size=batch_size,
         output_key="avgpool",
     )
     by_metric["Inception"] = identification_by_seed(original, candidates)
@@ -230,7 +265,7 @@ def main() -> None:
         clip_model.encode_image,
         preprocess_transform(224, CLIP_MEAN, CLIP_STD),
         device=device,
-        batch_size=args.batch_size,
+        batch_size=batch_size,
     )
     by_metric["CLIP"] = identification_by_seed(original, candidates)
     del clip_model
@@ -246,7 +281,7 @@ def main() -> None:
         efficient,
         preprocess_transform(255, IMAGENET_MEAN, IMAGENET_STD),
         device=device,
-        batch_size=args.batch_size,
+        batch_size=batch_size,
         output_key="avgpool",
     )
     by_metric["EffCorrDistance"] = [
@@ -269,7 +304,7 @@ def main() -> None:
         swav,
         preprocess_transform(224, IMAGENET_MEAN, IMAGENET_STD),
         device=device,
-        batch_size=args.batch_size,
+        batch_size=batch_size,
         output_key="avgpool",
     )
     by_metric["SwAVCorrDistance"] = [
@@ -296,21 +331,39 @@ def main() -> None:
     validation_loss = load_json_mapping(args.validation_loss)
     if int(validation_loss["image_count"]) != 500:
         raise ValueError("validation loss does not cover the fixed 500-image pool")
-    if validation_loss["snapshot_sha256"] != decode_manifest["snapshot_sha256"]:
-        raise ValueError("validation loss and decode use different snapshots")
-    if validation_loss["validation_ids_sha256"] != decode_manifest["validation_ids_sha256"]:
-        raise ValueError("validation loss and decode use different validation IDs")
-    if validation_loss["config_sha256"] != decode_manifest["config_sha256"]:
-        raise ValueError("validation loss and decode use different configs")
-    if validation_loss["config_sha256"] != config.sha256:
-        raise ValueError("evaluation config differs from decode and validation loss")
+    shared_fields = (
+        "optimizer_update",
+        "config_sha256",
+        "method_fingerprint",
+        "selection_plan_sha256",
+        "validation_ids_sha256",
+        "image_order_sha256",
+        "metric_implementation_sha256",
+        "protocol_namespace",
+        "repository_commit",
+        "snapshot_model_sha256",
+        "snapshot_manifest_sha256",
+        "snapshot_metadata_sha256",
+        "formal_approval_sha256",
+    )
+    for name in shared_fields:
+        if validation_loss.get(name) != decode_manifest.get(name):
+            raise ValueError(f"validation loss and decode differ in {name}")
     record = {
-        "optimizer_update": args.optimizer_update,
+        "optimizer_update": int(decode_manifest["optimizer_update"]),
         "validation_loss": float(validation_loss["mean_loss"]),
         "metrics": {
             name: float(values.mean()) for name, values in seed_mean.items()
         },
         "per_image_semantic_score": [row["SemanticScore"] for row in rows],
+        "snapshot_model_sha256": decode_manifest["snapshot_model_sha256"],
+        "snapshot_manifest_sha256": decode_manifest["snapshot_manifest_sha256"],
+        "snapshot_metadata_sha256": decode_manifest["snapshot_metadata_sha256"],
+        "run_mode": "formal",
+        "run_kind": "selection",
+        "training_config_sha256": config.sha256,
+        "method_fingerprint": fingerprint,
+        "formal_approval_sha256": decode_manifest["formal_approval_sha256"],
     }
     payload = {
         "schema_version": 1,
@@ -327,9 +380,16 @@ def main() -> None:
         "negative_pool": "the same 500 unique validation image IDs for every candidate seed",
         "candidate_aggregation": "per-image arithmetic mean after fixed-pool scoring",
         "config_sha256": config.sha256,
-        "validation_ids_sha256": decode_manifest["validation_ids_sha256"],
+        "method_fingerprint": fingerprint,
+        **plan_binding,
+        "protocol_namespace": plan.raw["protocol_namespace"],
+        "selection_stage": stage,
+        "denoising_steps": plan.raw["denoising_steps"],
+        "guidance_scale": plan.raw["guidance_scale"],
+        "evaluation_batch_size": batch_size,
+        "repository_commit": config.raw["protocol_commit"],
         "decode_manifest_sha256": sha256_file(args.decode_manifest),
-        "evaluation_manifest_sha256": sha256_file(args.evaluation_manifest),
+        "evaluation_manifest_sha256": sha256_file(config.paths["evaluation_manifest"]),
         "per_image_csv_sha256": sha256_file(args.output_csv),
         "checkpoints": [record],
     }

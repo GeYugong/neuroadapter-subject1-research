@@ -930,3 +930,190 @@ environment status      candidate
 ```
 
 初始化权重的 SHA-256 与刷新前完全一致；本次只补齐 environment lock、upstream source manifest、`modeling.py` 和 Git commit 的证据绑定，没有生成新权重。随后重新导出 `manifests/frozen/`。由于 Schaefer 等价性门禁尚未通过且 GPU 门禁尚未执行，canonical 状态继续保持 `candidate`，不得用于 formal training。
+
+---
+
+## 2026-09-01：正式协议第二轮审计闭合
+
+### 执行边界
+
+本轮只执行代码、CPU、磁盘和清单审计。检查期间两张 RTX 5090 均由既有任务占用，本项目没有终止、暂停、重启或修改这些进程，也没有启动任何 GPU 门禁或训练。GitHub 仓库继续保持 public；仓库可见性和分支保护不属于本轮技术修复范围。
+
+以下结论取代本日志早先“公开 whole_brain_encoder Schaefer 文件不等价，因此 decoder formal training 必须阻断”的判断，但不改写原始历史记录。
+
+### Decoder atlas 与 brain encoder parcel 分离
+
+原有单一 Schaefer equivalence gate 被拆为两个职责不同的门禁。
+
+Decoder atlas 使用以下命令重新审计：
+
+```bash
+cd /data/matengyu/geyugong/neuroadapter-subject1-research
+PYTHONPATH=repo envs/neuroadapter/bin/python repo/scripts/audit_decoder_atlas.py \
+  --project-root . \
+  --annotation-dir data/raw/schaefer/fsaverage/label \
+  --parcel-dir data/derived/parcels/schaefer \
+  --metadata data/derived/neural_data/metadata_sub-01.npy \
+  --parcel-map data/fingerprints/parcel_token_map.csv \
+  --cache-manifest data/fingerprints/training_cache_manifest.json \
+  --source-manifest repo/manifests/upstream_sources.json \
+  --output data/fingerprints/decoder_atlas_audit.json
+```
+
+结果：
+
+```text
+gate                              decoder_atlas
+status                            verified
+surface                           fsaverage
+CBIG commit                       35b5664bec8822e2f77da5e090e96f91d0095be6
+parcels / hemisphere              500
+selected parcels / hemisphere     100
+model tokens                      200
+top-SNR ranking                   verified
+ordered 200-token vertex SHA-256  4ffebb4a915787fb159f8a5d943559c579e7bf14e6448da6375f7ef125be2c13
+max_voxels                        626
+```
+
+CBIG annotation、派生 parcel、metadata、parcel token map 和 training cache manifest 均已纳入审计。结论是当前 decoder 输入链自洽，9000 图训练缓存不需要重建；公开 WBE 文件的 label 顺序不再错误阻断 decoder selection/final。
+
+Brain encoder parcel 使用以下命令独立审计：
+
+```bash
+PYTHONPATH=repo envs/neuroadapter/bin/python repo/scripts/audit_brain_encoder_parcels.py \
+  --asset-root models/brain-encoder/dinov2_q_transformer/schaefer/subj_01 \
+  --parcel-dir repo/vendor/whole_brain_encoder/parcels/schaefer \
+  --repository-root repo \
+  --source-manifest repo/manifests/upstream_sources.json \
+  --output data/fingerprints/brain_encoder_parcel_audit.json
+```
+
+结果：
+
+```text
+gate                         brain_encoder_parcel
+status                       blocked
+checkpoint count             16 / 16
+query embedding shape        [501, 768] for all checkpoints
+checkpoint parcel_dir        ./parcels/schaefer
+fixed WBE commit             767f25afc2240f568f4db8c0ce09604e6f83aa72
+runtime source relation      unverified
+public LH/RH parcel masks    identical canonical membership hash
+```
+
+所有 checkpoint 结构、checkpoint SHA、query 数量、公开 parcel Git blob 和运行时 mask 均已记录。阻断原因不是 forward 失败，而是 checkpoint 没有携带作者训练时原始 parcel 文件的哈希，公开文件与内部相对路径之间缺少可验证的身份链。该问题只阻断最终 brain encoder full-forward、encoder-selected 标准 test 和 test access。
+
+### Selection provenance 冻结
+
+新增 frozen `subject01_selection_plan.json`，固定 20 个一级 snapshot update：
+
+```text
+13282, 26563, 39844, 53125, 66407,
+79688, 92969, 106250, 119532, 132813,
+146094, 159375, 172657, 185938, 199219,
+212500, 225782, 239063, 252344, 265625
+```
+
+同时固定：
+
+```text
+validation images        500，ID 文件和实际顺序分别哈希
+screening candidates     2
+final candidates         8
+denoising steps          50
+guidance scale           4.0
+validation-loss draws    1
+validation batch         8
+evaluation batch         16
+bootstrap draws          10000
+bootstrap seed           20260901
+metric source SHA        evaluate_validation.py, metrics.py, selection.py
+```
+
+`validation_loss.py`、`decode_validation.py`、`evaluate_validation.py` 和 `select_checkpoint.py` 不再接受可改变科学设置的自由 CLI 参数。Optimizer update 从 atomic snapshot metadata 读取；每条结果绑定 snapshot model/manifest/metadata SHA、formal approval、完整 config、方法指纹、图片顺序和指标实现。Shortlist 必须恰好覆盖全部 20 个 update，二级 5 个 checkpoint 必须与 shortlist manifest 完全一致。
+
+Selection plan 现场校验结果：
+
+```text
+selection plan SHA-256        1cf772d05ce9a7bc389f759bf2ac6532971cb87017f2e6b7e52ed965c7f3dce2
+validation IDs SHA-256        73137068416d3400708e1a3d5bda09600be4ea7b2164f11322a26f4de1b37c55
+image order SHA-256           1eb801c0460754e803c9d86f6c60aec0512da0a49205971d1efb0fef1cc256ad
+metric implementation SHA-256 aec036bffe87ff6adfc580986ba3fd6a9ffe0dd7d8b9adbbd7f3276219decf02
+```
+
+### Selection 到 final 的 approval 闭合
+
+新增 `method_fingerprint`，绑定科学超参数、执行后端、数据、缓存、模型、环境、源码、decoder atlas、selection plan 和 gate requirements；排除 run name、run kind、split、output 和 `max_updates`。因此 selection 与 final 可以复用已经通过的 GPU/重复性门禁，同时不能改变训练方法。
+
+新增 final config template、完整 `train_pool_ids.txt` 和 `derive_final_config.py`。Selection approval 绑定 selection config 与六项门禁；final approval 进一步绑定 final selection manifest、`U*`、selection config 和 9000 图 train pool。Final config 只允许机械修改协议列出的运行字段。
+
+9000 图 train pool 结果：
+
+```text
+count                       9000
+ordered integer-array SHA   11e107c402acfffea891215e39375312f3e98cce5a2d332811dc2181a2953f4e
+train_pool_ids.txt SHA-256  b23342d713b303cbe2931bee52009bf9b1adec2cfa35b91aae0fbea6bc6a5d1d
+```
+
+### GPU、checkpoint、export 与 test gate 加固
+
+新增 frozen `gate_requirements.yaml`：双 RTX 5090、compute capability 12.0、原生 `sm_120`、BF16、forward tolerance `1e-6`、batch 至少 532 updates、双卡压力测试至少 1800 秒、reserved memory 上限 29 GiB 和必须可读的 Xid 检查。硬件门禁会执行 BF16 matmul backward、卷积 forward/backward、NCCL、UUID/driver/型号检查和持续压力测试，CLI 不能降低阈值。
+
+Inference snapshot 新增与序列化无关的 tensor structure hash。恢复后再次到达已存在 snapshot 时，只有模型和 metadata 完全一致才幂等复用；冲突硬失败。完整 distributed checkpoint 在 prepare、各 rank 保存、publish 和 verify 阶段同步错误，避免单 rank 失败后其他 rank 卡在 barrier。
+
+Final exporter 现在强制验证 snapshot 来自 `formal/final`、config/method/approval 与 `U*` 一致、run status 已完成、split 为完整 9000 图，并将 selection、snapshot、环境、源码、评价资产和 brain encoder 资产身份写入 `MODEL_LOCK.json`。标准 test access 还要求 annotated release tag，并逐项比较 brain encoder forward gate 与 model lock。
+
+### 冻结证据导出
+
+执行：
+
+```bash
+cd /data/matengyu/geyugong/neuroadapter-subject1-research
+PYTHONPATH=repo envs/neuroadapter/bin/python repo/scripts/export_frozen_manifests.py \
+  --project-root . \
+  --repository-root repo
+```
+
+`manifests/frozen/` 新增：
+
+```text
+decoder_atlas_audit.json
+brain_encoder_parcel_audit.json
+train_pool_ids.txt
+```
+
+并更新 `INDEX.json`、`split_manifest.json` 和 Schaefer 来源审计。两份大 CSV 的服务器工作树差异仅为换行格式，`git diff --ignore-space-at-eol` 无语义差异，因此没有制造无关 CSV 变更。
+
+### CPU 验证
+
+最终同步代码后在项目专用环境执行：
+
+```bash
+cd /data/matengyu/geyugong/neuroadapter-subject1-research/repo
+PYTHONPATH=src ../envs/neuroadapter/bin/python -m pytest -q
+../envs/neuroadapter/bin/python -m compileall -q src scripts tests
+```
+
+结果：
+
+```text
+58 passed
+14 个固定上游 matplotlib/pyparsing deprecation warnings
+compileall passed
+11 个关键 CLI --help 检查通过
+frozen selection plan 输入校验通过
+```
+
+### 当前状态
+
+```text
+decoder atlas gate          verified
+brain encoder parcel gate   blocked，仅阻断 encoder-selected test
+GPU gates                   尚未执行
+canonical status            candidate
+formal selection approval   不存在
+formal training             未启动
+MODEL_LOCK.json             不存在
+```
+
+下一步仍不是直接训练。必须等待两张 RTX 5090 同时空闲，冻结最终 protocol commit、canonical manifest 和正式 selection YAML，再依次执行固定 GPU/forward/batch/resume/decode/evaluator 门禁。

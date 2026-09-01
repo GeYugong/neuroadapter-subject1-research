@@ -9,6 +9,7 @@ import gc
 import hashlib
 import json
 import os
+import subprocess
 import sys
 from pathlib import Path, PosixPath
 
@@ -58,14 +59,53 @@ def tensor_sha256(value: torch.Tensor) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--project-root", type=Path, required=True)
     parser.add_argument("--repository-root", type=Path, required=True)
     parser.add_argument("--asset-root", type=Path, required=True)
     parser.add_argument("--parcel-dir", type=Path, required=True)
     parser.add_argument("--torch-home", type=Path, required=True)
+    parser.add_argument("--asset-manifest", type=Path, required=True)
+    parser.add_argument("--parcel-audit", type=Path, required=True)
+    parser.add_argument("--source-manifest", type=Path, required=True)
+    parser.add_argument("--environment-lock", type=Path, required=True)
+    parser.add_argument("--evaluation-manifest", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--device", default="cuda:0")
     args = parser.parse_args()
     repository = args.repository_root.resolve()
+    project_root = args.project_root.resolve()
+    asset_manifest = json.loads(args.asset_manifest.read_text(encoding="utf-8"))
+    parcel_audit = json.loads(args.parcel_audit.read_text(encoding="utf-8"))
+    source_manifest = json.loads(args.source_manifest.read_text(encoding="utf-8"))
+    evaluation_manifest = json.loads(
+        args.evaluation_manifest.read_text(encoding="utf-8")
+    )
+    if (
+        asset_manifest.get("status") != "verified"
+        or parcel_audit.get("gate") != "brain_encoder_parcel"
+        or parcel_audit.get("status") != "verified"
+    ):
+        raise ValueError("brain encoder asset and parcel audits must both be verified")
+    sources = source_manifest["sources"]
+    observed_wbe = subprocess.check_output(
+        ["git", "-C", str(repository / "vendor/whole_brain_encoder"), "rev-parse", "HEAD"],
+        text=True,
+    ).strip()
+    observed_dino = subprocess.check_output(
+        ["git", "-C", str(repository / "vendor/dinov2"), "rev-parse", "HEAD"],
+        text=True,
+    ).strip()
+    if observed_wbe != sources["whole_brain_encoder"]["commit"]:
+        raise ValueError("whole_brain_encoder commit differs from the source manifest")
+    if observed_dino != sources["dinov2"]["commit"]:
+        raise ValueError("DINOv2 commit differs from the source manifest")
+    dino_record = evaluation_manifest["files"]["dinov2_vitb14"]
+    dino_weight = project_root / dino_record["path"]
+    if (
+        dino_weight.stat().st_size != int(dino_record["size"])
+        or sha256_file(dino_weight) != dino_record["sha256"]
+    ):
+        raise ValueError("DINOv2 weight differs from the evaluation manifest")
     os.environ["TORCH_HOME"] = str(args.torch_home.resolve())
     torch.hub.set_dir(str(args.torch_home.resolve() / "hub"))
     wbe = repository / "vendor/whole_brain_encoder"
@@ -81,6 +121,10 @@ def main() -> None:
     predictions: dict[str, list[np.ndarray]] = {hemi: [] for hemi in HEMISPHERES}
     correlations: dict[str, list[np.ndarray]] = {hemi: [] for hemi in HEMISPHERES}
     entries = []
+    static_entries = {
+        (entry["encoder_layer"], entry["run"], entry["hemisphere"]): entry
+        for entry in asset_manifest["entries"]
+    }
     with redirect_dinov2_hub(repository / "vendor/dinov2"):
         for hemisphere in HEMISPHERES:
             parcels = torch.load(
@@ -88,6 +132,12 @@ def main() -> None:
                 map_location="cpu",
                 weights_only=True,
             )
+            parcel_file_sha256 = sha256_file(
+                args.parcel_dir / f"{hemisphere}_labels_s01.pt"
+            )
+            parcel_record = parcel_audit["parcels"][hemisphere]
+            if parcel_file_sha256 != parcel_record["runtime_file_sha256"]:
+                raise ValueError("runtime parcel file differs from the parcel audit")
             dataset = SyntheticParcelDataset(parcels)
             for run in RUNS:
                 for layer in LAYERS:
@@ -102,6 +152,14 @@ def main() -> None:
                         checkpoint_path, map_location="cpu", weights_only=True
                     )
                     checkpoint_args = checkpoint["args"]
+                    if (
+                        str(getattr(checkpoint_args, "parcel_dir", ""))
+                        != parcel_audit["checkpoint_parcel_dir"]
+                    ):
+                        raise ValueError("checkpoint parcel_dir differs from the parcel audit")
+                    static_entry = static_entries[(layer, run, hemisphere)]
+                    if sha256_file(checkpoint_path) != static_entry["checkpoint_sha256"]:
+                        raise ValueError("checkpoint differs from the static asset manifest")
                     checkpoint_args.device = device
                     model = brain_encoder(checkpoint_args, dataset)
                     state = {
@@ -121,6 +179,12 @@ def main() -> None:
                             f"unexpected={unexpected}, missing={forbidden_missing}"
                         )
                     model.to(device).eval()
+                    parcel_mask_sha256 = tensor_sha256(model.parcel_mask.float().cpu())
+                    if (
+                        parcel_mask_sha256
+                        != parcel_record["canonical_float32_parcel_mask_sha256"]
+                    ):
+                        raise ValueError("instantiated parcel_mask differs from the parcel audit")
                     with torch.no_grad():
                         prediction = model(image.to(device))["pred"].float().cpu()
                     if prediction.shape != (1, VERTICES) or not torch.isfinite(prediction).all():
@@ -136,6 +200,10 @@ def main() -> None:
                             "run": run,
                             "hemisphere": hemisphere,
                             "checkpoint_sha256": sha256_file(checkpoint_path),
+                            "checkpoint_parcel_dir": str(checkpoint_args.parcel_dir),
+                            "query_embed_shape": list(model.query_embed.weight.shape),
+                            "parcel_file_sha256": parcel_file_sha256,
+                            "parcel_mask_sha256": parcel_mask_sha256,
                             "prediction_sha256": tensor_sha256(prediction),
                             "missing_frozen_backbone_key_count": len(
                                 incompatibility.missing_keys
@@ -162,6 +230,7 @@ def main() -> None:
         }
     payload = {
         "schema_version": 1,
+        "gate": "brain_encoder_forward",
         "status": "passed",
         "subject": 1,
         "input": "fixed synthetic 425x425 RGB tensor",
@@ -169,6 +238,21 @@ def main() -> None:
         "state_dict_loading_verified": True,
         "full_forward_verified": True,
         "confidence_weighted_ensemble_verified": True,
+        "brain_encoder_asset_manifest_sha256": sha256_file(args.asset_manifest),
+        "brain_encoder_parcel_audit_sha256": sha256_file(args.parcel_audit),
+        "parcel_files_sha256": {
+            hemi: parcel_audit["parcels"][hemi]["runtime_file_sha256"]
+            for hemi in HEMISPHERES
+        },
+        "whole_brain_encoder_commit": observed_wbe,
+        "dinov2_commit": observed_dino,
+        "dinov2_weight_sha256": sha256_file(dino_weight),
+        "environment_lock_sha256": sha256_file(args.environment_lock),
+        "source_manifest_sha256": sha256_file(args.source_manifest),
+        "evaluation_manifest_sha256": sha256_file(args.evaluation_manifest),
+        "repository_commit": subprocess.check_output(
+            ["git", "-C", str(repository), "rev-parse", "HEAD"], text=True
+        ).strip(),
         "entries": entries,
         "ensemble": ensemble,
     }

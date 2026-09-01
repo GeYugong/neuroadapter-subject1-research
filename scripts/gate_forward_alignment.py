@@ -24,6 +24,7 @@ from neuroadapter_research.modeling import (
     load_frozen_backbone,
     load_trainable_state_dict,
 )
+from neuroadapter_research.protocol import load_gate_requirements, method_fingerprint
 from neuroadapter_research.trainer import min_snr_weights
 
 
@@ -194,11 +195,12 @@ def main() -> None:
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--device", default="cuda:0")
-    parser.add_argument("--atol", type=float, default=1e-6)
     args = parser.parse_args()
     if args.output.exists():
         raise FileExistsError(f"forward gate output already exists: {args.output}")
     config = load_training_config(args.config, require_frozen=True)
+    requirements = load_gate_requirements(config.paths["gate_requirements"])
+    tolerance = float(requirements.raw["forward_atol"])
     configure_torch_backend(config.training)
     repository = Path(__file__).resolve().parents[1]
     fingerprint = json.loads(config.paths["data_fingerprint"].read_text(encoding="utf-8"))
@@ -216,7 +218,7 @@ def main() -> None:
     )
     prediction_error = float((current_prediction - upstream_prediction).abs().max())
     loss_error = float((current_loss - upstream_loss).abs())
-    if prediction_error > args.atol or loss_error > args.atol:
+    if prediction_error > tolerance or loss_error > tolerance:
         raise ValueError(
             f"forward alignment failed: prediction={prediction_error}, loss={loss_error}"
         )
@@ -225,6 +227,8 @@ def main() -> None:
         "gate": "forward_alignment",
         "status": "passed",
         "config_sha256": config.sha256,
+        "method_fingerprint": method_fingerprint(config),
+        "gate_requirements_sha256": requirements.sha256,
         "canonical_initialization_sha256": sha256_file(
             config.paths["canonical_initialization"]
         ),
@@ -232,7 +236,7 @@ def main() -> None:
         "dtype": "bfloat16 autocast",
         "prediction_max_abs_error": prediction_error,
         "loss_abs_error": loss_error,
-        "absolute_tolerance": args.atol,
+        "absolute_tolerance": tolerance,
         "upstream_train_script_sha256": upstream_source,
         "upstream_setup_ip_adapter_sha256": upstream_function,
     }

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
+from scripts.select_checkpoint import validate_shortlist_manifest
 from neuroadapter_research.selection import (
     balanced_ranks,
     build_shortlist,
@@ -45,8 +46,14 @@ def test_balanced_rank_directions() -> None:
 
 def test_shortlist_is_unique_and_has_five_updates() -> None:
     records = [record(i, 1.0 - i / 100, i / 10, i / 20, float(10 - i)) for i in range(1, 8)]
-    shortlist = build_shortlist(records)
+    shortlist = build_shortlist(records, expected_updates=list(range(1, 8)))
     assert len(shortlist) == len(set(shortlist)) == 5
+
+
+def test_shortlist_rejects_missing_planned_checkpoint() -> None:
+    records = [record(i, 0.8, 0.7, 0.2, 1.0) for i in range(1, 6)]
+    with np.testing.assert_raises_regex(ValueError, "differs from"):
+        build_shortlist(records, expected_updates=list(range(1, 7)))
 
 
 def test_one_se_selection_uses_balanced_rank_then_ties() -> None:
@@ -58,18 +65,41 @@ def test_one_se_selection_uses_balanced_rank_then_ties() -> None:
 
 
 def evaluation_payload(update: int, candidate_count: int = 2):
-    return {
+    payload = {
         "schema_version": 1,
         "status": "complete",
         "config_sha256": "d" * 64,
+        "method_fingerprint": "e" * 64,
         "image_count": 500,
         "candidate_count": candidate_count,
         "negative_pool": "fixed-500",
         "candidate_aggregation": "seed-mean",
         "evaluation_manifest_sha256": "a" * 64,
         "validation_ids_sha256": "b" * 64,
+        "image_order_sha256": "c" * 64,
+        "selection_plan_sha256": "f" * 64,
+        "metric_implementation_sha256": "1" * 64,
+        "protocol_namespace": "subject01-selection-v1",
+        "selection_stage": "screening" if candidate_count == 2 else "final",
+        "denoising_steps": 50,
+        "guidance_scale": 4.0,
+        "evaluation_batch_size": 16,
+        "repository_commit": "2" * 40,
         "checkpoints": [record(update, 0.8, 0.7, 0.2, 1.0)],
     }
+    payload["checkpoints"][0].update(
+        {
+            "snapshot_model_sha256": "3" * 64,
+            "snapshot_manifest_sha256": "4" * 64,
+            "snapshot_metadata_sha256": "5" * 64,
+            "run_mode": "formal",
+            "run_kind": "selection",
+            "training_config_sha256": payload["config_sha256"],
+            "method_fingerprint": payload["method_fingerprint"],
+            "formal_approval_sha256": "6" * 64,
+        }
+    )
+    return payload
 
 
 def test_evaluation_merge_requires_matching_bindings() -> None:
@@ -83,4 +113,34 @@ def test_evaluation_merge_requires_matching_bindings() -> None:
     with np.testing.assert_raises_regex(ValueError, "different frozen inputs"):
         merge_evaluation_payloads(
             [evaluation_payload(10), changed], expected_candidate_count=2
+        )
+
+
+def test_shortlist_manifest_is_bound_to_full_protocol() -> None:
+    binding = {
+        "config_sha256": "a" * 64,
+        "method_fingerprint": "b" * 64,
+        "selection_plan_sha256": "c" * 64,
+        "candidate_count": 2,
+        "selection_stage": "screening",
+    }
+    payload = {
+        "schema_version": 1,
+        "stage": "shortlist",
+        "status": "complete",
+        **binding,
+        "expected_snapshot_updates": list(range(1, 21)),
+        "shortlist_updates": [1, 2, 3, 4, 5],
+    }
+    assert validate_shortlist_manifest(
+        payload,
+        expected_binding=binding,
+        expected_updates=list(range(1, 21)),
+    ) == [1, 2, 3, 4, 5]
+    payload["config_sha256"] = "d" * 64
+    with np.testing.assert_raises_regex(ValueError, "config_sha256"):
+        validate_shortlist_manifest(
+            payload,
+            expected_binding=binding,
+            expected_updates=list(range(1, 21)),
         )

@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "gate": "brain_encoder_parcel",
+  "status": "blocked",
+  "subject": 1,
+  "checkpoint_count": 16,
+  "checkpoint_query_counts_verified": true,
+  "checkpoint_parcel_dir": "./parcels/schaefer",
+  "runtime_parcel_source_relation": "unverified",
+  "identity_manifest_sha256": null,
+  "whole_brain_encoder_commit": "767f25afc2240f568f4db8c0ce09604e6f83aa72",
+  "source_manifest_sha256": "18d2f6bd4f5928e2c6b81f9a052e50d33de25b74eaf239b9965a3e49c4ea80a6",
+  "parcels": {
+    "lh": {
+      "runtime_file_sha256": "95013670928b86f4e4989346f5f86faf33a2cfbba065308ad14e0c23c0bed048",
+      "parcel_count": 501,
+      "canonical_float32_parcel_mask_sha256": "0cd7ada23df83db18b3fd8831199bd9728f9d055a3b9f3794d328204cb7f82cb",
+      "upstream_repository": "https://github.com/kriegeskorte-lab/whole_brain_encoder.git",
+      "upstream_commit": "767f25afc2240f568f4db8c0ce09604e6f83aa72",
+      "upstream_relative_path": "parcels/schaefer/lh_labels_s01.pt",
+      "upstream_git_blob_sha1": "c4d8d899083f2073b3dff8355fdfe47049091778"
+    },
+    "rh": {
+      "runtime_file_sha256": "6f71fef01ce5303232c7e063243701b99a368af92aa240ad9826fa240ff1313c",
+      "parcel_count": 501,
+      "canonical_float32_parcel_mask_sha256": "0cd7ada23df83db18b3fd8831199bd9728f9d055a3b9f3794d328204cb7f82cb",
+      "upstream_repository": "https://github.com/kriegeskorte-lab/whole_brain_encoder.git",
+      "upstream_commit": "767f25afc2240f568f4db8c0ce09604e6f83aa72",
+      "upstream_relative_path": "parcels/schaefer/rh_labels_s01.pt",
+      "upstream_git_blob_sha1": "45d5daff5bea1b7c9aea6cf0ed43a0f3a0c9ca5b"
+    }
+  },
+  "checkpoints": [
+    {
+      "encoder_layer": 1,
+      "run": 1,
+      "hemisphere": "lh",
+      "checkpoint_sha256": "4f3b41d591a68038797897a77d1e571a16d749f5c361c06f57ae42a5eca5347e",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 1,
+      "run": 1,
+      "hemisphere": "rh",
+      "checkpoint_sha256": "1d7db17076bb1ae6cedc45450dd4c9ea6a7dad81ea3126c6dd6a3830202f4064",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 1,
+      "run": 2,
+      "hemisphere": "lh",
+      "checkpoint_sha256": "01d70d681de44019ddc5df692630d44be79a4c94c33ffcc69630da5d43d91a0e",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 1,
+      "run": 2,
+      "hemisphere": "rh",
+      "checkpoint_sha256": "4afdb5e7dc89c9fc62f254331625f7b1c17d9af72a8e1119668b9e5065de44a8",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 3,
+      "run": 1,
+      "hemisphere": "lh",
+      "checkpoint_sha256": "4237c9bf2a8186a235860e923e30a092c3b041ab13086aa9461313d79d1c0a52",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 3,
+      "run": 1,
+      "hemisphere": "rh",
+      "checkpoint_sha256": "aaa0bceef24f9dc1bd239021cbe4d30bbf40f6ac3290ba6eca7e1862502a745d",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 3,
+      "run": 2,
+      "hemisphere": "lh",
+      "checkpoint_sha256": "449b0c7afbbe54f60b8a3d79ab73b7cdd28c710731f0c3267b88ef2dc39d09d2",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 3,
+      "run": 2,
+      "hemisphere": "rh",
+      "checkpoint_sha256": "a2a227d53c12476cb1b11d1405c8922f1670d35020098a18c4f1a22d05f69b3a",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 5,
+      "run": 1,
+      "hemisphere": "lh",
+      "checkpoint_sha256": "0d7a7e7b8ba4f1c6864c0d2baa7dcda16645e7217c8bcead3853915049409e70",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 5,
+      "run": 1,
+      "hemisphere": "rh",
+      "checkpoint_sha256": "48dc4cce4033ac15a081e5e8a2b79340bccbdf6a2fa35ed2dca0331e3ee4bae7",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 5,
+      "run": 2,
+      "hemisphere": "lh",
+      "checkpoint_sha256": "4e532fc4e476e40c2523093f3fa6c1d78c03e7cdc4087f4aff4a3ec41b6260b5",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 5,
+      "run": 2,
+      "hemisphere": "rh",
+      "checkpoint_sha256": "ec93ea674190c1d1c22457e52f2378b25fa9b921b809f4166fed534eb2e76128",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 7,
+      "run": 1,
+      "hemisphere": "lh",
+      "checkpoint_sha256": "7871f4712843363632d89b9e6543d77490a051f4d7840d93f3da43702d84849b",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 7,
+      "run": 1,
+      "hemisphere": "rh",
+      "checkpoint_sha256": "e68a263dab39bcba13d994d595dac58634c643f03fde5aca08ee0c9a6d519552",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 7,
+      "run": 2,
+      "hemisphere": "lh",
+      "checkpoint_sha256": "3c6d59dae283b22ff3aae22263fd0a3449e1542da8464ff23cd9c8f5aeb26961",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    },
+    {
+      "encoder_layer": 7,
+      "run": 2,
+      "hemisphere": "rh",
+      "checkpoint_sha256": "0418d86cd8fd4e2758af38d01526c0c5dc6e2121855150b5ba322a959a638ebe",
+      "checkpoint_parcel_dir": "./parcels/schaefer",
+      "query_embed_key": "query_embed.weight",
+      "query_embed_shape": [
+        501,
+        768
+      ]
+    }
+  ]
+}

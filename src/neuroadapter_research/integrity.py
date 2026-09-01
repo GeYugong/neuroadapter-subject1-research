@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from .atomic import sha256_file
+from .protocol import LoadedGateRequirements
 
 
 SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
@@ -31,7 +32,11 @@ def load_json_mapping(path: Path) -> dict[str, Any]:
 
 
 def validate_gate_artifact(
-    path: Path, *, expected_gate: str, config_sha256: str
+    path: Path,
+    *,
+    expected_gate: str,
+    method_fingerprint: str,
+    gate_requirements: LoadedGateRequirements,
 ) -> dict[str, Any]:
     payload = load_json_mapping(path)
     if payload.get("schema_version") != 1:
@@ -40,8 +45,71 @@ def validate_gate_artifact(
         raise ValueError(f"formal gate identity mismatch: {expected_gate}")
     if payload.get("status") not in {"passed", "verified"}:
         raise ValueError(f"formal gate has not passed: {expected_gate}")
-    if payload.get("config_sha256") != config_sha256:
-        raise ValueError(f"formal gate uses a different config: {expected_gate}")
+    if payload.get("method_fingerprint") != method_fingerprint:
+        raise ValueError(f"formal gate uses a different method: {expected_gate}")
+    if payload.get("gate_requirements_sha256") != gate_requirements.sha256:
+        raise ValueError(f"formal gate uses different requirements: {expected_gate}")
+    config_sha256 = payload.get("config_sha256")
+    if not isinstance(config_sha256, str) or not SHA256_PATTERN.fullmatch(config_sha256):
+        raise ValueError(f"formal gate has no source config identity: {expected_gate}")
+
+    requirements = gate_requirements.raw
+    if expected_gate == "hardware_gate":
+        if (
+            payload.get("required_cuda_arch") != requirements["required_cuda_arch"]
+            or payload.get("native_arch_available") is not True
+            or float(payload.get("stress_duration_seconds", -1))
+            < requirements["stress_minimum_seconds"]
+            or payload.get("xid_check_passed") is not True
+        ):
+            raise ValueError("hardware gate evidence is weaker than the requirements")
+        ranks = payload.get("ranks")
+        if not isinstance(ranks, list) or len(ranks) != requirements["required_world_size"]:
+            raise ValueError("hardware gate has the wrong world size")
+        for record in ranks:
+            if (
+                record.get("device_name") != requirements["required_gpu_name"]
+                or record.get("compute_capability")
+                != requirements["required_compute_capability"]
+                or record.get("bf16_supported") is not requirements["required_bf16"]
+                or record.get("bf16_matmul_finite") is not True
+                or record.get("bf16_conv_backward_finite") is not True
+                or record.get("nccl_all_reduce_verified") is not True
+            ):
+                raise ValueError("hardware rank evidence does not meet requirements")
+        inventory = payload.get("system_evidence", {}).get("nvidia_smi")
+        if not isinstance(inventory, list) or len(inventory) != requirements[
+            "required_world_size"
+        ]:
+            raise ValueError("hardware gate has incomplete nvidia-smi inventory")
+        uuids = [record.get("uuid") for record in inventory]
+        if (
+            any(record.get("name") != requirements["required_gpu_name"] for record in inventory)
+            or any(not record.get("driver_version") for record in inventory)
+            or any(not value for value in uuids)
+            or len(set(uuids)) != len(uuids)
+        ):
+            raise ValueError("hardware gate has invalid GPU identity evidence")
+    elif expected_gate == "forward_alignment":
+        tolerance = float(payload.get("absolute_tolerance", -1))
+        if tolerance != requirements["forward_atol"]:
+            raise ValueError("forward gate tolerance differs from requirements")
+        if (
+            float(payload.get("prediction_max_abs_error", float("inf"))) > tolerance
+            or float(payload.get("loss_abs_error", float("inf"))) > tolerance
+        ):
+            raise ValueError("forward gate errors exceed the frozen tolerance")
+    elif expected_gate == "batch_gate":
+        if payload.get("minimum_updates") != requirements["batch_minimum_updates"]:
+            raise ValueError("batch gate duration differs from requirements")
+        selected_name = payload.get("selection")
+        selected = payload.get(selected_name) if isinstance(selected_name, str) else None
+        if (
+            not isinstance(selected, dict)
+            or int(selected.get("maximum_memory_reserved_bytes", 2**63))
+            > requirements["max_reserved_memory_bytes"]
+        ):
+            raise ValueError("selected batch geometry exceeds the memory limit")
     return payload
 
 
@@ -74,20 +142,32 @@ def validate_subject1_audits(paths: dict[str, Path]) -> dict[str, dict[str, Any]
     ):
         raise ValueError("NSD image mapping audit has not passed")
 
-    schaefer = load_json_mapping(paths["schaefer_equivalence"])
-    hemispheres = schaefer.get("hemispheres")
+    decoder_atlas = load_json_mapping(paths["decoder_atlas_audit"])
+    hemispheres = decoder_atlas.get("hemispheres")
     if (
-        schaefer.get("schema_version") != 1
-        or schaefer.get("status") != "indexed_equivalent"
+        decoder_atlas.get("schema_version") != 1
+        or decoder_atlas.get("gate") != "decoder_atlas"
+        or decoder_atlas.get("status") != "verified"
+        or decoder_atlas.get("surface_space") != "fsaverage"
+        or decoder_atlas.get("model_token_count") != 200
+        or decoder_atlas.get("max_voxels") != cache.get("max_voxels")
+        or decoder_atlas.get("top_snr_ranking_verified") is not True
         or not isinstance(hemispheres, dict)
         or set(hemispheres) != {"lh", "rh"}
-        or any(
-            hemispheres[hemi].get("relationship") != "indexed_equivalent"
-            for hemi in ("lh", "rh")
-        )
     ):
-        raise ValueError("Schaefer token membership is not indexed-equivalent")
-    return {"training_cache": cache, "nsd_image_mapping": mapping, "schaefer": schaefer}
+        raise ValueError("decoder atlas audit has not passed")
+    runtime = decoder_atlas.get("runtime_inputs", {})
+    if (
+        runtime.get("cache_manifest_sha256")
+        != sha256_file(paths["training_cache_manifest"])
+        or runtime.get("parcel_map_sha256") != cache.get("parcel_map_sha256")
+    ):
+        raise ValueError("decoder atlas audit is not bound to the training cache")
+    return {
+        "training_cache": cache,
+        "nsd_image_mapping": mapping,
+        "decoder_atlas": decoder_atlas,
+    }
 
 
 def _normalized_relative_path(value: object) -> str:

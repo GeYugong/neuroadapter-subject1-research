@@ -11,6 +11,7 @@ from typing import Any
 
 from neuroadapter_research.atomic import sha256_file, write_json_atomic
 from neuroadapter_research.config import load_training_config
+from neuroadapter_research.protocol import load_gate_requirements, method_fingerprint
 
 
 def load_run(path: Path, expected_geometry: dict[str, int], minimum_updates: int) -> dict[str, Any]:
@@ -34,6 +35,7 @@ def load_run(path: Path, expected_geometry: dict[str, int], minimum_updates: int
                 raise ValueError(f"batch gate contains non-finite {name}")
     return {
         "config_sha256": effective["config_sha256"],
+        "method_fingerprint": effective["method_fingerprint"],
         "input_hashes": effective["input_hashes"],
         "canonical_initialization_sha256": effective["input_hashes"][
             "canonical_initialization"
@@ -56,22 +58,23 @@ def main() -> None:
     parser.add_argument("--preferred-run", type=Path, required=True)
     parser.add_argument("--fallback-run", type=Path, required=True)
     parser.add_argument("--selected", choices=("preferred", "fallback"), required=True)
-    parser.add_argument("--minimum-updates", type=int, default=532)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.output.exists():
         raise FileExistsError(f"batch gate output already exists: {args.output}")
     config = load_training_config(args.config, require_frozen=True)
+    requirements = load_gate_requirements(config.paths["gate_requirements"])
+    minimum_updates = int(requirements.raw["batch_minimum_updates"])
     common = {"world_size": 2, "global_batch_size": 16}
     preferred = load_run(
         args.preferred_run,
         {**common, "micro_batch_size": 8, "gradient_accumulation_steps": 1},
-        args.minimum_updates,
+        minimum_updates,
     )
     fallback = load_run(
         args.fallback_run,
         {**common, "micro_batch_size": 4, "gradient_accumulation_steps": 2},
-        args.minimum_updates,
+        minimum_updates,
     )
     for name in ("backend", "canonical_initialization_sha256"):
         if preferred[name] != fallback[name]:
@@ -83,11 +86,22 @@ def main() -> None:
     selected = preferred if args.selected == "preferred" else fallback
     if selected["config_sha256"] != config.sha256:
         raise ValueError("selected batch gate run differs from the frozen config")
+    if selected["method_fingerprint"] != method_fingerprint(config):
+        raise ValueError("selected batch gate run uses a different method")
+    if (
+        int(selected["maximum_memory_reserved_bytes"])
+        > int(requirements.raw["max_reserved_memory_bytes"])
+    ):
+        raise ValueError("selected batch geometry exceeds the frozen memory limit")
     payload = {
         "schema_version": 1,
         "gate": "batch_gate",
         "status": "passed",
         "config_sha256": config.sha256,
+        "method_fingerprint": method_fingerprint(config),
+        "gate_requirements_sha256": requirements.sha256,
+        "minimum_updates": minimum_updates,
+        "max_reserved_memory_bytes": requirements.raw["max_reserved_memory_bytes"],
         "strict_weight_equivalence_claimed": False,
         "selection": args.selected,
         "preferred": preferred,

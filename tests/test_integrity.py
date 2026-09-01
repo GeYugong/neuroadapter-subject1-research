@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 import pytest
+import yaml
 
 from neuroadapter_research.integrity import (
     validate_gate_artifact,
@@ -12,6 +13,7 @@ from neuroadapter_research.integrity import (
     verify_file_against_manifest,
     verify_tree_against_manifest,
 )
+from neuroadapter_research.protocol import FIXED_GATE_REQUIREMENTS, load_gate_requirements
 
 
 def digest(value: bytes) -> str:
@@ -75,7 +77,12 @@ def test_manifest_rejects_parent_traversal(tmp_path: Path) -> None:
         verify_file_against_manifest(tmp_path / "asset.bin", manifest, "../asset.bin")
 
 
-def test_gate_artifact_is_bound_to_identity_and_config(tmp_path: Path) -> None:
+def test_gate_artifact_is_bound_to_identity_and_method(tmp_path: Path) -> None:
+    requirements_path = tmp_path / "requirements.yaml"
+    requirements_path.write_text(
+        yaml.safe_dump(FIXED_GATE_REQUIREMENTS, sort_keys=False), encoding="utf-8"
+    )
+    requirements = load_gate_requirements(requirements_path)
     gate = tmp_path / "gate.json"
     gate.write_text(
         json.dumps(
@@ -84,20 +91,88 @@ def test_gate_artifact_is_bound_to_identity_and_config(tmp_path: Path) -> None:
                 "gate": "decode_determinism",
                 "status": "passed",
                 "config_sha256": "a" * 64,
+                "method_fingerprint": "b" * 64,
+                "gate_requirements_sha256": requirements.sha256,
             }
         ),
         encoding="utf-8",
     )
     assert validate_gate_artifact(
-        gate, expected_gate="decode_determinism", config_sha256="a" * 64
+        gate,
+        expected_gate="decode_determinism",
+        method_fingerprint="b" * 64,
+        gate_requirements=requirements,
     )["status"] == "passed"
     with pytest.raises(ValueError, match="identity mismatch"):
         validate_gate_artifact(
-            gate, expected_gate="evaluator_repeatability", config_sha256="a" * 64
+            gate,
+            expected_gate="evaluator_repeatability",
+            method_fingerprint="b" * 64,
+            gate_requirements=requirements,
         )
 
 
-def test_subject1_audits_require_indexed_schaefer_equivalence(tmp_path: Path) -> None:
+def test_hardware_gate_requires_gpu_identity_inventory(tmp_path: Path) -> None:
+    requirements_path = tmp_path / "requirements.yaml"
+    requirements_path.write_text(
+        yaml.safe_dump(FIXED_GATE_REQUIREMENTS, sort_keys=False), encoding="utf-8"
+    )
+    requirements = load_gate_requirements(requirements_path)
+    rank = {
+        "device_name": FIXED_GATE_REQUIREMENTS["required_gpu_name"],
+        "compute_capability": [12, 0],
+        "bf16_supported": True,
+        "bf16_matmul_finite": True,
+        "bf16_conv_backward_finite": True,
+        "nccl_all_reduce_verified": True,
+    }
+    payload = {
+        "schema_version": 1,
+        "gate": "hardware_gate",
+        "status": "passed",
+        "config_sha256": "a" * 64,
+        "method_fingerprint": "b" * 64,
+        "gate_requirements_sha256": requirements.sha256,
+        "required_cuda_arch": "sm_120",
+        "native_arch_available": True,
+        "stress_duration_seconds": 1800.0,
+        "xid_check_passed": True,
+        "ranks": [dict(rank), dict(rank)],
+        "system_evidence": {
+            "nvidia_smi": [
+                {
+                    "uuid": "GPU-a",
+                    "name": FIXED_GATE_REQUIREMENTS["required_gpu_name"],
+                    "driver_version": "999.0",
+                },
+                {
+                    "uuid": "GPU-b",
+                    "name": FIXED_GATE_REQUIREMENTS["required_gpu_name"],
+                    "driver_version": "999.0",
+                },
+            ]
+        },
+    }
+    gate = tmp_path / "hardware.json"
+    gate.write_text(json.dumps(payload), encoding="utf-8")
+    validate_gate_artifact(
+        gate,
+        expected_gate="hardware_gate",
+        method_fingerprint="b" * 64,
+        gate_requirements=requirements,
+    )
+    payload["system_evidence"]["nvidia_smi"][1]["uuid"] = "GPU-a"
+    gate.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(ValueError, match="GPU identity"):
+        validate_gate_artifact(
+            gate,
+            expected_gate="hardware_gate",
+            method_fingerprint="b" * 64,
+            gate_requirements=requirements,
+        )
+
+
+def test_subject1_audits_require_verified_decoder_atlas(tmp_path: Path) -> None:
     paths = {
         name: tmp_path / name
         for name in (
@@ -106,7 +181,7 @@ def test_subject1_audits_require_indexed_schaefer_equivalence(tmp_path: Path) ->
             "training_cache_verification",
             "data_fingerprint",
             "nsd_image_mapping",
-            "schaefer_equivalence",
+            "decoder_atlas_audit",
         )
     }
     paths["training_cache"].write_bytes(b"cache")
@@ -120,6 +195,8 @@ def test_subject1_audits_require_indexed_schaefer_equivalence(tmp_path: Path) ->
                 "cache_sha256": digest(b"cache"),
                 "build_manifest_sha256": digest(b"manifest"),
                 "data_fingerprint_sha256": digest(b"fingerprint"),
+                "max_voxels": 626,
+                "parcel_map_sha256": "p" * 64,
             }
         ),
         encoding="utf-8",
@@ -139,21 +216,30 @@ def test_subject1_audits_require_indexed_schaefer_equivalence(tmp_path: Path) ->
         ),
         encoding="utf-8",
     )
-    paths["schaefer_equivalence"].write_text(
-        json.dumps({"schema_version": 1, "status": "mismatch", "hemispheres": {}}),
+    paths["decoder_atlas_audit"].write_text(
+        json.dumps({"schema_version": 1, "gate": "decoder_atlas", "status": "blocked"}),
         encoding="utf-8",
     )
-    with pytest.raises(ValueError, match="not indexed-equivalent"):
+    with pytest.raises(ValueError, match="has not passed"):
         validate_subject1_audits(paths)
 
-    paths["schaefer_equivalence"].write_text(
+    paths["decoder_atlas_audit"].write_text(
         json.dumps(
             {
                 "schema_version": 1,
-                "status": "indexed_equivalent",
+                "gate": "decoder_atlas",
+                "status": "verified",
+                "surface_space": "fsaverage",
+                "model_token_count": 200,
+                "max_voxels": 626,
+                "top_snr_ranking_verified": True,
                 "hemispheres": {
-                    "lh": {"relationship": "indexed_equivalent"},
-                    "rh": {"relationship": "indexed_equivalent"},
+                    "lh": {},
+                    "rh": {},
+                },
+                "runtime_inputs": {
+                    "cache_manifest_sha256": digest(b"manifest"),
+                    "parcel_map_sha256": "p" * 64,
                 },
             }
         ),

@@ -99,7 +99,7 @@ validation        500
 split_seed        20260901
 ```
 
-划分发生在唯一图片层面，不得在 30000 个 trial 层面切分。生成并冻结三组 image ID 清单及其 SHA-256。
+划分发生在唯一图片层面，不得在 30000 个 trial 层面切分。生成并冻结 `train_pool`、`selection_train`、`validation` 和 `test` 四组 image ID 清单及其 SHA-256。
 
 ### 3.5 Parcel 选择
 
@@ -123,7 +123,12 @@ vertex-list SHA-256
 
 `ncsnr.mgh` 是固定的扫描质量/可靠性元数据，不从新划出的 8500/500 split 重新估计。该选择复现公开数据管线，只用于固定输入维度，不参与 checkpoint 比较。
 
-CBIG annotation 派生 membership 还必须与固定 `whole_brain_encoder` 资产逐 hemisphere、逐 label 比较。当前审计发现：LH 的 501 个顶点集合完全相同但 label 顺序发生置换，只有 7/501 个位置直接相同；RH 与 CBIG 派生集合无一匹配，而公开上游的 RH 文件在顶点集合层面与其 LH 文件完全相同。该结果说明至少存在 token 顺序和 RH atlas 来源两项未决问题；口径解决并重新生成相关数据指纹前，正式训练保持阻断。
+atlas 身份拆成两个独立门禁：
+
+1. `decoder_atlas_gate` 固定 CBIG repository/commit、左右 annotation SHA 与 Git blob、每侧 500 parcels、top-SNR 排序、最终 200-token vertex hash 和 `max_voxels`。这是 decoder selection/final 的正式训练门禁；
+2. `brain_encoder_parcel_gate` 固定 16 个 checkpoint 的 `checkpoint_args.parcel_dir`、query 数量、运行时 LH/RH 文件 SHA 和 `parcel_mask` SHA。这是最终 brain encoder forward/test 门禁，不参与 decoder 训练 approval。
+
+当前 `decoder_atlas_gate` 已验证通过，最终 200-token 顺序哈希为 `4ffebb4a915787fb159f8a5d943559c579e7bf14e6448da6375f7ef125be2c13`，`max_voxels=626`，现有训练缓存无需重建。公开 `whole_brain_encoder` 的 LH/RH parcel membership 集合相同，且 checkpoint 只记录内部相对路径，无法证明公开文件就是作者训练 checkpoint 时的原始资产；因此 `brain_encoder_parcel_gate` 当前保持阻断，直到获得作者原始文件、文件哈希或可验证的生成链。
 
 ## 4. 环境与硬件门禁
 
@@ -220,7 +225,7 @@ test generation namespace
 
 checkpoint 只在 optimizer update 边界保存。收到 SIGTERM 时只设置退出标记，在当前 update 完成后执行全 rank barrier、原子保存、校验和写入 `COMPLETE` 标记，再安全退出。
 
-保存采用临时目录、fsync、重新加载验证、哈希计算和原子 rename。任何缺少 `COMPLETE` 的目录均不得恢复。
+保存采用临时目录、fsync、重新加载验证、哈希计算和原子 rename。任何缺少 `COMPLETE` 的目录均不得恢复。完整 snapshot 已存在时，只有在 `COMPLETE`、manifest、metadata 与模型结构哈希全部等于当前状态时才能幂等复用；任何冲突均硬失败。rank 0 或任一 rank 保存失败时必须将错误同步给所有进程，禁止其他 rank 永久等待 barrier。
 
 存储策略固定为：完整 resume checkpoint 每 5000 updates 保存一次但只保留最近 2 个；每 25 reference epochs 保存全部 inference-only snapshot；max update 同时保存最终 snapshot 和完整 resume。崩溃遗留的 `.incomplete` 目录先原子移动到 `corrupt/`，随后才允许重试同一 update。
 
@@ -239,7 +244,9 @@ checkpoint 只在 optimizer update 边界保存。收到 SIGTERM 时只设置退
 
 恢复测试必须比较两个 rank 各自的 `trace-rank-XXXXX.jsonl`；样本 ID、VAE latent、timestep、noise 和 dropout checksum 必须完全一致。BF16/DDP 权重若不能 bitwise 一致，必须在正式运行前冻结严格数值容差。所有门禁权重在验证后删除，不得进入正式结果。
 
-正式 approval 必须逐项绑定 config、protocol commit、environment lock、hardware、forward alignment、batch、resume、decode、evaluator、data fingerprint、training cache verification、NSD 图像映射、Schaefer indexed-equivalence、model assets 和 canonical initialization 的 SHA-256。训练器还会重新全量哈希 `nsd_stimuli.hdf5`，逐文件验证 Stable Diffusion tree，并核对五个 vendor submodule HEAD；只验证 manifest 文件本身不构成通过。Schaefer 审计不是 `indexed_equivalent` 时，approval 无法生成且 formal trainer 会再次拒绝。
+固定 `gate_requirements.yaml` 规定 GPU 名称/数量、`sm_120`、BF16、forward tolerance `1e-6`、batch 最少 532 updates、压力测试至少 1800 秒、reserved memory 上限 29 GiB 和 Xid 检查。命令行不得降低这些阈值。
+
+正式 approval 必须逐项绑定完整 config、`method_fingerprint`、protocol commit、environment lock、hardware、forward alignment、batch、resume、decode、evaluator、data fingerprint、training cache verification、NSD 图像映射、decoder atlas、model assets 和 canonical initialization 的 SHA-256。`method_fingerprint` 包含科学超参数、执行后端、数据/缓存/模型/环境/源码身份，排除 `run_name`、`run_kind`、`split_ids`、`output_dir` 和 `max_updates` 等运行字段。训练器还会重新全量哈希 `nsd_stimuli.hdf5`，逐文件验证 Stable Diffusion tree，并核对五个 vendor submodule HEAD；只验证 manifest 文件本身不构成通过。
 
 ## 9. Selection run
 
@@ -252,6 +259,8 @@ maximum duration     500 reference epochs
 initialization       canonical adapter initialization
 optimizer state      new and continuous
 ```
+
+`configs/protocol/subject01_selection_plan.json` 预先冻结 20 个精确 optimizer update、500 图 ID 与顺序哈希、2/8 candidates、50 denoising steps、guidance 4.0、validation/evaluation batch、bootstrap 10000 次及指标源码 SHA。validation、decode、evaluate 和 select 工具只能读取该计划，不接受自由 CLI 覆盖。
 
 训练中不得修改 GPU 数、batch、precision、LR、dropout 或数据顺序规则，也不得通过重启重置 optimizer。reference epoch 使用固定 global batch 并记录实际 optimizer updates，最终训练长度以 update 数而非 epoch 数表示。
 
@@ -285,6 +294,8 @@ LowLevelRank = mean(rank_desc(PixCorr), rank_desc(SSIM), rank_desc(AlexNet-2))
 
 `rank_desc` 将较高指标赋予较小 rank；使用 `scipy.stats.rankdata(method="average")` 处理并列，并在全部一级候选 snapshot 内计算。若低层或 loss 候选已在前三，则按 SemanticScore 顺序补足到 5 个，候选不得少于 5 个。
 
+shortlist 输入必须恰好覆盖固定计划的全部 20 个 update，不能缺失、增加或手工替换 checkpoint。每条记录必须从原子 snapshot metadata 读取 optimizer update，并绑定 snapshot model、manifest、metadata SHA 和 formal selection 身份。
+
 ### 9.4 二级验证
 
 五个 checkpoint 分别生成：
@@ -298,6 +309,8 @@ LowLevelRank = mean(rank_desc(PixCorr), rank_desc(SSIM), rank_desc(AlexNet-2))
 AlexNet-2、AlexNet-5、Inception 和 CLIP 的 two-way identification 固定使用同一 500 图负样本池。先在完整且无重复的池上计算每图 identification accuracy，再在同一图内平均 8 个 candidate seed。paired bootstrap 只重采样 image ID 及其已计算分数，不在含重复样本的 bootstrap 列表上重建相关矩阵。
 
 whole-brain encoder 可以生成附加诊断，但不得参与 shortlist、主分数或最终 checkpoint 选择。
+
+二级选择必须显式读取一级 shortlist manifest，5 个 update 的集合必须完全一致；final selection manifest 记录 shortlist manifest SHA。全部 evaluator 结果必须具有相同的协议 namespace、`method_fingerprint`、实际 image ID 顺序、推理设置、评价 batch、指标源码和 snapshot provenance。
 
 ### 9.5 选择规则
 
@@ -347,6 +360,8 @@ selection manifest SHA-256
 
 ## 10. Final run
 
+Final config 必须由 selection config、final selection manifest、`U*` 和冻结的 9000 图 `train_pool_ids.txt` 机械派生，不能手工重写。Selection approval 绑定 selection 完整 config 和共同方法；final approval 绑定 final 完整 config、相同 `method_fingerprint`、selection manifest、`U*` 和 train pool。两份配置只允许协议列出的运行字段发生变化。
+
 Final run 重新加载 canonical adapter initialization，创建新的 AdamW，使用全部 9000 张 train pool 图片，连续训练恰好 `U*` 个 optimizer updates。由于 selection 与 final 使用相同 global batch 16，该规则同时固定总样本曝光量：
 
 ```text
@@ -365,7 +380,7 @@ Final run 中：
 
 ## 11. 模型锁定与最终评价
 
-Final run 完成后先导出 inference-only 权重，验证可重新加载，生成 `MODEL_LOCK.json` 并固定 SHA-256。只有模型锁和 Git tag 均存在时，标准 test loader 才允许运行。
+Final run 完成后先导出 inference-only 权重，验证可重新加载，生成 `MODEL_LOCK.json` 并固定 SHA-256。Exporter 必须验证 snapshot 的 `run_mode=formal`、`run_kind=final`、config/method/approval、`U*`、完整 9000 图 split 和已完成的 run status。模型锁同时绑定 selection、final approval、snapshot、环境、源码、评价资产、brain encoder 资产与 parcel 审计。只有模型锁和 Git tag 均存在时，标准 test loader 才允许运行。
 
 最终 test 配置：
 
@@ -423,3 +438,5 @@ failure_cases.csv
 - 解码或 evaluator 不可重复；
 - 正式配置仍存在未冻结字段；
 - 当前 Git 工作树不干净或 protocol commit 未记录。
+
+brain encoder parcel 来源或 full-forward 门禁失败不阻断 decoder selection/final 训练，但阻断 encoder-selected 标准 test 与正式 test access。

@@ -1,7 +1,7 @@
 schema_version: 1
 status: draft
-run_name: subject01-selection-v1
-run_kind: selection
+run_name: subject01-final-v1
+run_kind: final
 subject: 1
 protocol_commit: TO_BE_FROZEN
 project_root: /path/to/neuroadapter-subject1-research
@@ -14,7 +14,7 @@ paths:
   training_cache_manifest: data/fingerprints/training_cache_manifest.json
   training_cache_verification: data/fingerprints/training_cache_verification.json
   stimuli: data/raw/nsd/stimuli/nsd_stimuli.hdf5
-  split_ids: data/derived/splits/selection_train_ids.txt
+  split_ids: data/derived/splits/train_pool_ids.txt
   canonical_initialization: models/canonical/subject01_adapter_init.pt
   canonical_manifest: models/canonical/subject01_adapter_init.json
   data_fingerprint: data/fingerprints/data_fingerprint.json
@@ -37,10 +37,10 @@ paths:
   resume_equivalence: data/gates/resume_equivalence.json
   decode_determinism: data/gates/decode_determinism.json
   evaluator_repeatability: data/gates/evaluator_repeatability.json
-  output_dir: runs/selection/subject01-selection-v1
+  output_dir: runs/final/subject01-final-v1
 
 training:
-  max_updates: 265625
+  max_updates: 1
   world_size: 2
   global_batch_size: 16
   micro_batch_size: 8

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import re
 import shutil
@@ -19,6 +20,31 @@ from .atomic import fsync_directory, sha256_file, write_bytes_atomic, write_json
 SCHEMA_VERSION = 1
 CHECKPOINT_PATTERN = re.compile(r"^checkpoint-update-(\d{8})$")
 Barrier = Callable[[], None]
+ErrorSynchronizer = Callable[[str | None], str | None]
+
+
+def model_state_sha256(value: Any) -> str:
+    """Hash a nested tensor state independently of torch serialization bytes."""
+
+    digest = hashlib.sha256()
+
+    def update(item: Any) -> None:
+        if isinstance(item, dict):
+            digest.update(b"dict\0")
+            for name in sorted(item):
+                if not isinstance(name, str):
+                    raise TypeError("model state keys must be strings")
+                digest.update(name.encode("utf-8") + b"\0")
+                update(item[name])
+        elif torch.is_tensor(item):
+            tensor = item.detach().cpu().contiguous()
+            digest.update(f"{tensor.dtype}:{tuple(tensor.shape)}\0".encode("ascii"))
+            digest.update(tensor.view(torch.uint8).numpy().tobytes())
+        else:
+            raise TypeError(f"unsupported model state value: {type(item)!r}")
+
+    update(value)
+    return digest.hexdigest()
 
 
 def _torch_save(path: Path, payload: Any) -> None:
@@ -70,6 +96,7 @@ def save_distributed_checkpoint(
     trainer_state: dict[str, Any],
     rank_state: dict[str, Any],
     barrier: Barrier,
+    synchronize_error: ErrorSynchronizer,
 ) -> Path:
     """Save one checkpoint at an optimizer boundary.
 
@@ -82,21 +109,38 @@ def save_distributed_checkpoint(
     output_dir = Path(output_dir)
     final = output_dir / _checkpoint_name(update)
     temporary = output_dir / f".{_checkpoint_name(update)}.incomplete"
-    if rank == 0:
-        output_dir.mkdir(parents=True, exist_ok=True)
-        if final.exists():
-            raise FileExistsError(f"checkpoint path already exists: {final}")
-        quarantine_stale_incomplete(output_dir, _checkpoint_name(update))
-        temporary.mkdir()
-        fsync_directory(output_dir)
+    def synchronized(description: str, action: Callable[[], None]) -> None:
+        local_error = None
+        try:
+            action()
+        except BaseException as exc:
+            local_error = f"{description}: {type(exc).__name__}: {exc}"
+        shared_error = synchronize_error(local_error)
+        if shared_error is not None:
+            raise RuntimeError(shared_error)
+
+    def prepare() -> None:
+        if rank == 0:
+            output_dir.mkdir(parents=True, exist_ok=True)
+            if final.exists():
+                raise FileExistsError(f"checkpoint path already exists: {final}")
+            quarantine_stale_incomplete(output_dir, _checkpoint_name(update))
+            temporary.mkdir()
+            fsync_directory(output_dir)
+
+    synchronized("checkpoint preparation failed", prepare)
     barrier()
 
     rank_path = temporary / f"rank-{rank:05d}.pt"
-    _torch_save(rank_path, rank_state)
-    _verify_torch_file(rank_path)
+    synchronized(
+        f"rank {rank} state save failed",
+        lambda: (_torch_save(rank_path, rank_state), _verify_torch_file(rank_path)),
+    )
     barrier()
 
-    if rank == 0:
+    def publish() -> None:
+        if rank != 0:
+            return
         _torch_save(temporary / "model.pt", model_state)
         _torch_save(temporary / "optimizer.pt", optimizer_state)
         write_json_atomic(temporary / "trainer_state.json", trainer_state)
@@ -135,9 +179,17 @@ def save_distributed_checkpoint(
         fsync_directory(temporary)
         os.replace(temporary, final)
         fsync_directory(output_dir)
+
+    synchronized("checkpoint publication failed", publish)
     barrier()
-    if not final.is_dir():
-        raise RuntimeError(f"checkpoint was not published: {final}")
+    synchronized(
+        "checkpoint publication verification failed",
+        lambda: None
+        if final.is_dir()
+        else (_ for _ in ()).throw(
+            RuntimeError(f"checkpoint was not published: {final}")
+        ),
+    )
     return final
 
 
@@ -153,8 +205,20 @@ def save_inference_snapshot(
     final = output_dir / _snapshot_name(update)
     temporary = output_dir / f".{_snapshot_name(update)}.incomplete"
     output_dir.mkdir(parents=True, exist_ok=True)
+    if int(metadata.get("optimizer_update", -1)) != update:
+        raise ValueError("snapshot metadata optimizer_update differs from its path")
+    state_digest = model_state_sha256(model_state)
     if final.exists():
-        raise FileExistsError(f"snapshot path already exists: {final}")
+        existing = load_inference_snapshot_provenance(final)
+        if existing["metadata"] != metadata:
+            raise FileExistsError(
+                f"existing snapshot metadata differs at update {update}: {final}"
+            )
+        if existing["manifest"].get("model_state_sha256") != state_digest:
+            raise FileExistsError(
+                f"existing snapshot model differs at update {update}: {final}"
+            )
+        return final
     quarantine_stale_incomplete(output_dir, _snapshot_name(update))
     temporary.mkdir()
     _torch_save(temporary / "model.pt", model_state)
@@ -164,6 +228,7 @@ def save_inference_snapshot(
         "schema_version": SCHEMA_VERSION,
         "artifact_kind": "inference_snapshot",
         "optimizer_update": update,
+        "model_state_sha256": state_digest,
         "files": {
             name: {
                 "size": (temporary / name).stat().st_size,
@@ -199,6 +264,8 @@ def verify_inference_snapshot(path: Path) -> dict[str, Any]:
         raise ValueError("unsupported snapshot schema")
     if manifest.get("artifact_kind") != "inference_snapshot":
         raise ValueError("artifact is not an inference snapshot")
+    if not isinstance(manifest.get("model_state_sha256"), str):
+        raise ValueError("snapshot manifest has no structural model-state hash")
     if set(manifest.get("files", {})) != {"model.pt", "metadata.json"}:
         raise ValueError("snapshot manifest has unexpected artifacts")
     for name, record in manifest["files"].items():
@@ -207,7 +274,27 @@ def verify_inference_snapshot(path: Path) -> dict[str, Any]:
             raise ValueError(f"snapshot artifact size mismatch: {name}")
         if sha256_file(artifact) != record["sha256"]:
             raise ValueError(f"snapshot artifact hash mismatch: {name}")
+    state = torch.load(path / "model.pt", map_location="cpu", weights_only=True)
+    if model_state_sha256(state) != manifest["model_state_sha256"]:
+        raise ValueError("snapshot structural model-state hash mismatch")
+    metadata = json.loads((path / "metadata.json").read_text(encoding="utf-8"))
+    if int(metadata.get("optimizer_update", -1)) != int(manifest["optimizer_update"]):
+        raise ValueError("snapshot metadata update differs from its manifest")
     return manifest
+
+
+def load_inference_snapshot_provenance(path: Path) -> dict[str, Any]:
+    path = Path(path)
+    manifest = verify_inference_snapshot(path)
+    metadata_path = path / "metadata.json"
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    return {
+        "manifest": manifest,
+        "metadata": metadata,
+        "model_sha256": sha256_file(path / "model.pt"),
+        "manifest_sha256": sha256_file(path / "MANIFEST.json"),
+        "metadata_sha256": sha256_file(metadata_path),
+    }
 
 
 def prune_full_checkpoints(output_dir: Path, keep_latest: int = 2) -> list[Path]:

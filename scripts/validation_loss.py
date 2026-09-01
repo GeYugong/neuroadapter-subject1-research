@@ -22,6 +22,14 @@ from neuroadapter_research.modeling import (
     build_adapter,
     load_frozen_backbone,
 )
+from neuroadapter_research.protocol import (
+    load_selection_plan,
+    method_fingerprint,
+    validate_selection_config_and_plan,
+    validate_selection_plan_inputs,
+    validate_selection_snapshot,
+    verify_protocol_repository,
+)
 from neuroadapter_research.trainer import min_snr_weights
 
 
@@ -29,23 +37,38 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--snapshot", type=Path, required=True)
-    parser.add_argument("--validation-ids", type=Path, required=True)
     parser.add_argument("--output-json", type=Path, required=True)
     parser.add_argument("--output-csv", type=Path, required=True)
-    parser.add_argument("--batch-size", type=int, default=8)
-    parser.add_argument("--protocol", default="subject01-selection-v1")
     args = parser.parse_args()
-    if "test" in args.validation_ids.name.lower():
-        raise ValueError("validation loss refuses a test-named ID file")
 
-    config = load_training_config(args.config, require_frozen=False)
+    config = load_training_config(args.config, require_frozen=True)
+    repository = Path(__file__).resolve().parents[1]
+    verify_protocol_repository(repository, config.raw["protocol_commit"])
+    plan = load_selection_plan(config.paths["selection_plan"], require_frozen=True)
+    validate_selection_config_and_plan(config, plan)
+    plan_binding = validate_selection_plan_inputs(
+        plan,
+        validation_ids_path=config.paths["validation_ids"],
+        repository_root=repository,
+    )
+    fingerprint = method_fingerprint(config)
+    snapshot = validate_selection_snapshot(
+        args.snapshot, config=config, plan=plan, fingerprint=fingerprint
+    )
     configure_torch_backend(config.training)
     dataset = Subject1TrainingDataset(
-        config.paths["training_cache"], config.paths["stimuli"], args.validation_ids
+        config.paths["training_cache"],
+        config.paths["stimuli"],
+        config.paths["validation_ids"],
     )
     if len(dataset) != 500:
         raise ValueError("deterministic validation loss requires exactly 500 images")
-    loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False, num_workers=0)
+    loader = DataLoader(
+        dataset,
+        batch_size=int(plan.raw["validation_loss_batch_size"]),
+        shuffle=False,
+        num_workers=0,
+    )
     device = torch.device("cuda:0")
     dtype = torch.bfloat16
     backbone = load_frozen_backbone(config.paths["stable_diffusion"])
@@ -78,7 +101,9 @@ def main() -> None:
             timesteps = []
             for image_id in image_ids:
                 generator = torch.Generator(device=device).manual_seed(
-                    sample_seed(args.protocol, "validation-loss", image_id, 0)
+                    sample_seed(
+                        plan.raw["protocol_namespace"], "validation-loss", image_id, 0
+                    )
                 )
                 noises.append(
                     torch.randn(
@@ -142,13 +167,19 @@ def main() -> None:
         "token_dropout": "disabled",
         "min_snr_gamma": 5.0,
         "aggregation": "equal mean over images",
+        "optimizer_update": int(snapshot["metadata"]["optimizer_update"]),
         "config_sha256": config.sha256,
+        "method_fingerprint": fingerprint,
+        **plan_binding,
+        "protocol_namespace": plan.raw["protocol_namespace"],
+        "validation_loss_batch_size": plan.raw["validation_loss_batch_size"],
+        "repository_commit": config.raw["protocol_commit"],
         "mean_loss": float(values.mean()),
         "std_loss": float(values.std(unbiased=True)),
-        "snapshot_sha256": sha256_file(
-            args.snapshot / "model.pt" if args.snapshot.is_dir() else args.snapshot
-        ),
-        "validation_ids_sha256": sha256_file(args.validation_ids),
+        "snapshot_model_sha256": snapshot["model_sha256"],
+        "snapshot_manifest_sha256": snapshot["manifest_sha256"],
+        "snapshot_metadata_sha256": snapshot["metadata_sha256"],
+        "formal_approval_sha256": snapshot["metadata"]["formal_approval_sha256"],
         "per_image_csv_sha256": sha256_file(args.output_csv),
     }
     write_json_atomic(args.output_json, payload)

@@ -53,6 +53,7 @@ def main() -> None:
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     arrays = {
+        "train_pool": np.sort(train_pool),
         "selection_train": selection_train,
         "validation": validation,
         "test": np.sort(test),
@@ -82,4 +83,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

@@ -9,6 +9,7 @@ from pathlib import Path
 
 from neuroadapter_research.atomic import sha256_file, write_json_atomic
 from neuroadapter_research.config import load_training_config
+from neuroadapter_research.protocol import load_gate_requirements, method_fingerprint
 from neuroadapter_research.reproducibility import (
     compare_resume_outputs,
     structural_sha256,
@@ -33,6 +34,8 @@ def main() -> None:
     if args.output.exists():
         raise FileExistsError(f"gate output already exists: {args.output}")
     config = load_training_config(args.config, require_frozen=True)
+    requirements = load_gate_requirements(config.paths["gate_requirements"])
+    fingerprint = method_fingerprint(config)
 
     if args.gate == "resume_equivalence":
         if args.left_aux is None or args.right_aux is None:
@@ -45,8 +48,8 @@ def main() -> None:
         right = verify_decode_tree(args.right)
         if left != right:
             raise ValueError("deterministic decode manifests differ")
-        if left.get("config_sha256") != config.sha256:
-            raise ValueError("decode artifact uses a different config")
+        if left.get("method_fingerprint") != fingerprint:
+            raise ValueError("decode artifact uses a different method")
         evidence = {
             "decode_manifest_structural_sha256": structural_sha256(left),
             "png_count": int(left["image_count"]) * int(left["candidate_count"]),
@@ -58,8 +61,8 @@ def main() -> None:
         right = json.loads(args.right.read_text(encoding="utf-8"))
         if left != right:
             raise ValueError("evaluator JSON outputs differ")
-        if left.get("config_sha256") != config.sha256:
-            raise ValueError("evaluator artifact uses a different config")
+        if left.get("method_fingerprint") != fingerprint:
+            raise ValueError("evaluator artifact uses a different method")
         left_csv = sha256_file(args.left_aux)
         if left_csv != sha256_file(args.right_aux):
             raise ValueError("evaluator per-image CSV outputs differ")
@@ -75,6 +78,8 @@ def main() -> None:
         "gate": args.gate,
         "status": "passed",
         "config_sha256": config.sha256,
+        "method_fingerprint": fingerprint,
+        "gate_requirements_sha256": requirements.sha256,
         "left_input_sha256": sha256_file(args.left / "MANIFEST.json")
         if args.left.is_dir()
         else sha256_file(args.left),

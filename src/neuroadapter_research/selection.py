@@ -14,12 +14,32 @@ HIGH_LEVEL_DESC = ("AlexNet-5", "Inception", "CLIP")
 HIGH_LEVEL_ASC = ("EffCorrDistance", "SwAVCorrDistance")
 EVALUATION_BINDING_FIELDS = (
     "config_sha256",
+    "method_fingerprint",
     "image_count",
     "candidate_count",
     "negative_pool",
     "candidate_aggregation",
     "evaluation_manifest_sha256",
     "validation_ids_sha256",
+    "image_order_sha256",
+    "selection_plan_sha256",
+    "metric_implementation_sha256",
+    "protocol_namespace",
+    "selection_stage",
+    "denoising_steps",
+    "guidance_scale",
+    "evaluation_batch_size",
+    "repository_commit",
+)
+RECORD_PROVENANCE_FIELDS = (
+    "snapshot_model_sha256",
+    "snapshot_manifest_sha256",
+    "snapshot_metadata_sha256",
+    "run_mode",
+    "run_kind",
+    "training_config_sha256",
+    "method_fingerprint",
+    "formal_approval_sha256",
 )
 
 
@@ -51,6 +71,15 @@ def merge_evaluation_payloads(
         payload_records = payload.get("checkpoints")
         if not isinstance(payload_records, list) or not payload_records:
             raise ValueError("evaluation payload has no checkpoint records")
+        for record in payload_records:
+            if any(record.get(name) is None for name in RECORD_PROVENANCE_FIELDS):
+                raise ValueError("checkpoint record is missing snapshot provenance")
+            if record["run_mode"] != "formal" or record["run_kind"] != "selection":
+                raise ValueError("checkpoint record is not from formal selection")
+            if record["training_config_sha256"] != binding["config_sha256"]:
+                raise ValueError("checkpoint record uses a different training config")
+            if record["method_fingerprint"] != binding["method_fingerprint"]:
+                raise ValueError("checkpoint record uses a different method")
         records.extend(payload_records)
     updates = [int(record["optimizer_update"]) for record in records]
     if len(set(updates)) != len(updates):
@@ -137,7 +166,12 @@ def balanced_ranks(records: list[dict[str, Any]]) -> dict[int, dict[str, float]]
     }
 
 
-def build_shortlist(records: list[dict[str, Any]], count: int = 5) -> list[int]:
+def build_shortlist(
+    records: list[dict[str, Any]], *, expected_updates: list[int], count: int = 5
+) -> list[int]:
+    observed = {int(record["optimizer_update"]) for record in records}
+    if observed != set(expected_updates) or len(records) != len(expected_updates):
+        raise ValueError("screening checkpoint set differs from the frozen selection plan")
     if len(records) < count:
         raise ValueError(f"at least {count} checkpoints are required")
     by_semantic = sorted(

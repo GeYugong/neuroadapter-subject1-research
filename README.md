@@ -52,7 +52,7 @@ Git 只跟踪代码、配置、小型清单、统计摘要和文档。原始数�
 
 ## 可公开复核的冻结证据
 
-`manifests/frozen/` 保存服务器丢失后仍需保留的完整小型证据，包括：9000/1000 与 8500/500 实际 ID、parcel token map、原始 NSD 文件 SHA、数据指纹、训练缓存清单、模型资产树、brain encoder 资产审计、canonical initialization manifest、非有限值审计和 NSD 图像映射审计。所有服务器绝对路径均已转换为项目相对路径；beta、HDF5、模型权重和 checkpoint 不进入 Git。
+`manifests/frozen/` 保存服务器丢失后仍需保留的完整小型证据，包括：9000/1000 与 8500/500 实际 ID、完整 9000 图 train pool、parcel token map、原始 NSD 文件 SHA、数据指纹、训练缓存清单、decoder atlas 审计、brain encoder parcel/权重审计、模型资产树、canonical initialization manifest、非有限值审计和 NSD 图像映射审计。所有服务器绝对路径均已转换为项目相对路径；beta、HDF5、模型权重和 checkpoint 不进入 Git。
 
 `manifests/frozen/INDEX.json` 固定每个公开清单的来源与 SHA-256。服务器上的运行清单是正式训练输入，Git 中的副本用于长期审计；每次正式输入变化后必须重新导出并提交。
 
@@ -69,4 +69,8 @@ Python 下载脚本同样要求 `--project-root "$PROJECT_ROOT"`。训练 YAML �
 
 ## 当前正式训练状态
 
-正式配置仍为 `draft`，两张 RTX 5090 门禁尚未执行，正式训练未启动。新增 atlas 审计还发现：LH 顶点集合等价但 token 顺序不同，RH 与 CBIG 派生 atlas 不匹配，且公开上游 RH 资产与其 LH 资产集合相同。在作者实际 token 顺序和 RH 资产来源明确、相关数据指纹重新确认以及全部 approval 门禁通过之前，训练器不得进入 formal mode。
+正式配置仍为 `draft`，两张 RTX 5090 门禁尚未执行，正式训练未启动。
+
+decoder 训练所用 atlas 已单独完成审计：CBIG 来源、左右 annotation、每侧 500 parcels、top-SNR 排序、最终 200-token 顺序和 `max_voxels=626` 均可验证，当前 9000 图训练缓存无需重建。公开 `whole_brain_encoder` parcel 文件与作者内部训练资产的关系仍无法由公开材料证明，因此该问题只阻断模型锁定后的 brain encoder forward/test 门禁，不再错误阻断 decoder 的 selection/final 训练。
+
+正式执行还受到以下条件约束：固定 GPU 门禁全部通过、正式 YAML 与 protocol commit 冻结、canonical initialization 标记为 `frozen`、selection/final approval 闭合。仓库按研究协作需要保持公开。

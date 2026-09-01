@@ -25,6 +25,7 @@ from torch.nn.parallel import DistributedDataParallel
 from torch.utils.data import DataLoader
 
 from .atomic import sha256_file, write_json_atomic
+from .approval import expected_approval_payload
 from .backend import configure_torch_backend
 from .checkpoint import (
     load_distributed_checkpoint,
@@ -36,12 +37,11 @@ from .config import LoadedTrainingConfig, verify_config_inputs
 from .data import Subject1TrainingDataset
 from .integrity import (
     load_json_mapping,
-    validate_gate_artifact,
-    validate_subject1_audits,
     verify_file_against_manifest,
     verify_submodule_heads,
     verify_tree_against_manifest,
 )
+from .protocol import load_selection_plan, method_fingerprint
 from .modeling import (
     NeuroAdapterTrainingModule,
     audit_trainable_parameters,
@@ -129,7 +129,7 @@ def all_ranks_agree_on_hash(value: str, context: DistributedContext) -> None:
 def collect_input_hashes(
     config: LoadedTrainingConfig, context: DistributedContext
 ) -> dict[str, str]:
-    names = (
+    names = [
         "training_cache",
         "training_cache_manifest",
         "training_cache_verification",
@@ -140,11 +140,17 @@ def collect_input_hashes(
         "canonical_manifest",
         "data_fingerprint",
         "nsd_image_mapping",
-        "schaefer_equivalence",
+        "decoder_atlas_audit",
         "split_manifest",
         "source_manifest",
         "environment_lock",
-    )
+        "validation_ids",
+        "selection_plan",
+        "gate_requirements",
+        "evaluation_manifest",
+    ]
+    if config.raw["run_kind"] == "final":
+        names.extend(("selection_config", "selection_manifest"))
     payload: list[dict[str, str] | None] = [None]
     if context.is_main:
         stimulus = verify_file_against_manifest(
@@ -218,46 +224,9 @@ def validate_canonical_initialization(
 
 def validate_formal_approval(config: LoadedTrainingConfig, approval_path: Path) -> None:
     approval = load_json_mapping(Path(approval_path))
-    gate_fields = {
-        "environment_lock_sha256": "environment_lock",
-        "hardware_gate_sha256": "hardware_gate",
-        "forward_alignment_sha256": "forward_alignment",
-        "batch_gate_sha256": "batch_gate",
-        "resume_equivalence_sha256": "resume_equivalence",
-        "decode_determinism_sha256": "decode_determinism",
-        "evaluator_repeatability_sha256": "evaluator_repeatability",
-        "data_fingerprint_sha256": "data_fingerprint",
-        "model_assets_manifest_sha256": "model_manifest",
-        "canonical_initialization_sha256": "canonical_initialization",
-        "training_cache_verification_sha256": "training_cache_verification",
-        "nsd_image_mapping_sha256": "nsd_image_mapping",
-        "schaefer_equivalence_sha256": "schaefer_equivalence",
-    }
-    expected = {
-        "approved": True,
-        "config_sha256": config.sha256,
-        "protocol_commit": config.raw["protocol_commit"],
-        **{
-            field: sha256_file(config.paths[path_name])
-            for field, path_name in gate_fields.items()
-        },
-    }
+    expected = expected_approval_payload(config)
     if approval != expected:
         raise ValueError("formal approval file does not match the frozen config")
-    for path_name in (
-        "hardware_gate",
-        "forward_alignment",
-        "batch_gate",
-        "resume_equivalence",
-        "decode_determinism",
-        "evaluator_repeatability",
-    ):
-        validate_gate_artifact(
-            config.paths[path_name],
-            expected_gate=path_name,
-            config_sha256=config.sha256,
-        )
-    validate_subject1_audits(config.paths)
     repository = Path(__file__).resolve().parents[2]
     head = subprocess.check_output(
         ["git", "-C", str(repository), "rev-parse", "HEAD"], text=True
@@ -278,6 +247,28 @@ def validate_formal_approval(config: LoadedTrainingConfig, approval_path: Path) 
     )
     if status:
         raise ValueError("formal training requires a clean Git worktree")
+
+
+def run_rank_zero_action(
+    context: DistributedContext, description: str, action: Any
+) -> None:
+    error: list[str | None] = [None]
+    if context.is_main:
+        try:
+            action()
+        except BaseException as exc:
+            error[0] = f"{description} failed on rank 0: {type(exc).__name__}: {exc}"
+    dist.broadcast_object_list(error, src=0, device=context.device)
+    if error[0] is not None:
+        raise RuntimeError(error[0])
+
+
+def synchronize_distributed_error(
+    context: DistributedContext, local_error: str | None
+) -> str | None:
+    errors: list[str | None] = [None for _ in range(context.world_size)]
+    dist.all_gather_object(errors, local_error)
+    return next((value for value in errors if value is not None), None)
 
 
 def token_keep_mask(
@@ -426,6 +417,13 @@ def run_training(
         seed=training["sampler_seed"],
     )
     input_hashes = collect_input_hashes(config, context)
+    fingerprint = method_fingerprint(config)
+    selection_plan = load_selection_plan(
+        config.paths["selection_plan"], require_frozen=run_mode == "formal"
+    )
+    approval_sha256 = (
+        sha256_file(approval_path) if approval_path is not None else None
+    )
     cache_manifest = json.loads(
         config.paths["training_cache_manifest"].read_text(encoding="utf-8")
     )
@@ -526,6 +524,9 @@ def run_training(
             "run_kind": config.raw["run_kind"],
             "config_path": str(config.path),
             "config_sha256": config.sha256,
+            "method_fingerprint": fingerprint,
+            "selection_plan_sha256": selection_plan.sha256,
+            "formal_approval_sha256": approval_sha256,
             "start_update": start_update,
             "max_updates": max_updates,
             "input_hashes": input_hashes,
@@ -564,6 +565,9 @@ def run_training(
     )
     full_checkpoint_updates = interval_checkpoints | {max_updates}
     snapshot_updates = epoch_checkpoints | {max_updates}
+    if config.raw["run_kind"] == "selection" and run_mode == "formal":
+        if snapshot_updates != set(selection_plan.raw["expected_snapshot_updates"]):
+            raise ValueError("trainer snapshot schedule differs from the selection plan")
     log_path = output_dir / "training.jsonl"
     trace_path = output_dir / "traces" / f"trace-rank-{context.rank:05d}.jsonl"
     started = time.perf_counter()
@@ -699,22 +703,33 @@ def run_training(
         exit_after_checkpoint = bool(local_stop.item())
         if next_update in snapshot_updates:
             training_module = unwrap_training_module(distributed_module)
-            if context.is_main:
-                save_inference_snapshot(
+            snapshot_metadata = {
+                "schema_version": 1,
+                "optimizer_update": next_update,
+                "images_seen": next_update * training["global_batch_size"],
+                "reference_epoch": next_update
+                * training["global_batch_size"]
+                / len(dataset),
+                "run_name": config.raw["run_name"],
+                "run_mode": run_mode,
+                "run_kind": config.raw["run_kind"],
+                "config_sha256": config.sha256,
+                "method_fingerprint": fingerprint,
+                "selection_plan_sha256": selection_plan.sha256,
+                "formal_approval_sha256": approval_sha256,
+                "split_ids_sha256": input_hashes["split_ids"],
+                "input_hashes": input_hashes,
+            }
+            run_rank_zero_action(
+                context,
+                f"snapshot update {next_update}",
+                lambda: save_inference_snapshot(
                     output_dir / "snapshots",
                     next_update,
                     trainable_state_dict(training_module.as_bundle()),
-                    {
-                        "schema_version": 1,
-                        "optimizer_update": next_update,
-                        "images_seen": next_update * training["global_batch_size"],
-                        "reference_epoch": next_update
-                        * training["global_batch_size"]
-                        / len(dataset),
-                        "input_hashes": input_hashes,
-                    },
-                )
-            dist.barrier()
+                    snapshot_metadata,
+                ),
+            )
         if next_update in full_checkpoint_updates or exit_after_checkpoint:
             training_module = unwrap_training_module(distributed_module)
             state = (
@@ -725,6 +740,10 @@ def run_training(
             trainer_state = {
                 "schema_version": 1,
                 "run_mode": run_mode,
+                "run_kind": config.raw["run_kind"],
+                "config_sha256": config.sha256,
+                "method_fingerprint": fingerprint,
+                "formal_approval_sha256": approval_sha256,
                 "next_update": next_update,
                 "images_seen": next_update * training["global_batch_size"],
                 "accumulation_step": 0,
@@ -748,6 +767,9 @@ def run_training(
                 trainer_state=trainer_state,
                 rank_state=rank_state,
                 barrier=dist.barrier,
+                synchronize_error=lambda error: synchronize_distributed_error(
+                    context, error
+                ),
             )
             if context.is_main:
                 prune_full_checkpoints(output_dir / "checkpoints", keep_latest=2)
@@ -764,6 +786,12 @@ def run_training(
                 "last_completed_update": next_update,
                 "last_saved_update": last_saved_update,
                 "formal_training": run_mode == "formal",
+                "run_mode": run_mode,
+                "run_kind": config.raw["run_kind"],
+                "config_sha256": config.sha256,
+                "method_fingerprint": fingerprint,
+                "formal_approval_sha256": approval_sha256,
+                "max_updates": max_updates,
             },
         )
     dist.barrier()

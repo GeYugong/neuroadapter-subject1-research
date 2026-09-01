@@ -2,10 +2,19 @@
   "schema_version": 1,
   "status": "mismatch",
   "comparison": "exact sorted fsaverage vertex membership, with indexed and permutation-aware checks",
+  "provenance": {
+    "derived_directory": "data/derived/parcels/schaefer",
+    "upstream_runtime_directory": "repo/vendor/whole_brain_encoder/parcels/schaefer",
+    "upstream_repository": "https://github.com/kriegeskorte-lab/whole_brain_encoder.git",
+    "upstream_commit": "767f25afc2240f568f4db8c0ce09604e6f83aa72",
+    "upstream_relative_directory": "parcels/schaefer",
+    "source_manifest_sha256": "18d2f6bd4f5928e2c6b81f9a052e50d33de25b74eaf239b9965a3e49c4ea80a6"
+  },
   "hemispheres": {
     "lh": {
       "derived_file_sha256": "7490924f647c9227ab912f1c769a0f0e18ebf53ae1d5d7f27d9659f527953fb4",
       "upstream_file_sha256": "95013670928b86f4e4989346f5f86faf33a2cfbba065308ad14e0c23c0bed048",
+      "upstream_git_blob_sha1": "c4d8d899083f2073b3dff8355fdfe47049091778",
       "equal_label_count": 7,
       "label_count": 501,
       "all_labels_equal": false,
@@ -4527,6 +4536,7 @@
     "rh": {
       "derived_file_sha256": "d8382d15d53b613991c0d91ff20584de2686a6f8c5c884cf1648112428e21e3f",
       "upstream_file_sha256": "6f71fef01ce5303232c7e063243701b99a368af92aa240ad9826fa240ff1313c",
+      "upstream_git_blob_sha1": "45d5daff5bea1b7c9aea6cf0ed43a0f3a0c9ca5b",
       "equal_label_count": 0,
       "label_count": 501,
       "all_labels_equal": false,

@@ -8,6 +8,11 @@
       "sha256": "a7b29ce1e6c0b22c4716247ac740b4a7a37f54598697aa3e6552a3ad19cc845e"
     },
     {
+      "path": "brain_encoder_parcel_audit.json",
+      "source": "data/fingerprints/brain_encoder_parcel_audit.json",
+      "sha256": "794fe5edeefa82f5d616816008eec56e4653fac87e30ae49f8207e4e4684388a"
+    },
+    {
       "path": "canonical_initialization.json",
       "source": "models/canonical/subject01_adapter_init.json",
       "sha256": "27fa88a3d8391aa7a5dbeee024387d4869f7db00ed74b38d78e3b1cc368f8ab7"
@@ -16,6 +21,11 @@
       "path": "data_fingerprint.json",
       "source": "data/fingerprints/data_fingerprint.json",
       "sha256": "16a6e610670f0d91e0cc063ab375b93276a62838b73e25fcae24e5f4932042cc"
+    },
+    {
+      "path": "decoder_atlas_audit.json",
+      "source": "data/fingerprints/decoder_atlas_audit.json",
+      "sha256": "a56951d6a8c07ff69934d2794f05cb125702b52f75d0f84b367c93df2943e4b8"
     },
     {
       "path": "evaluation_assets.json",
@@ -60,7 +70,7 @@
     {
       "path": "schaefer_upstream_equivalence.json",
       "source": "data/fingerprints/schaefer_upstream_equivalence.json",
-      "sha256": "f2a45b00fcd07bed0c23a2f47627b73040ff4982d8f9d9ab472a291ce190d745"
+      "sha256": "6914ad9b619438f7eaf18a7c8a39bfcc67729d39d4b25986a9c0232db36cf5cc"
     },
     {
       "path": "selection_train_ids.txt",
@@ -75,12 +85,17 @@
     {
       "path": "split_manifest.json",
       "source": "data/derived/splits/split_manifest.json",
-      "sha256": "99b3b67775895e642235043aed8cdc29e97826bcc17c7c9ff233d8ea008ff099"
+      "sha256": "ae764681c366c7c0fe32c90b8b0761a5c4e82fe1a63db064fadd0a63b41323f5"
     },
     {
       "path": "test_ids.txt",
       "source": "data/derived/splits/test_ids.txt",
       "sha256": "d7ae0a80b9101133df3445b81eecad63cc5b598999f2a6a13d20c65696c63997"
+    },
+    {
+      "path": "train_pool_ids.txt",
+      "source": "data/derived/splits/train_pool_ids.txt",
+      "sha256": "b23342d713b303cbe2931bee52009bf9b1adec2cfa35b91aae0fbea6bc6a5d1d"
     },
     {
       "path": "training_cache_manifest.json",

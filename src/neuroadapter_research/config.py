@@ -93,10 +93,18 @@ def load_training_config(path: Path, *, require_frozen: bool) -> LoadedTrainingC
             "canonical_manifest",
             "data_fingerprint",
             "nsd_image_mapping",
-            "schaefer_equivalence",
+            "decoder_atlas_audit",
             "split_manifest",
             "source_manifest",
             "environment_lock",
+            "validation_ids",
+            "selection_plan",
+            "gate_requirements",
+            "evaluation_manifest",
+            "brain_encoder_assets",
+            "brain_encoder_parcel_audit",
+            "selection_config",
+            "selection_manifest",
             "hardware_gate",
             "forward_alignment",
             "batch_gate",
@@ -115,6 +123,11 @@ def load_training_config(path: Path, *, require_frozen: bool) -> LoadedTrainingC
             raise ValueError(f"paths.{name} must be relative to project_root")
     if "test" in Path(paths["split_ids"]).name.lower():
         raise ValueError("training config may not point to the standard test split")
+    split_name = Path(paths["split_ids"]).name
+    if payload["run_kind"] == "selection" and split_name != "selection_train_ids.txt":
+        raise ValueError("selection training requires selection_train_ids.txt")
+    if payload["run_kind"] == "final" and split_name != "train_pool_ids.txt":
+        raise ValueError("final training requires train_pool_ids.txt")
 
     training = payload["training"]
     _require_exact_keys(
@@ -218,8 +231,14 @@ def verify_config_inputs(
         "decode_determinism",
         "evaluator_repeatability",
     }
+    final_only = {"selection_config", "selection_manifest"}
+    post_training_only = {"brain_encoder_assets", "brain_encoder_parcel_audit"}
     for name, path in config.paths.items():
         if name in gate_names and not require_gate_artifacts:
+            continue
+        if name in final_only and config.raw["run_kind"] == "selection":
+            continue
+        if name in post_training_only:
             continue
         if name == "output_dir":
             path.parent.mkdir(parents=True, exist_ok=True)

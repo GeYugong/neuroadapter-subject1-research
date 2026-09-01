@@ -23,13 +23,16 @@ JSON_SOURCES = {
     "model_assets_sha256.json": "data/fingerprints/model_assets_sha256.json",
     "evaluation_assets.json": "data/fingerprints/evaluation_downloads.json",
     "brain_encoder_assets_verification.json": "data/fingerprints/brain_encoder_assets_verification.json",
+    "brain_encoder_parcel_audit.json": "data/fingerprints/brain_encoder_parcel_audit.json",
     "canonical_initialization.json": "models/canonical/subject01_adapter_init.json",
     "nsd_image_mapping_subject01.json": "data/fingerprints/nsd_image_mapping_subject01.json",
     "schaefer_upstream_equivalence.json": "data/fingerprints/schaefer_upstream_equivalence.json",
+    "decoder_atlas_audit.json": "data/fingerprints/decoder_atlas_audit.json",
 }
 TEXT_SOURCES = {
     "parcel_token_map.csv": "data/fingerprints/parcel_token_map.csv",
     "selection_train_ids.txt": "data/derived/splits/selection_train_ids.txt",
+    "train_pool_ids.txt": "data/derived/splits/train_pool_ids.txt",
     "validation_ids.txt": "data/derived/splits/validation_ids.txt",
     "test_ids.txt": "data/derived/splits/test_ids.txt",
     "nsd_image_mapping_subject01.csv": "data/fingerprints/nsd_image_mapping_subject01.csv",

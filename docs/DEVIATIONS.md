@@ -82,10 +82,28 @@ selection 使用 8500 张图，final 使用 9000 张图。直接复用同一 epo
 
 最终评价除论文口径的 brain-encoder-selected candidate 外，还报告 candidate 0 和 8-seed mean。后两项用于减少候选选择器对模型质量解释的混淆，属于新增报告口径。
 
-## D017：CBIG 与公开 whole_brain_encoder Schaefer 资产不等价
+## D017：decoder atlas 与 brain encoder parcel 资产分开审计
 
-逐 hemisphere、逐 label 的 fsaverage vertex membership 审计结果为：LH 的 501 个顶点集合完全相同，但上游 label 顺序与 CBIG annotation 顺序不同，按索引仅 7/501 相同；RH 与 CBIG 派生集合的交集为 0/501，并且公开 `whole_brain_encoder` 的 LH/RH 文件包含完全相同的 501 个顶点集合。当前训练缓存来自固定 CBIG annotation，尚未改写。必须先确定作者训练时的真实 token 顺序和 RH 资产来源，再决定是否重建缓存；重新验证数据指纹前不得启动正式训练。
+逐 hemisphere、逐 label 的 fsaverage vertex membership 审计结果为：LH 的 501 个顶点集合完全相同，但公开 `whole_brain_encoder` label 顺序与 CBIG annotation 顺序不同，按索引仅 7/501 相同；RH 与 CBIG 派生集合的交集为 0/501，并且公开 `whole_brain_encoder` 的 LH/RH 文件包含完全相同的 501 个顶点集合。
+
+该结果不能反推 NeuroAdapter decoder 使用了错误 atlas。Decoder 从头训练独立的 parcel mapper，真正需要固定的是 CBIG 来源、top-SNR 后最终 200 个 token 的 vertex membership 及其顺序；这些项目已经由独立 decoder atlas gate 验证，现有 cache 不重建。Whole-brain encoder checkpoint 的 query 与 parcel mask 必须严格对齐，但公开 checkpoint 没有携带作者原始 parcel 文件哈希，因此该来源问题转为独立的 brain encoder/test 阻断项。
 
 ## D018：固定上游训练脚本不能整体导入
 
 固定提交中的 `train_brain_adapter.py` 导入了当前 `brain_adapter.dataset` 不提供的 `nsd_groupwise_topk_parcel_dataset`，因此无法作为 Python 模块直接导入。forward alignment gate 通过 AST 从该固定文件中提取唯一的 `setup_ip_adapter()` 原始函数体，在显式提供其原始依赖后执行；gate 同时记录完整训练脚本和函数体 SHA-256。该处理只隔离无关的坏 import，不重写作者的 adapter 构造函数。
+
+## D019：selection 采用预冻结的精确更新点
+
+论文没有规定当前内部 validation 的 checkpoint 日程。本阶段按 8500 图、global batch 16 和每 25 reference epochs 的规则，预先冻结 20 个精确 optimizer update，并要求 shortlist 全量覆盖。运行时不得根据中间效果增删评价点。
+
+## D020：selection 与 final 使用方法指纹闭合
+
+Selection 和 final 的完整配置 SHA 必然不同。为避免重复执行与科学方法无关的 GPU 门禁，同时禁止 final 偷换方法，本阶段增加 `method_fingerprint`：它包含科学超参数、执行后端和全部关键资产/源码身份，但排除 run name、run kind、split、output 和训练长度。Selection 与 final 分别生成 approval，并强制共享同一方法指纹。
+
+## D021：GPU 门禁阈值独立冻结
+
+硬件、forward tolerance、batch updates、压力时长、显存和 Xid 要求放入独立的 frozen gate requirements。脚本不再允许通过 CLI 降低门槛。该机制属于本项目的工程审计增强，不声称是作者原始训练流程。
+
+## D022：最终 brain encoder 评价延后到 parcel 身份可验证后
+
+Decoder 正式权重可以在 decoder atlas 与训练门禁通过后生成。由于公开资料尚不能证明 brain encoder checkpoint 与公开 LH/RH parcel 文件的来源绑定，encoder-selected 标准 test 继续阻断；fixed candidate 和 seed-mean 的模型锁定不用于绕过该门禁。

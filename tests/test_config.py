@@ -14,12 +14,19 @@ TEMPLATE = (
     / "training"
     / "subject01_selection.template.yaml"
 )
+FINAL_TEMPLATE = TEMPLATE.with_name("subject01_final.template.yaml")
 
 
 def test_draft_template_is_valid_for_gate_runs() -> None:
     config = load_training_config(TEMPLATE, require_frozen=False)
     assert config.training["global_batch_size"] == 16
     assert config.raw["run_kind"] == "selection"
+
+
+def test_final_template_uses_complete_train_pool() -> None:
+    config = load_training_config(FINAL_TEMPLATE, require_frozen=False)
+    assert config.raw["run_kind"] == "final"
+    assert config.raw["paths"]["split_ids"].endswith("train_pool_ids.txt")
 
 
 def test_draft_template_is_rejected_for_formal_runs() -> None:

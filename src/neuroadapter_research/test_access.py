@@ -24,10 +24,26 @@ def verify_test_access(
         raise ValueError("model lock is not finalized")
     brain_gate_path = Path(brain_encoder_gate_path).resolve()
     brain_gate = json.loads(brain_gate_path.read_text(encoding="utf-8"))
-    if brain_gate.get("status") != "passed" or not brain_gate.get(
-        "full_forward_verified"
+    if (
+        brain_gate.get("gate") != "brain_encoder_forward"
+        or brain_gate.get("status") != "passed"
+        or not brain_gate.get("full_forward_verified")
     ):
         raise ValueError("brain encoder full-forward gate has not passed")
+    brain_bindings = {
+        "brain_encoder_asset_manifest_sha256": "brain_encoder_assets_sha256",
+        "brain_encoder_parcel_audit_sha256": "brain_encoder_parcel_audit_sha256",
+        "whole_brain_encoder_commit": "whole_brain_encoder_commit",
+        "dinov2_commit": "dinov2_commit",
+        "dinov2_weight_sha256": "dinov2_weight_sha256",
+        "environment_lock_sha256": "environment_lock_sha256",
+        "source_manifest_sha256": "source_manifest_sha256",
+        "evaluation_manifest_sha256": "evaluation_manifest_sha256",
+        "repository_commit": "repository_commit",
+    }
+    for gate_name, lock_name in brain_bindings.items():
+        if brain_gate.get(gate_name) != lock.get(lock_name):
+            raise ValueError(f"brain encoder gate differs from model lock: {gate_name}")
     for name, record in lock.get("files", {}).items():
         path = model_lock_path.parent / name
         if not path.is_file() or path.stat().st_size != int(record["size"]):
@@ -41,6 +57,12 @@ def verify_test_access(
         ["git", "-C", str(repository_root), "rev-list", "-n", "1", required_tag],
         text=True,
     ).strip()
+    tag_type = subprocess.check_output(
+        ["git", "-C", str(repository_root), "cat-file", "-t", required_tag],
+        text=True,
+    ).strip()
+    if tag_type != "tag":
+        raise ValueError("standard-test access requires an annotated release tag")
     if head != lock["repository_commit"] or tag != head:
         raise ValueError("required release tag, Git HEAD, and model lock commit differ")
     status = subprocess.check_output(

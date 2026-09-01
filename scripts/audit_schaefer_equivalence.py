@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 import torch
@@ -27,10 +28,24 @@ def load_parcels(path: Path) -> list[torch.Tensor]:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--project-root", type=Path, required=True)
+    parser.add_argument("--repository-root", type=Path, required=True)
+    parser.add_argument("--source-manifest", type=Path, required=True)
     parser.add_argument("--derived-dir", type=Path, required=True)
     parser.add_argument("--upstream-dir", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+
+    project_root = args.project_root.resolve()
+    repository = args.repository_root.resolve()
+    source_manifest = json.loads(args.source_manifest.read_text(encoding="utf-8"))
+    source = source_manifest["sources"]["whole_brain_encoder"]
+    upstream_repository = repository / "vendor/whole_brain_encoder"
+    observed_commit = subprocess.check_output(
+        ["git", "-C", str(upstream_repository), "rev-parse", "HEAD"], text=True
+    ).strip()
+    if observed_commit != source["commit"]:
+        raise ValueError("whole_brain_encoder checkout differs from source manifest")
 
     hemispheres = {}
     loaded: dict[tuple[str, str], list[torch.Tensor]] = {}
@@ -65,6 +80,16 @@ def main() -> None:
         hemispheres[hemi] = {
             "derived_file_sha256": sha256_file(derived_path),
             "upstream_file_sha256": sha256_file(upstream_path),
+            "upstream_git_blob_sha1": subprocess.check_output(
+                [
+                    "git",
+                    "-C",
+                    str(upstream_repository),
+                    "rev-parse",
+                    f"HEAD:parcels/schaefer/{hemi}_labels_s01.pt",
+                ],
+                text=True,
+            ).strip(),
             "equal_label_count": equal_count,
             "label_count": len(labels),
             "all_labels_equal": indexed_equal,
@@ -101,6 +126,16 @@ def main() -> None:
         "schema_version": 1,
         "status": "indexed_equivalent" if all_indexed_equal else "mismatch",
         "comparison": "exact sorted fsaverage vertex membership, with indexed and permutation-aware checks",
+        "provenance": {
+            "derived_directory": args.derived_dir.resolve().relative_to(project_root).as_posix(),
+            "upstream_runtime_directory": args.upstream_dir.resolve().relative_to(
+                project_root
+            ).as_posix(),
+            "upstream_repository": source["url"],
+            "upstream_commit": observed_commit,
+            "upstream_relative_directory": "parcels/schaefer",
+            "source_manifest_sha256": sha256_file(args.source_manifest),
+        },
         "hemispheres": hemispheres,
         "cross_hemisphere": cross_hemisphere,
     }

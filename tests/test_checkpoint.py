@@ -19,6 +19,10 @@ def no_barrier() -> None:
     return None
 
 
+def no_error(error: str | None) -> str | None:
+    return error
+
+
 def test_checkpoint_round_trip(tmp_path) -> None:
     model = torch.nn.Linear(3, 2)
     optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
@@ -32,6 +36,7 @@ def test_checkpoint_round_trip(tmp_path) -> None:
         trainer_state={"next_update": 17, "accumulation_step": 0},
         rank_state={"torch_cpu": torch.get_rng_state()},
         barrier=no_barrier,
+        synchronize_error=no_error,
     )
     assert output.name == "checkpoint-update-00000017"
     manifest = verify_checkpoint(output, expected_world_size=1)
@@ -52,6 +57,7 @@ def test_checkpoint_rejects_tampering(tmp_path) -> None:
         trainer_state={"next_update": 1},
         rank_state={},
         barrier=no_barrier,
+        synchronize_error=no_error,
     )
     trainer_path = output / "trainer_state.json"
     payload = json.loads(trainer_path.read_text(encoding="utf-8"))
@@ -72,9 +78,10 @@ def test_checkpoint_refuses_overwrite(tmp_path) -> None:
         trainer_state={},
         rank_state={},
         barrier=no_barrier,
+        synchronize_error=no_error,
     )
     save_distributed_checkpoint(**kwargs)
-    with pytest.raises(FileExistsError):
+    with pytest.raises(RuntimeError, match="already exists"):
         save_distributed_checkpoint(**kwargs)
 
 
@@ -92,6 +99,7 @@ def test_checkpoint_quarantines_stale_incomplete(tmp_path) -> None:
         trainer_state={"next_update": 3},
         rank_state={"rank": 0},
         barrier=no_barrier,
+        synchronize_error=no_error,
     )
     assert output.is_dir()
     assert len(list((tmp_path / "corrupt").iterdir())) == 1
@@ -119,6 +127,7 @@ def test_inference_snapshot_and_full_retention(tmp_path) -> None:
             trainer_state={"next_update": update},
             rank_state={"rank": 0},
             barrier=no_barrier,
+            synchronize_error=no_error,
         )
     removed = prune_full_checkpoints(checkpoints, keep_latest=2)
     assert [path.name for path in removed] == ["checkpoint-update-00000001"]
@@ -134,3 +143,27 @@ def test_inference_snapshot_rejects_tampering(tmp_path) -> None:
     (snapshot / "metadata.json").write_text("{}\n", encoding="utf-8")
     with pytest.raises(ValueError, match="size mismatch|hash mismatch"):
         verify_inference_snapshot(snapshot)
+
+
+def test_inference_snapshot_reuses_identical_complete_artifact(tmp_path) -> None:
+    state = {"value": torch.tensor([2.0])}
+    metadata = {"optimizer_update": 5, "run_kind": "selection"}
+    first = save_inference_snapshot(tmp_path, 5, state, metadata)
+    second = save_inference_snapshot(tmp_path, 5, state, metadata)
+    assert second == first
+
+
+def test_inference_snapshot_rejects_conflicting_complete_artifact(tmp_path) -> None:
+    metadata = {"optimizer_update": 5, "run_kind": "selection"}
+    save_inference_snapshot(tmp_path, 5, {"value": torch.tensor([2.0])}, metadata)
+    with pytest.raises(FileExistsError, match="model differs"):
+        save_inference_snapshot(
+            tmp_path, 5, {"value": torch.tensor([3.0])}, metadata
+        )
+    with pytest.raises(FileExistsError, match="metadata differs"):
+        save_inference_snapshot(
+            tmp_path,
+            5,
+            {"value": torch.tensor([2.0])},
+            {"optimizer_update": 5, "run_kind": "final"},
+        )
