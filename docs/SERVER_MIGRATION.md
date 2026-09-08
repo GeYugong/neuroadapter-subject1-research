@@ -29,3 +29,7 @@
 运行代码通过 `scripts/freeze_runtime.py` 从干净提交复制到独立 `runtime/`。训练配置将源码清单和固定计划绑定该副本，并显式以该副本 `src/` 为 PYTHONPATH。`repo/` 可以继续追加日志与提交报告；运行副本不随文档提交改变。该安排不放松 HEAD、工作区或方法指纹校验。
 
 正式启动仍需 hardware、forward alignment、batch、resume、decode determinism、evaluator repeatability 六项证据全部通过。旧脑编码器 parcel 来源问题仍只阻断 brain-encoder-selected 最终 test，不因换机器自动解决。迁移进度、实际命令、日志和验收结果逐次追加主日志，不能把正在传输或尚未运行的门禁记为完成。
+
+用户已授权准备完成后自动启动正式训练。`scripts/run_4090_gates_and_train.sh` 在数据校验及 30 分钟硬件门禁成功后依次执行其余检查，每个阶段在主日志追加命令、时间、输出位置和退出码；任一失败即停止。它不自动杀进程、降低门槛或覆盖旧输出，也不自动采用备用配置。若首选显存不合格，必须保留失败证据、重新冻结实际配置及对应门禁后再启动。
+
+正式 checkpoint 尚不存在时，推理与评价门禁由 `scripts/gate_preflight_inference.py` 执行。该工程辅助程序绑定自身 SHA，并读取固定 runtime 的原始推理函数和完整八指标计算段，不改写科学评价代码。使用固定验证顺序前 8 张图片、每图 8 个候选，比较同进程重复与新进程逆序的 PNG；评价重复性使用固定 20 个 GT/候选对，其中只有 8 个唯一 GT。这个小样本输出明确标记 `run_mode=gate`，只证明工程重复性，不能用于正式指标、负样本池统计、checkpoint 选择或模型质量结论。

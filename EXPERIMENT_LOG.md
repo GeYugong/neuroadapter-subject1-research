@@ -1169,3 +1169,17 @@ environment parity: verified, pinned_distribution_count=116, errors=[]
 14 个 warning 均来自固定上游 matplotlib/pyparsing 的弃用提示。日志：新实验根目录 `logs/migration-environment-20260908.log`；版本核对：`artifacts/migration-20260908/environment-parity.json`。此时源端完整数据 SHA 清单已生成，新端原始 NSD 仍在传输。
 
 训练代码将以干净提交复制到独立 `runtime/`，正式配置的源码、selection plan、gate requirements 路径绑定该副本；`repo/` 继续记录日志和报告，避免文档提交改变正在运行的 protocol HEAD。复制后的 Git 与 vendor 状态仍须验证，不能只复制 Python 文件。
+
+### 12:36：传输完成，补齐自动启动与工程推理门禁
+
+服务器间传输于 12:29:10 完成；数据树共传输 120,175,910,826 字节。新端完整 SHA 校验于 12:30:35 启动，尚未完成，不能据此宣布校验成功。固定 runtime 为 `runtime/subject01-4090-bce13f2`，训练协议提交为 `bce13f220c30494104a397c18fd91009b1e12993`，复制后 HEAD、工作区与五个 vendor 均验证一致。
+
+canonical 权重原样保留，SHA-256 为 `dc363931727f5f5e445d267f9b31e1a366b134b2e62a34dc72ae12693d875fca`；使用新端环境锁刷新单独的 `artifacts/migration-20260908/canonical_manifest.json`，重新加载逐 tensor 一致。可训练参数 116,068,608，冻结参数 859,520,964。历史模型目录中的 manifest 未改写。
+
+用户明确授权准备成功后直接开始正式训练，无须二次询问。增加顺序运行门禁与正式 selection 的脚本，每项运行追加主日志；只有全部门禁通过才生成绑定配置、输入与门禁 SHA 的正式 approval。首选配置若失败，脚本停止，不自动跳过失败或更改学习率/batch。
+
+增加独立工程推理辅助脚本，解决正式 snapshot 尚不存在而推理重复性门禁必须先完成的启动顺序问题。辅助脚本直接调用固定 runtime 的推理函数，并抽取执行其未经修改的八指标计算段；绑定自己的脚本 SHA。固定验证集前 8 张图、每图 8 个候选用于重复/逆序解码；固定 20 个图像对用于评价程序重复性，不作为正式指标或模型选择依据，也不读取标准测试集。
+
+新端测试：`63 passed, 14 warnings in 129.15s`；工程辅助 CLI `--help` 通过；自动启动脚本 `bash -n` 通过。此次运行同时进行完整数据读取，因此测试墙钟时间包含磁盘争用。新增四项测试覆盖固定评价段抽取、拒绝歧义、固定样本对以及不改写评价源文件。
+
+30 分钟双卡硬件压力测试从 12:20:07 开始，截至本条仍在运行。此时尚未启动任何正式训练，当前 GPU 占用来自压力测试。
