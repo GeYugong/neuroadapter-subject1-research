@@ -8,6 +8,7 @@ import ast
 import gc
 import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 from types import SimpleNamespace
@@ -18,6 +19,7 @@ import torch.nn.functional as F
 from neuroadapter_research.atomic import sha256_file, write_json_atomic
 from neuroadapter_research.backend import configure_torch_backend
 from neuroadapter_research.config import load_training_config
+from neuroadapter_research.integrity import verify_submodule_heads
 from neuroadapter_research.modeling import (
     NeuroAdapterTrainingModule,
     build_adapter,
@@ -178,6 +180,8 @@ def run_upstream(
             inputs["text"].to(device),
             condition,
         )
+    # Upstream training calls scheduler.add_noise first, which moves this buffer.
+    backbone.noise_scheduler.alphas_cumprod = backbone.noise_scheduler.alphas_cumprod.to(device)
     weights = min_snr_loss_weights(
         inputs["timesteps"].to(device), backbone.noise_scheduler, gamma=5.0
     )
@@ -203,6 +207,7 @@ def main() -> None:
     tolerance = float(requirements.raw["forward_atol"])
     configure_torch_backend(config.training)
     repository = Path(__file__).resolve().parents[1]
+    verify_submodule_heads(repository, config.paths["source_manifest"])
     fingerprint = json.loads(config.paths["data_fingerprint"].read_text(encoding="utf-8"))
     max_voxels = int(fingerprint["max_voxels"])
     state = torch.load(
@@ -225,6 +230,10 @@ def main() -> None:
     payload = {
         "schema_version": 1,
         "gate": "forward_alignment",
+        "gate_script_sha256": sha256_file(Path(__file__)),
+        "gate_script_repository_commit": subprocess.check_output(
+            ["git", "-C", str(repository), "rev-parse", "HEAD"], text=True
+        ).strip(),
         "status": "passed",
         "config_sha256": config.sha256,
         "method_fingerprint": method_fingerprint(config),

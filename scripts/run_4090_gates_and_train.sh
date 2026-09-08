@@ -12,6 +12,8 @@ ARTIFACTS="$PROJECT_ROOT/artifacts/gates-4090"
 RUNS="$PROJECT_ROOT/runs/calibration"
 HELPER="$PROJECT_ROOT/repo/scripts/gate_preflight_inference.py"
 LOG="$PROJECT_ROOT/repo/EXPERIMENT_LOG.md"
+ATTEMPT=${GATE_ATTEMPT:-v1}
+[[ $ATTEMPT =~ ^[a-zA-Z0-9_-]+$ ]]
 
 mkdir -p "$ARTIFACTS" "$RUNS"
 exec 9>"$ARTIFACTS/pipeline.lock"
@@ -22,8 +24,8 @@ flock -n 9
 stage() {
   local name=$1
   shift
-  local status="$ARTIFACTS/$name.exit"
-  local logfile="$PROJECT_ROOT/logs/4090-$name.log"
+  local status="$ARTIFACTS/$ATTEMPT-$name.exit"
+  local logfile="$PROJECT_ROOT/logs/4090-$ATTEMPT-$name.log"
   [[ ! -e "$status" && ! -e "$logfile" ]]
   {
     printf '\n### %s：执行 %s\n\n' "$(date --iso-8601=seconds)" "$name"
@@ -55,7 +57,7 @@ stage training-cache-verification "$PYTHON" "$RUNTIME/scripts/verify_training_ca
   --validation-ids "$PROJECT_ROOT/data/derived/splits/validation_ids.txt" \
   --output "$PROJECT_ROOT/artifacts/migration-20260908/training-cache-verification.json"
 idle
-stage forward "$PYTHON" "$RUNTIME/scripts/gate_forward_alignment.py" \
+stage forward "$PYTHON" "$PROJECT_ROOT/repo/scripts/gate_forward_alignment.py" \
   --config "$CONFIG" --output "$ARTIFACTS/forward_alignment.json"
 idle
 stage batch-preferred "${TRAIN[@]}" --config "$CONFIG" --run-mode gate \

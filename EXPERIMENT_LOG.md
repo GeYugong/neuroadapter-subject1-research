@@ -1183,3 +1183,49 @@ canonical 权重原样保留，SHA-256 为 `dc363931727f5f5e445d267f9b31e1a366b1
 新端测试：`63 passed, 14 warnings in 129.15s`；工程辅助 CLI `--help` 通过；自动启动脚本 `bash -n` 通过。此次运行同时进行完整数据读取，因此测试墙钟时间包含磁盘争用。新增四项测试覆盖固定评价段抽取、拒绝歧义、固定样本对以及不改写评价源文件。
 
 30 分钟双卡硬件压力测试从 12:20:07 开始，截至本条仍在运行。此时尚未启动任何正式训练，当前 GPU 占用来自压力测试。
+
+### 12:43：完整数据迁移校验通过，自动门禁流程就绪
+
+完整数据校验于 12:40:27 成功退出，127 个文件共 120,175,910,826 字节逐一验证大小与 SHA-256，无缺失或额外文件。数据树 SHA-256：`3ac79739d4aa25ce3a653b7569767d9062c637f1c9ae7bf17c4f5833b9536f0c`。源清单 SHA-256：`73208c296dc9640a0555e41b222ead97dd960d8a565993dd0cfa07b98c94e5ef`。日志耗时约 9 分 52 秒。12:40:57 前后撤销旧端只读临时 authorized-key 条目，并删除新端迁移私钥；普通 SSH 访问仍使用本机已有密钥。
+
+12:41:29 建立 tmux 会话 `neuroadapter-4090-gates-train`。其依赖等待程序只等待当前硬件门禁退出文件，最多等待 30 分钟；门禁非零退出会使流程停止。后续运行代码绑定 `runtime/subject01-4090-bce13f2`，工程启动与推理辅助代码来自提交 `5e39f6fcdd7261b9552fba975c865e40fe6b303a`。
+
+```text
+总流程日志：logs/4090-gates-train-pipeline.log
+总流程退出码：artifacts/gates-4090/pipeline.exit
+各阶段日志：logs/4090-<stage>.log
+各阶段退出码：artifacts/gates-4090/<stage>.exit
+正式训练目标目录：runs/selection/subject01-selection-4090-v1
+```
+
+新端数据校验、完整源数据 inventory、环境版本一致性和更新后的 canonical manifest 已导出到 `manifests/migration-20260908/`；INDEX 同时记录运行源文件 SHA 和公开副本 SHA。缺少的后续门禁文件不会被导出或伪装成通过。此时仍处于硬件压力测试，正式训练尚未开始。
+
+### 2026-09-08T12:50:29+08:00：执行 training-cache-verification
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-bce13f2`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-training-cache-verification.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-bce13f2/scripts/verify_training_cache.py --cache /data1/matengyu/geyugong/neuroadapter-subject1-research/data/derived/training/subject01_train_pool_top100.h5 --project-root /data1/matengyu/geyugong/neuroadapter-subject1-research --manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/data/fingerprints/training_cache_manifest.json --data-fingerprint /data1/matengyu/geyugong/neuroadapter-subject1-research/data/fingerprints/data_fingerprint.json --metadata /data1/matengyu/geyugong/neuroadapter-subject1-research/data/derived/neural_data/metadata_sub-01.npy --selection-train-ids /data1/matengyu/geyugong/neuroadapter-subject1-research/data/derived/splits/selection_train_ids.txt --validation-ids /data1/matengyu/geyugong/neuroadapter-subject1-research/data/derived/splits/validation_ids.txt --output /data1/matengyu/geyugong/neuroadapter-subject1-research/artifacts/migration-20260908/training-cache-verification.json 
+```
+
+结果：退出码 0，耗时 7 秒；证据保存在上述输出路径。
+
+### 2026-09-08T12:50:36+08:00：执行 forward
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-bce13f2`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-forward.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-bce13f2/scripts/gate_forward_alignment.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_preferred.yaml --output /data1/matengyu/geyugong/neuroadapter-subject1-research/artifacts/gates-4090/forward_alignment.json 
+```
+
+结果：失败，退出码 1，耗时 39 秒。流程停止，未跳过门禁。
+
+### 12:53：硬件与训练缓存通过，修复独立 forward 检查的设备前置条件
+
+两张 RTX 4090 分别连续运行 1800.00057/1800.00065 秒，BF16 矩阵计算、卷积反向及 NCCL all-reduce 均通过，journalctl 无 Xid 事件。硬件配置及方法指纹已固化。训练缓存重新扫描通过：9000 图、200 parcels、626 最大顶点数，8500/500 内部划分无交集，标准测试集重叠为 0，无 NaN/Inf，padding 为 0。
+
+12:51:15，第一次 forward 对齐检查在固定上游 `min_snr_loss_weights()` 报错：GPU timesteps 索引 CPU `alphas_cumprod`。正式上游训练会先调用 scheduler `add_noise()`，该调用把缓冲区移到相应设备；独立 forward 检查直接接收固定 noisy tensor，因此没有触发这一前置操作。此问题发生在检查程序，不是新训练器 loss，也没有产生训练权重。
+
+修复仅在独立检查调用上游 loss 前显式把 `alphas_cumprod` 放到目标设备，数值、loss 公式和模型不变。修复后的工程检查从 `repo/scripts/gate_forward_alignment.py` 执行，并在证据中记录该文件 SHA 与工程提交；它的训练模块仍从冻结 runtime 导入，且重新核对上游 vendor HEAD。`runtime/subject01-4090-bce13f2` 未修改，硬件门禁及训练方法指纹不改变。失败日志 `logs/4090-forward.log` 和退出文件完整保留。
+
+启动脚本加入独立 attempt 日志前缀，第二次从头运行其余门禁，避免覆盖第一次失败记录。CPU 回归测试 `63 passed, 14 warnings in 4.20s`，`bash -n` 通过。正式训练仍未启动。

@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "status": "verified",
+  "verified_at_utc": "2026-09-08T04:40:27.616121+00:00",
+  "source_inventory_sha256": "73208c296dc9640a0555e41b222ead97dd960d8a565993dd0cfa07b98c94e5ef",
+  "tree_name": "data",
+  "file_count": 127,
+  "total_bytes": 120175910826,
+  "tree_sha256": "3ac79739d4aa25ce3a653b7569767d9062c637f1c9ae7bf17c4f5833b9536f0c"
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "runtime_commit": "bce13f220c30494104a397c18fd91009b1e12993",
+  "files": [
+    {
+      "path": "data-verification.json",
+      "source": "artifacts/migration-20260908/data-verification.json",
+      "source_sha256": "063e569f3a5f08196d6fe8b50f014672ad2547816bb2be1c95aa1819700bef6a",
+      "sha256": "063e569f3a5f08196d6fe8b50f014672ad2547816bb2be1c95aa1819700bef6a"
+    },
+    {
+      "path": "source-data-inventory.json",
+      "source": "migration/source-data-inventory.json",
+      "source_sha256": "73208c296dc9640a0555e41b222ead97dd960d8a565993dd0cfa07b98c94e5ef",
+      "sha256": "61b74f72adb0d537e5111c5c8d339e04cc2ab68e891f5839e82d491eb4633671"
+    },
+    {
+      "path": "environment-parity.json",
+      "source": "artifacts/migration-20260908/environment-parity.json",
+      "source_sha256": "b0f28600d23187a84a1293eda49818db9d3a902a7d238f17adecc142df3d290e",
+      "sha256": "b0f28600d23187a84a1293eda49818db9d3a902a7d238f17adecc142df3d290e"
+    },
+    {
+      "path": "canonical_manifest.json",
+      "source": "artifacts/migration-20260908/canonical_manifest.json",
+      "source_sha256": "0e6f9fb31cdad3aa0fc1e5668074e6d569838bffa1bd593115ce1e2a63cc0881",
+      "sha256": "0e6f9fb31cdad3aa0fc1e5668074e6d569838bffa1bd593115ce1e2a63cc0881"
+    }
+  ]
+}
