@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import argparse
+import inspect
 import json
+import subprocess
 from pathlib import Path
 
 from neuroadapter_research.atomic import sha256_file, write_json_atomic
@@ -76,6 +78,12 @@ def main() -> None:
     payload = {
         "schema_version": 1,
         "gate": args.gate,
+        "gate_script_sha256": sha256_file(Path(__file__)),
+        "comparison_implementation_sha256": sha256_file(Path(inspect.getfile(structural_sha256))),
+        "gate_script_repository_commit": subprocess.check_output(
+            ["git", "-C", str(Path(__file__).resolve().parents[1]), "rev-parse", "HEAD"],
+            text=True,
+        ).strip(),
         "status": "passed",
         "config_sha256": config.sha256,
         "method_fingerprint": fingerprint,

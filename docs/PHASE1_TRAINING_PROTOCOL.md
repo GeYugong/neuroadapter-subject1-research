@@ -182,7 +182,8 @@ OOM fallback              2/GPU, accumulation 4
 selection upper bound     500 reference epochs
 allow TF32                true（待门禁）
 cuDNN benchmark           false
-deterministic algorithms  false
+deterministic algorithms  true（2026-09-08：false 未通过逐位恢复门禁）
+CUBLAS_WORKSPACE_CONFIG    :4096:8
 AdamW fused               false
 AdamW foreach             false
 ```

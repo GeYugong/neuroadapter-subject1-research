@@ -72,7 +72,9 @@ selection 使用 8500 张图，final 使用 9000 张图。直接复用同一 epo
 
 ## D014：执行后端显式冻结
 
-当前候选配置明确使用 `allow_tf32=true`、`cudnn_benchmark=false`、`deterministic_algorithms=false`、`adamw_fused=false`、`adamw_foreach=false`。这些是待 RTX 4090 门禁验证的工程选择，不作为作者原始设置。selection 与 final 必须保持一致。
+当前候选配置明确使用 `allow_tf32=true`、`cudnn_benchmark=false`、`deterministic_algorithms=true`、`adamw_fused=false`、`adamw_foreach=false`，并固定 `CUBLAS_WORKSPACE_CONFIG=:4096:8`。这些是待完整 RTX 4090 门禁验证的工程选择，不作为作者原始设置。selection 与 final 必须保持一致。
+
+2026-09-08，原 `deterministic_algorithms=false` 候选的两次运行从第一步梯度开始分歧，而两卡完整 100 步输入/RNG 轨迹一致。切换确定性算法后的两次独立 2 步诊断运行，模型、AdamW、trainer、每卡 RNG 与 trace 完全相同。这只是工程诊断，不能替代 100 步连续/50+50 恢复门禁。新候选配置、环境锁、canonical manifest 和六项 GPU 门禁均重新绑定，不复用旧候选的通过结论。PyTorch 对随机种子与算法确定性的区别见[官方说明](https://docs.pytorch.org/docs/2.11/notes/randomness.html)。目前没有逐算子定位到唯一的非确定性 kernel，不把整个问题武断归因于某一个 attention 实现。
 
 ## D015：图像 resize 实现不同
 

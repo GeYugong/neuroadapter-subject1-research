@@ -56,7 +56,7 @@ training:
   precision: bf16
   allow_tf32: true
   cudnn_benchmark: false
-  deterministic_algorithms: false
+  deterministic_algorithms: true
   adamw_fused: false
   adamw_foreach: false
   base_seed: 20260901

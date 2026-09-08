@@ -21,7 +21,7 @@ def structural_sha256(value: Any) -> str:
         if torch.is_tensor(item):
             tensor = item.detach().cpu().contiguous()
             digest.update(f"tensor:{tensor.dtype}:{tuple(tensor.shape)}\0".encode())
-            digest.update(tensor.view(torch.uint8).numpy().tobytes())
+            digest.update(tensor.reshape(-1).view(torch.uint8).numpy().tobytes())
         elif isinstance(item, np.ndarray):
             array = np.ascontiguousarray(item)
             digest.update(f"ndarray:{array.dtype}:{array.shape}\0".encode())

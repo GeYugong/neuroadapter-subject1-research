@@ -3,35 +3,54 @@ set -euo pipefail
 
 : "${PROJECT_ROOT:?Set PROJECT_ROOT to the dedicated 4090 project directory}"
 : "${RUNTIME:?Set RUNTIME to the frozen clean protocol checkout}"
-source "$PROJECT_ROOT/repo/scripts/activate_project.sh"
+ENGINEERING_ROOT=${GATE_CODE_ROOT:-"$PROJECT_ROOT/repo"}
+source "$ENGINEERING_ROOT/scripts/activate_project.sh"
 export PYTHONPATH="$RUNTIME/src" PYTHONUNBUFFERED=1
 PYTHON="$PROJECT_ROOT/envs/neuroadapter/bin/python"
-CONFIG="$PROJECT_ROOT/configs/calibration/subject01_4090_preferred.yaml"
-FALLBACK="$PROJECT_ROOT/configs/calibration/subject01_4090_fallback.yaml"
-ARTIFACTS="$PROJECT_ROOT/artifacts/gates-4090"
-RUNS="$PROJECT_ROOT/runs/calibration"
-HELPER="$PROJECT_ROOT/repo/scripts/gate_preflight_inference.py"
+CONFIG=${PREFERRED_CONFIG:-"$PROJECT_ROOT/configs/calibration/subject01_4090_preferred.yaml"}
+FALLBACK=${FALLBACK_CONFIG:-"$PROJECT_ROOT/configs/calibration/subject01_4090_fallback.yaml"}
+ARTIFACTS=${GATE_ARTIFACT_ROOT:-"$PROJECT_ROOT/artifacts/gates-4090"}
+RUNS=${CALIBRATION_ROOT:-"$PROJECT_ROOT/runs/calibration"}
+HARDWARE_STATUS=${HARDWARE_STATUS:-"$PROJECT_ROOT/artifacts/migration-20260908/hardware.exit"}
+HELPER="$ENGINEERING_ROOT/scripts/gate_preflight_inference.py"
 LOG="$PROJECT_ROOT/repo/EXPERIMENT_LOG.md"
 ATTEMPT=${GATE_ATTEMPT:-v1}
 [[ $ATTEMPT =~ ^[a-zA-Z0-9_-]+$ ]]
+START_STAGE=${GATE_START_STAGE:-}
+PREVIOUS=${GATE_PREVIOUS_ATTEMPT:-}
+ACTIVE=true
+if [[ -n $START_STAGE ]]; then
+  [[ $PREVIOUS =~ ^[a-zA-Z0-9_-]+$ ]]
+  ACTIVE=false
+fi
 
 mkdir -p "$ARTIFACTS" "$RUNS"
 exec 9>"$ARTIFACTS/pipeline.lock"
 flock -n 9
 [[ $(cat "$PROJECT_ROOT/artifacts/migration-20260908/data-verification.exit") == 0 ]]
-[[ $(cat "$PROJECT_ROOT/artifacts/migration-20260908/hardware.exit") == 0 ]]
+[[ $(cat "$HARDWARE_STATUS") == 0 ]]
 
 stage() {
   local name=$1
   shift
+  if [[ $ACTIVE == false ]]; then
+    if [[ $name == "$START_STAGE" ]]; then
+      ACTIVE=true
+    else
+      [[ $(cat "$ARTIFACTS/$PREVIOUS-$name.exit") == 0 ]]
+      printf '\n%s：保留已完成阶段 %s 的结果（attempt %s，退出码 0），不重复运行。\n' "$(date --iso-8601=seconds)" "$name" "$PREVIOUS" >> "$LOG"
+      return 0
+    fi
+  fi
   local status="$ARTIFACTS/$ATTEMPT-$name.exit"
   local logfile="$PROJECT_ROOT/logs/4090-$ATTEMPT-$name.log"
   [[ ! -e "$status" && ! -e "$logfile" ]]
   {
     printf '\n### %s：执行 %s\n\n' "$(date --iso-8601=seconds)" "$name"
     printf '运行代码：`%s`。日志：`%s`。\n\n```bash\n' "$RUNTIME" "$logfile"
-    printf '%q ' "$@"
-    printf '\n```\n'
+    local command
+    printf -v command '%q ' "$@"
+    printf '%s\n```\n' "${command% }"
   } >> "$LOG"
   local started=$SECONDS
   if bash "$RUNTIME/scripts/run_with_status.sh" "$status" "$logfile" "$@"; then
@@ -45,7 +64,7 @@ stage() {
 
 idle() { bash "$RUNTIME/scripts/check_gpu_idle.sh"; }
 TRAIN=("$PYTHON" -m torch.distributed.run --standalone --nproc_per_node=2 "$RUNTIME/scripts/train_subject01.py")
-VERIFY=("$PYTHON" "$RUNTIME/scripts/verify_repeatability_gate.py" --config "$CONFIG")
+VERIFY=(env "PYTHONPATH=$ENGINEERING_ROOT/src" "$PYTHON" "$ENGINEERING_ROOT/scripts/verify_repeatability_gate.py" --config "$CONFIG")
 
 stage training-cache-verification "$PYTHON" "$RUNTIME/scripts/verify_training_cache.py" \
   --cache "$PROJECT_ROOT/data/derived/training/subject01_train_pool_top100.h5" \
@@ -57,7 +76,7 @@ stage training-cache-verification "$PYTHON" "$RUNTIME/scripts/verify_training_ca
   --validation-ids "$PROJECT_ROOT/data/derived/splits/validation_ids.txt" \
   --output "$PROJECT_ROOT/artifacts/migration-20260908/training-cache-verification.json"
 idle
-stage forward "$PYTHON" "$PROJECT_ROOT/repo/scripts/gate_forward_alignment.py" \
+stage forward "$PYTHON" "$ENGINEERING_ROOT/scripts/gate_forward_alignment.py" \
   --config "$CONFIG" --output "$ARTIFACTS/forward_alignment.json"
 idle
 stage batch-preferred "${TRAIN[@]}" --config "$CONFIG" --run-mode gate \
@@ -120,6 +139,7 @@ stage evaluate-verification "${VERIFY[@]}" --gate evaluator_repeatability \
   --output "$ARTIFACTS/evaluator_repeatability.json"
 
 FORMAL="$PROJECT_ROOT/configs/formal/subject01_selection.yaml"
+[[ $ACTIVE == true ]]
 APPROVAL="$ARTIFACTS/selection_approval.json"
 mkdir -p "$(dirname "$FORMAL")"
 [[ ! -e "$FORMAL" ]]

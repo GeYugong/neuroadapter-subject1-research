@@ -19,3 +19,4 @@ def test_4090_protocol_is_consistent_with_both_templates() -> None:
         assert config.training["micro_batch_size"] == 4
         assert config.training["gradient_accumulation_steps"] == 2
         assert config.training["global_batch_size"] == 16
+        assert config.training["deterministic_algorithms"] is True
