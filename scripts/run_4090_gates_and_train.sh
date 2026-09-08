@@ -138,7 +138,7 @@ stage evaluate-verification "${VERIFY[@]}" --gate evaluator_repeatability \
   --right-aux "$RUNS/4090-evaluator-b/per_pair.csv" \
   --output "$ARTIFACTS/evaluator_repeatability.json"
 
-FORMAL="$PROJECT_ROOT/configs/formal/subject01_selection.yaml"
+FORMAL=${FORMAL_CONFIG_PATH:-"$PROJECT_ROOT/configs/formal/subject01_selection.yaml"}
 [[ $ACTIVE == true ]]
 APPROVAL="$ARTIFACTS/selection_approval.json"
 mkdir -p "$(dirname "$FORMAL")"

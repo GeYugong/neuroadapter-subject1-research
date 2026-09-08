@@ -143,6 +143,19 @@ def validate_subject1_audits(paths: dict[str, Path]) -> dict[str, dict[str, Any]
         raise ValueError("NSD image mapping audit has not passed")
 
     decoder_atlas = load_json_mapping(paths["decoder_atlas_audit"])
+    fingerprint = load_json_mapping(paths["data_fingerprint"])
+    # The cache verifier records brain_shape; parcel identity belongs to the
+    # fingerprint already bound by data_fingerprint_sha256 above.
+    max_voxels = fingerprint.get("max_voxels")
+    parcel_map_sha256 = fingerprint.get("parcel_map_sha256")
+    if (
+        not isinstance(max_voxels, int)
+        or max_voxels <= 0
+        or cache.get("brain_shape") != [9000, 200, max_voxels]
+        or not isinstance(parcel_map_sha256, str)
+        or not SHA256_PATTERN.fullmatch(parcel_map_sha256)
+    ):
+        raise ValueError("training cache dimensions or parcel fingerprint are invalid")
     hemispheres = decoder_atlas.get("hemispheres")
     if (
         decoder_atlas.get("schema_version") != 1
@@ -150,7 +163,7 @@ def validate_subject1_audits(paths: dict[str, Path]) -> dict[str, dict[str, Any]
         or decoder_atlas.get("status") != "verified"
         or decoder_atlas.get("surface_space") != "fsaverage"
         or decoder_atlas.get("model_token_count") != 200
-        or decoder_atlas.get("max_voxels") != cache.get("max_voxels")
+        or decoder_atlas.get("max_voxels") != max_voxels
         or decoder_atlas.get("top_snr_ranking_verified") is not True
         or not isinstance(hemispheres, dict)
         or set(hemispheres) != {"lh", "rh"}
@@ -160,7 +173,7 @@ def validate_subject1_audits(paths: dict[str, Path]) -> dict[str, dict[str, Any]
     if (
         runtime.get("cache_manifest_sha256")
         != sha256_file(paths["training_cache_manifest"])
-        or runtime.get("parcel_map_sha256") != cache.get("parcel_map_sha256")
+        or runtime.get("parcel_map_sha256") != parcel_map_sha256
     ):
         raise ValueError("decoder atlas audit is not bound to the training cache")
     return {

@@ -1,0 +1,31 @@
+{
+  "purpose": "two independent fresh 2-step runs; NOT the 100-step resume gate",
+  "comparison_tool_output": {
+    "schema_version": 1,
+    "gate": "resume_equivalence",
+    "status": "passed",
+    "config_sha256": "b72fe7734f4e6cc7f2c12845ea27cca44e2535e6eb4e70b19f3cc7cd852f3916",
+    "method_fingerprint": "70913f88cd48447e2b2216b69042807b16693fd11ae708d99978ea9d55858854",
+    "gate_requirements_sha256": "c2c81cf80f226efb9ba5e01b9d74fd5b085f36a5d00be39f5f9d45d72d638d09",
+    "left_input_sha256": "f10be01f8c55c97f7f5f679b6d951323d3bface1d1400a478d6ec0d784643c91",
+    "right_input_sha256": "f10be01f8c55c97f7f5f679b6d951323d3bface1d1400a478d6ec0d784643c91",
+    "evidence": {
+      "optimizer_update": 2,
+      "world_size": 2,
+      "structural_state_sha256": {
+        "rank_00000_model": "cf47bf38270ad7ada96679373d38f7e30ad349b84a83093ee1df2ea9f89ef0b9",
+        "rank_00000_optimizer": "029ea632d836d9a4528cb2989bf6114a8137842409b4a9e69f2ce3d86ec417eb",
+        "rank_00000_trainer": "d930e5661081ed08a50f0ece0a8dd18ad376f5ab61ef0446e8fbbd5ac1f63293",
+        "rank_00000_rank": "c1003c3bae2a9fa7754b73548cb67cf0517a612ec099607dade2093fb1e056d5",
+        "rank_00001_model": "cf47bf38270ad7ada96679373d38f7e30ad349b84a83093ee1df2ea9f89ef0b9",
+        "rank_00001_optimizer": "029ea632d836d9a4528cb2989bf6114a8137842409b4a9e69f2ce3d86ec417eb",
+        "rank_00001_trainer": "d930e5661081ed08a50f0ece0a8dd18ad376f5ab61ef0446e8fbbd5ac1f63293",
+        "rank_00001_rank": "d0f67586a228adbcc36e743102c3c8f6ae5a7c4ddaa977f6b83b7a9cf00dc48c"
+      },
+      "trace_sha256": {
+        "trace-rank-00000.jsonl": "cf64737f149fab5d991c0ac787b66a7bf36b8b6c6bb74f9b8772d4b94448ce2a",
+        "trace-rank-00001.jsonl": "8396f26566146ff026a4431fcd5b85a283ced106ee88b614d8f2b02f8765be25"
+      }
+    }
+  }
+}

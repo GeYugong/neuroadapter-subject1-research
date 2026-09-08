@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "gate": "resume_equivalence",
+  "gate_script_sha256": "c0688413fa3520213a0a48f12d5b11544f98590c36200b96b308a63ab68e29de",
+  "comparison_implementation_sha256": "a4ecdd344ba8cac81c4cd89a9580eefd79a3c73c048413ec392a4e164774f933",
+  "gate_script_repository_commit": "4a54d9236fc40307c1ecb78e3c91369c1333a12c",
+  "status": "passed",
+  "config_sha256": "fee15bfdb6567765916b2c337b93ac6e80551aa6fa8bfbc843067ba6a51842c0",
+  "method_fingerprint": "0315dc5d2dd2acd9f1f79f08c5d9e99f5af4ba0a80d5e9479163f053bf148a4d",
+  "gate_requirements_sha256": "c2c81cf80f226efb9ba5e01b9d74fd5b085f36a5d00be39f5f9d45d72d638d09",
+  "left_input_sha256": "368f8d5b5bccbaab1545ce47294273a658848f351f09a5dd49d6b954af5e0074",
+  "right_input_sha256": "9c3a72502cb6d4d962c6264fbf7c999194767172e4ff445f17d00e7c80ad3f65",
+  "evidence": {
+    "optimizer_update": 100,
+    "world_size": 2,
+    "structural_state_sha256": {
+      "rank_00000_model": "f318931c5514f7063502f232ce041b17f2428ab7b319fa0fe837c8236cad3fd9",
+      "rank_00000_optimizer": "763760f74c413bb74d85a792e06872b4cf5d17d35e321a12608c4c3d630d740c",
+      "rank_00000_trainer": "35d5e93dc6a32bcd77c3b87a5766efd2e18f7c6f420f15d458677360c64c2708",
+      "rank_00000_rank": "ffbf7626d6cabacbf138c7993700d588f487e94ce592063d7604c2ded791be64",
+      "rank_00001_model": "f318931c5514f7063502f232ce041b17f2428ab7b319fa0fe837c8236cad3fd9",
+      "rank_00001_optimizer": "763760f74c413bb74d85a792e06872b4cf5d17d35e321a12608c4c3d630d740c",
+      "rank_00001_trainer": "35d5e93dc6a32bcd77c3b87a5766efd2e18f7c6f420f15d458677360c64c2708",
+      "rank_00001_rank": "5ec114c2c9668ca266b5d86c9d55ce6bfc9ab2cbb283b22307d9ef7d7f5ab826"
+    },
+    "trace_sha256": {
+      "trace-rank-00000.jsonl": "4d83de9cefa8e6c8b3277bfa8521e8fa5ea7ab72ab8a94601381658fe385d09f",
+      "trace-rank-00001.jsonl": "4baf6dea9de83ae64a899345133cc7f847590d896ec47cbfee05ecd0c2de3f3f"
+    }
+  }
+}

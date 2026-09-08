@@ -9,6 +9,12 @@
       "sha256": "063e569f3a5f08196d6fe8b50f014672ad2547816bb2be1c95aa1819700bef6a"
     },
     {
+      "path": "model-verification.json",
+      "source": "artifacts/migration-20260908/model-verification.json",
+      "source_sha256": "6e1aa00e150901b1749d8973fbc4db0672024d3788d045ddb437d3d01456a68c",
+      "sha256": "6e1aa00e150901b1749d8973fbc4db0672024d3788d045ddb437d3d01456a68c"
+    },
+    {
       "path": "source-data-inventory.json",
       "source": "migration/source-data-inventory.json",
       "source_sha256": "73208c296dc9640a0555e41b222ead97dd960d8a565993dd0cfa07b98c94e5ef",
@@ -25,6 +31,30 @@
       "source": "artifacts/migration-20260908/canonical_manifest.json",
       "source_sha256": "0e6f9fb31cdad3aa0fc1e5668074e6d569838bffa1bd593115ce1e2a63cc0881",
       "sha256": "0e6f9fb31cdad3aa0fc1e5668074e6d569838bffa1bd593115ce1e2a63cc0881"
+    },
+    {
+      "path": "training-cache-verification.json",
+      "source": "artifacts/migration-20260908/training-cache-verification.json",
+      "source_sha256": "a4fda1d659731f854b897730dbde309dc240059d6d773903772437857ba49e72",
+      "sha256": "a4fda1d659731f854b897730dbde309dc240059d6d773903772437857ba49e72"
+    },
+    {
+      "path": "hardware_gate.json",
+      "source": "artifacts/gates-4090/hardware_gate.json",
+      "source_sha256": "8fbb26fecb59c08b634313cea507ac3f5f5d2e870a3f520537fc7b20fa191465",
+      "sha256": "8fbb26fecb59c08b634313cea507ac3f5f5d2e870a3f520537fc7b20fa191465"
+    },
+    {
+      "path": "forward_alignment.json",
+      "source": "artifacts/gates-4090/forward_alignment.json",
+      "source_sha256": "e817d3b616491f49f1c0b7878aef93bda3f6e53e628a009197dee51872848e4b",
+      "sha256": "e817d3b616491f49f1c0b7878aef93bda3f6e53e628a009197dee51872848e4b"
+    },
+    {
+      "path": "batch_gate.json",
+      "source": "artifacts/gates-4090/batch_gate.json",
+      "source_sha256": "83b2c7e3dbaa308bf73c4cfd3000020572e88747f169145fcdb2c518582755b4",
+      "sha256": "83b2c7e3dbaa308bf73c4cfd3000020572e88747f169145fcdb2c518582755b4"
     }
   ]
 }

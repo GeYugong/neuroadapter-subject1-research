@@ -186,7 +186,8 @@ def test_subject1_audits_require_verified_decoder_atlas(tmp_path: Path) -> None:
     }
     paths["training_cache"].write_bytes(b"cache")
     paths["training_cache_manifest"].write_bytes(b"manifest")
-    paths["data_fingerprint"].write_bytes(b"fingerprint")
+    fingerprint_bytes = json.dumps({"max_voxels": 626, "parcel_map_sha256": "a" * 64}).encode()
+    paths["data_fingerprint"].write_bytes(fingerprint_bytes)
     paths["training_cache_verification"].write_text(
         json.dumps(
             {
@@ -194,9 +195,8 @@ def test_subject1_audits_require_verified_decoder_atlas(tmp_path: Path) -> None:
                 "status": "verified",
                 "cache_sha256": digest(b"cache"),
                 "build_manifest_sha256": digest(b"manifest"),
-                "data_fingerprint_sha256": digest(b"fingerprint"),
-                "max_voxels": 626,
-                "parcel_map_sha256": "p" * 64,
+                "data_fingerprint_sha256": digest(fingerprint_bytes),
+                "brain_shape": [9000, 200, 626],
             }
         ),
         encoding="utf-8",
@@ -239,10 +239,23 @@ def test_subject1_audits_require_verified_decoder_atlas(tmp_path: Path) -> None:
                 },
                 "runtime_inputs": {
                     "cache_manifest_sha256": digest(b"manifest"),
-                    "parcel_map_sha256": "p" * 64,
+                    "parcel_map_sha256": "a" * 64,
                 },
             }
         ),
         encoding="utf-8",
     )
     assert validate_subject1_audits(paths)["training_cache"]["status"] == "verified"
+
+    atlas = json.loads(paths["decoder_atlas_audit"].read_text())
+    atlas["runtime_inputs"]["parcel_map_sha256"] = "b" * 64
+    paths["decoder_atlas_audit"].write_text(json.dumps(atlas))
+    with pytest.raises(ValueError, match="not bound to the training cache"):
+        validate_subject1_audits(paths)
+    atlas["runtime_inputs"]["parcel_map_sha256"] = "a" * 64
+    paths["decoder_atlas_audit"].write_text(json.dumps(atlas))
+    cache = json.loads(paths["training_cache_verification"].read_text())
+    cache["brain_shape"][-1] = 625
+    paths["training_cache_verification"].write_text(json.dumps(cache))
+    with pytest.raises(ValueError, match="dimensions or parcel fingerprint"):
+        validate_subject1_audits(paths)

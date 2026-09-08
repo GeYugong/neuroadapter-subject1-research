@@ -109,3 +109,7 @@ Selection 和 final 的完整配置 SHA 必然不同。为避免重复执行与�
 ## D022：最终 brain encoder 评价延后到 parcel 身份可验证后
 
 Decoder 正式权重可以在 decoder atlas 与训练门禁通过后生成。由于公开资料尚不能证明 brain encoder checkpoint 与公开 LH/RH parcel 文件的来源绑定，encoder-selected 标准 test 继续阻断；fixed candidate 和 seed-mean 的模型锁定不用于绕过该门禁。
+
+## D023：正式许可使用实际缓存审计 schema
+
+2026-09-08 的真实运行发现许可检查错误地假设 cache verification 顶层包含 `max_voxels` 和 `parcel_map_sha256`。修复后读取已经由 cache verification SHA 绑定的 data fingerprint，并验证其 max_voxels 与 cache brain_shape、atlas 一致，parcel SHA 与 atlas 一致。该变更只修复审计接口，不改变模型、输入数据或优化步骤；仍重新冻结提交并执行对应验收，不重写旧验收记录。

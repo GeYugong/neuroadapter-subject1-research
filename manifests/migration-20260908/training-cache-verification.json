@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "status": "verified",
+  "cache_path": "data/derived/training/subject01_train_pool_top100.h5",
+  "cache_size": 1924581142,
+  "cache_sha256": "88218e827856562a8efef1353d1cbaea0b4b00a2b139a5d9b09feb9892820400",
+  "image_count": 9000,
+  "selection_train_count": 8500,
+  "validation_count": 500,
+  "standard_test_overlap": 0,
+  "brain_shape": [
+    9000,
+    200,
+    626
+  ],
+  "brain_dtype": "float32",
+  "max_voxels_source": "data_fingerprint.json",
+  "historical_reference_max_voxels": 626,
+  "matches_historical_reference": true,
+  "padding_policy": "zero outside parcel_valid_mask",
+  "statistics_over_valid_values": {
+    "valid_value_count": 475263000,
+    "minimum": -30.841522216796875,
+    "maximum": 59.4533805847168,
+    "mean": 1.1830519251528038,
+    "std": 1.6606457324689756
+  },
+  "build_manifest_sha256": "9897447eb45839aa23ff683583432b0ea86d8386dee6d3de1915605b790504c8",
+  "data_fingerprint_sha256": "16a6e610670f0d91e0cc063ab375b93276a62838b73e25fcae24e5f4932042cc"
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "gate": "forward_alignment",
+  "gate_script_sha256": "2ba5fbf77071f451fd97a5ad94003f730ae2e668329f1e3c81ddce878c051d0d",
+  "gate_script_repository_commit": "b806b5b8d8896a757731088d6656489b0070de11",
+  "status": "passed",
+  "config_sha256": "8703d52671f665a8f7b391bfdf90f6d5dcb0533c06d3a458186e1e9ce706bc11",
+  "method_fingerprint": "ec682e79504ad81bbaf4ec27f1c2ab4a77e311287ecf84f31c3ec5b6bb5ebc2b",
+  "gate_requirements_sha256": "c2c81cf80f226efb9ba5e01b9d74fd5b085f36a5d00be39f5f9d45d72d638d09",
+  "canonical_initialization_sha256": "dc363931727f5f5e445d267f9b31e1a366b134b2e62a34dc72ae12693d875fca",
+  "input_seed": 20260901,
+  "dtype": "bfloat16 autocast",
+  "prediction_max_abs_error": 0.0,
+  "loss_abs_error": 0.0,
+  "absolute_tolerance": 1e-06,
+  "upstream_train_script_sha256": "e3ac49aaa7f9c48d7023c451e3076ca0f485efa1634fe6b54754e28045d7c049",
+  "upstream_setup_ip_adapter_sha256": "dcb7a65c6119f370dac4f498a25865dd283a8dd59e599a9127d899cd98612440"
+}
