@@ -1,0 +1,10 @@
+{
+  "status": "verified",
+  "purpose": "CPU data audit interfaces only; not a formal approval",
+  "config_sha256": "7e12cca6093733c598d2877838d8c31a53961c9dd93857efb33bd99f45f93077",
+  "audits": {
+    "training_cache": "verified",
+    "nsd_image_mapping": "verified",
+    "decoder_atlas": "verified"
+  }
+}

@@ -1,6 +1,6 @@
 # 正式执行顺序
 
-本文只给出阶段顺序和命令接口。所有路径均以实验根目录 `$PROJECT_ROOT` 为基准；selection 正式配置记为 `$SELECTION_CONFIG`。当前尚未执行 GPU 门禁，不能生成 formal approval，也不能启动 formal training。
+本文给出阶段顺序和命令接口，不承担实时状态记录。所有路径均以实验根目录 `$PROJECT_ROOT` 为基准；selection 正式配置记为 `$SELECTION_CONFIG`。实际运行状态见根目录 README 与 `EXPERIMENT_LOG.md`；只有同一冻结配置的全部门禁通过后，才可生成 formal approval 和启动 formal training。
 
 ## 1. 冻结前提
 
@@ -13,6 +13,16 @@
 `brain_encoder_parcel_audit.json` 是最终 brain encoder forward/test 的独立门禁。公开资产目前不能证明与 checkpoint 训练时使用的 parcel 文件同源，因此它不参与 decoder formal approval，但在解决前禁止标准 test 的 encoder-selected 口径。
 
 ## 2. CPU 门禁
+
+除单元测试外，必须检查服务器真实报告的 schema 与哈希绑定，避免仅有模拟 fixture 通过而实际许可失败：
+
+```bash
+PYTHONPATH="$RUNTIME/src" "$PROJECT_ROOT/envs/neuroadapter/bin/python" \
+  "$RUNTIME/scripts/preflight_subject1_audits.py" \
+  --config "$SELECTION_CONFIG" --output "$PROJECT_ROOT/artifacts/cpu_preflight.json"
+```
+
+`$RUNTIME` 指该配置 `protocol_commit` 对应的干净冻结代码目录。预检只验证数据审计接口，不能替代后续六项 GPU/重复性门禁。
 
 ```bash
 cd "$PROJECT_ROOT/repo"

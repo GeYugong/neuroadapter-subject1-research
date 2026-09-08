@@ -1511,3 +1511,233 @@ env PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/e
 - 修复为从已绑定 data fingerprint 读取 max_voxels 与合法 SHA，并要求 cache `brain_shape == [9000, 200, max_voxels]`，然后与 atlas 比较；没有放宽状态、尺寸或哈希要求。回归测试改用实际报告 schema，并增加错误尺寸、错误 parcel SHA 拒绝检查。服务器全套测试 65 passed，14 条上游弃用警告，耗时 3.55 秒。
 - 增加 CPU 真实数据审计入口，在 GPU 验收前检查接口；下一轮使用新冻结提交、新 config、独立 det-v2 目录重新验收。旧许可失败日志、全部门禁、checkpoint 和图片均保留，不修改旧通过记录的指纹。
 - 抽查 det-v1 的 `4090-decode/normal/pass-0/images/00095/candidate-00.png`：512x512 图像正常可读，无空白或损坏。仅检查解码输出有效性，不据此判断重建质量，也不用于权重选择。
+
+### 2026-09-08T14:17:43+08:00：det-v2 从真实数据预检开始全套重新验收
+
+冻结运行目录：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`；配置：`/data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml`。旧 det-v1 的六项通过结果不复用，全部重新运行。
+
+硬件门禁命令：
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python -m torch.distributed.run --standalone --nproc_per_node=2 /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/gate_hardware.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --output /data1/matengyu/geyugong/neuroadapter-subject1-research/artifacts/gates-4090-deterministic-v2/hardware_gate.json
+```
+
+2026-09-08T14:47:48+08:00：det-v2 双卡 30 分钟硬件门禁通过；继续 batch、恢复、解码与评价门禁，全部通过后自动启动正式 selection。
+
+### 2026-09-08T14:47:48+08:00：执行 training-cache-verification
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-training-cache-verification.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/verify_training_cache.py --cache /data1/matengyu/geyugong/neuroadapter-subject1-research/data/derived/training/subject01_train_pool_top100.h5 --project-root /data1/matengyu/geyugong/neuroadapter-subject1-research --manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/data/fingerprints/training_cache_manifest.json --data-fingerprint /data1/matengyu/geyugong/neuroadapter-subject1-research/data/fingerprints/data_fingerprint.json --metadata /data1/matengyu/geyugong/neuroadapter-subject1-research/data/derived/neural_data/metadata_sub-01.npy --selection-train-ids /data1/matengyu/geyugong/neuroadapter-subject1-research/data/derived/splits/selection_train_ids.txt --validation-ids /data1/matengyu/geyugong/neuroadapter-subject1-research/data/derived/splits/validation_ids.txt --output /data1/matengyu/geyugong/neuroadapter-subject1-research/artifacts/migration-20260908/training-cache-verification.json
+```
+
+结果：退出码 0，耗时 6 秒；证据保存在上述输出路径。
+
+### 2026-09-08T14:47:54+08:00：执行 forward
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-forward.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/gate_forward_alignment.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --output /data1/matengyu/geyugong/neuroadapter-subject1-research/artifacts/gates-4090-deterministic-v2/forward_alignment.json
+```
+
+结果：退出码 0，耗时 6 秒；证据保存在上述输出路径。
+
+### 2026-09-08T14:48:00+08:00：执行 batch-preferred
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-batch-preferred.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python -m torch.distributed.run --standalone --nproc_per_node=2 /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/train_subject01.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --run-mode gate --max-updates-override 532 --output-override /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-preferred-532
+```
+
+结果：退出码 0，耗时 350 秒；证据保存在上述输出路径。
+
+### 2026-09-08T14:53:50+08:00：执行 batch-fallback
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-batch-fallback.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python -m torch.distributed.run --standalone --nproc_per_node=2 /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/train_subject01.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_fallback.yaml --run-mode gate --max-updates-override 532 --output-override /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-fallback-532
+```
+
+结果：退出码 0，耗时 396 秒；证据保存在上述输出路径。
+
+### 2026-09-08T15:00:26+08:00：执行 batch-verification
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-batch-verification.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/verify_batch_gate.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --preferred-run /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-preferred-532 --fallback-run /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-fallback-532 --selected preferred --output /data1/matengyu/geyugong/neuroadapter-subject1-research/artifacts/gates-4090-deterministic-v2/batch_gate.json
+```
+
+结果：退出码 0，耗时 0 秒；证据保存在上述输出路径。
+
+### 2026-09-08T15:00:26+08:00：执行 resume-continuous
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-resume-continuous.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python -m torch.distributed.run --standalone --nproc_per_node=2 /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/train_subject01.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --run-mode gate --max-updates-override 100 --output-override /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-continuous-100
+```
+
+结果：退出码 0，耗时 105 秒；证据保存在上述输出路径。
+
+### 2026-09-08T15:02:11+08:00：执行 resume-first
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-resume-first.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python -m torch.distributed.run --standalone --nproc_per_node=2 /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/train_subject01.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --run-mode gate --max-updates-override 50 --output-override /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-resumed-100
+```
+
+结果：退出码 0，耗时 71 秒；证据保存在上述输出路径。
+
+### 2026-09-08T15:03:22+08:00：执行 resume-second
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-resume-second.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python -m torch.distributed.run --standalone --nproc_per_node=2 /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/train_subject01.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --run-mode gate --max-updates-override 100 --output-override /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-resumed-100 --resume /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-resumed-100/checkpoints/checkpoint-update-00000050
+```
+
+结果：退出码 0，耗时 75 秒；证据保存在上述输出路径。
+
+### 2026-09-08T15:04:37+08:00：执行 resume-verification
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-resume-verification.log`。
+
+```bash
+env PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/verify_repeatability_gate.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --gate resume_equivalence --left /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-continuous-100/checkpoints/checkpoint-update-00000100 --right /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-resumed-100/checkpoints/checkpoint-update-00000100 --left-aux /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-continuous-100/traces --right-aux /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-resumed-100/traces --output /data1/matengyu/geyugong/neuroadapter-subject1-research/artifacts/gates-4090-deterministic-v2/resume_equivalence.json
+```
+
+结果：退出码 0，耗时 9 秒；证据保存在上述输出路径。
+
+### 2026-09-08T15:04:46+08:00：执行 decode-same-process
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-decode-same-process.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/gate_preflight_inference.py --runtime /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --action decode --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-preferred-532/snapshots/snapshot-update-00000532 --output /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-decode/normal --repeats 2
+```
+
+结果：退出码 0，耗时 227 秒；证据保存在上述输出路径。
+
+### 2026-09-08T15:08:33+08:00：执行 decode-new-process
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-decode-new-process.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/gate_preflight_inference.py --runtime /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --action decode --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-preferred-532/snapshots/snapshot-update-00000532 --output /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-decode/reversed --reverse
+```
+
+结果：退出码 0，耗时 116 秒；证据保存在上述输出路径。
+
+### 2026-09-08T15:10:29+08:00：执行 decode-same-verification
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-decode-same-verification.log`。
+
+```bash
+env PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/verify_repeatability_gate.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --gate decode_determinism --left /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-decode/normal/pass-0/decode_manifest.json --right /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-decode/normal/pass-1/decode_manifest.json --output /data1/matengyu/geyugong/neuroadapter-subject1-research/artifacts/gates-4090-deterministic-v2/decode_same_process.json
+```
+
+结果：退出码 0，耗时 1 秒；证据保存在上述输出路径。
+
+### 2026-09-08T15:10:30+08:00：执行 decode-new-verification
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-decode-new-verification.log`。
+
+```bash
+env PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/verify_repeatability_gate.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --gate decode_determinism --left /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-decode/normal/pass-0/decode_manifest.json --right /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-decode/reversed/pass-0/decode_manifest.json --output /data1/matengyu/geyugong/neuroadapter-subject1-research/artifacts/gates-4090-deterministic-v2/decode_determinism.json
+```
+
+结果：退出码 0，耗时 1 秒；证据保存在上述输出路径。
+
+### 2026-09-08T15:10:31+08:00：执行 evaluate-a
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-evaluate-a.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/gate_preflight_inference.py --runtime /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --action evaluate --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-decode/normal/pass-0/decode_manifest.json --output /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-evaluator-a
+```
+
+结果：退出码 0，耗时 8 秒；证据保存在上述输出路径。
+
+### 2026-09-08T15:10:39+08:00：执行 evaluate-b
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-evaluate-b.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/gate_preflight_inference.py --runtime /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --action evaluate --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-decode/normal/pass-0/decode_manifest.json --output /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-evaluator-b
+```
+
+结果：退出码 0，耗时 8 秒；证据保存在上述输出路径。
+
+### 2026-09-08T15:10:47+08:00：执行 evaluate-verification
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-evaluate-verification.log`。
+
+```bash
+env PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/verify_repeatability_gate.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/calibration/subject01_4090_deterministic_v2_preferred.yaml --gate evaluator_repeatability --left /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-evaluator-a/evaluation.json --right /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-evaluator-b/evaluation.json --left-aux /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-evaluator-a/per_pair.csv --right-aux /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/calibration/deterministic-v2/4090-evaluator-b/per_pair.csv --output /data1/matengyu/geyugong/neuroadapter-subject1-research/artifacts/gates-4090-deterministic-v2/evaluator_repeatability.json
+```
+
+结果：退出码 0，耗时 1 秒；证据保存在上述输出路径。
+
+### 2026-09-08T15:10:48+08:00：执行 formal-approval
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-formal-approval.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/create_formal_approval.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --output /data1/matengyu/geyugong/neuroadapter-subject1-research/artifacts/gates-4090-deterministic-v2/selection_approval.json --approve
+```
+
+结果：退出码 0，耗时 1 秒；证据保存在上述输出路径。
+
+正式 selection 启动命令即将执行。门禁权重不参与初始化；从固定 canonical 权重及全新 AdamW 开始。
+
+### 2026-09-08T15:10:49+08:00：执行 formal-selection
+
+运行代码：`/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa`。日志：`/data1/matengyu/geyugong/neuroadapter-subject1-research/logs/4090-det-v2-formal-selection.log`。
+
+```bash
+/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python -m torch.distributed.run --standalone --nproc_per_node=2 /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/train_subject01.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --run-mode formal --approval-file /data1/matengyu/geyugong/neuroadapter-subject1-research/artifacts/gates-4090-deterministic-v2/selection_approval.json
+```
+
+### 2026-09-08T15:12:46+08:00：正式 selection 启动验收完成
+
+**本轮结论：双 RTX 4090 迁移完成，正式 selection 已实际运行。尚非训练完成，尚未进入 final 9000 图重训。**
+
+- 冻结训练与验收代码：`1a1fcfa66e06de07a04dfbb48cc6f9ad108ed567`；独立干净 runtime，不受后续日志和报告提交影响。该 runtime 全套测试 65 passed，14 条上游弃用警告，3.03 秒。
+- 数据/模型迁移沿用已完成的逐文件 SHA 验证：127 个数据文件、120175910826 字节全部一致；Stable Diffusion、brain encoder 及六类评价模型文件已验证，116 项环境分发版本一致。旧服务器数据与旧运行均保留，新任务仅使用本项目目录及两张 RTX 4090。
+- det-v2 真实数据 CPU 预检通过；双卡 30 分钟 BF16/NCCL 压力与 Xid 检查通过；上游 forward prediction/loss 差异均为 0。
+- 两种 batch 各完成 532 updates；冻结首选 `2 GPUs x microbatch 4 x accumulation 2 = global batch 16`。首选最大 reserved memory 14659092480 字节，低于 22 GiB 阈值。
+- 完整恢复验收通过：连续 100 与 50+50 updates 的模型、AdamW、trainer、两卡 RNG 和 traces 完全一致。64 张候选图同进程两轮及跨进程倒序生成完全一致；两次八项评价指标及逐样本 CSV 完全一致。上述解码/指标属于工程测试，不能作为正式重建效果。
+- 额外诊断 `calibration_code_equivalence.json` 比较 det-v1 与 det-v2 的 144 条训练数值记录及第 532 步 snapshot，完全一致，表明这次 schema 修复未改变训练更新。该诊断不替代 det-v2 六项重新运行的门禁。
+- 正式许可已生成，配置 SHA：`7e12cca6093733c598d2877838d8c31a53961c9dd93857efb33bd99f45f93077`；方法指纹：`b59f30fe2f1bdc54fc5b9404aae71f6cb8dd6dc21209aa368a6d0cc21c7802ce`。
+- `formal_start_verified.json` 检查到 140 updates：run_mode=formal、run_kind=selection、start_update=0、max_updates=265625，初始模型结构哈希与 canonical 文件完全一致。该时刻 loss=0.10728598，梯度范数=0.01701337，LR=0.0001；截至该记录所有损失/梯度均为有限值。当前参数不能据短时 loss 判定重建质量。
+- 核验时两卡训练 PID 为 487927、487928。后台 tmux：`neuroadapter-4090-det-v2`；启动时间 15:10:49，关闭本地 SSH/应用窗口不影响后台任务。
+- 根据短运行估计每步约 0.57–0.62 秒，selection 训练本身约 42–46 小时；只是启动阶段估计，未包括 checkpoint IO 波动、完整验证筛选、final 重训或标准测试。
+
+主要路径（均相对于 `/data1/matengyu/geyugong/neuroadapter-subject1-research`）：
+
+| 内容 | 路径 |
+| --- | --- |
+| 正式配置 | `configs/formal/subject01_selection_v2.yaml` |
+| 正式运行 | `runs/selection/subject01-selection-4090-deterministic-v2/` |
+| 逐步训练记录 | 正式运行目录下 `training.jsonl` |
+| 完整 checkpoint / 推理 snapshot | 正式运行目录下 `checkpoints/` / `snapshots/`，按冻结日程生成 |
+| 完整控制台日志 | `logs/4090-det-v2-formal-selection.log` |
+| 六项门禁、许可、启动核验 | `artifacts/gates-4090-deterministic-v2/` |
+| Git 可公开审计副本 | `repo/manifests/deterministic-4090-v2/` |
+
+启动核验和证据导出命令：
+
+```bash
+export PROJECT_ROOT=/data1/matengyu/geyugong/neuroadapter-subject1-research
+export PYTHONPATH="$PROJECT_ROOT/runtime/subject01-4090-1a1fcfa/src"
+"$PROJECT_ROOT/envs/neuroadapter/bin/python" "$PROJECT_ROOT/migration/verify_formal_start_4090_v2.py"
+"$PROJECT_ROOT/envs/neuroadapter/bin/python" "$PROJECT_ROOT/migration/export_deterministic_v2_evidence.py"
+```
+
+下一步：保持冻结配置连续完成 selection；随后对预定 20 个 snapshot 执行内部验证及 shortlist/full-candidate 选择，依据选定更新数，用全部 9000 张训练图从同一初始化重新训练 final。当前后台流程只承载 selection，不自动宣称 final 或模型锁已完成。Brain encoder parcel 来源问题仍只阻断后续 encoder-selected 标准测试，不影响本轮 decoder 训练。

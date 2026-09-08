@@ -1,0 +1,31 @@
+{
+  "status": "verified",
+  "checked_at": "2026-09-08T15:12:46.812205+08:00",
+  "purpose": "formal selection startup only; not completion or final model lock",
+  "config_sha256": "7e12cca6093733c598d2877838d8c31a53961c9dd93857efb33bd99f45f93077",
+  "method_fingerprint": "b59f30fe2f1bdc54fc5b9404aae71f6cb8dd6dc21209aa368a6d0cc21c7802ce",
+  "protocol_commit": "1a1fcfa66e06de07a04dfbb48cc6f9ad108ed567",
+  "formal_approval_sha256": "b581a0a9269dac6774b53f3e1235426a3eed0791ea015dc9133b91b979af6996",
+  "run_directory": "runs/selection/subject01-selection-4090-deterministic-v2",
+  "canonical_initial_state_matches": true,
+  "batch_geometry": {
+    "world_size": 2,
+    "global_batch_size": 16,
+    "micro_batch_size": 4,
+    "gradient_accumulation_steps": 2
+  },
+  "last_record": {
+    "elapsed_seconds": 86.88540131389163,
+    "gradient_norm_before_clip": 0.017013367265462875,
+    "images_seen": 2240,
+    "learning_rate": 0.0001,
+    "loss": 0.1072859838604927,
+    "max_memory_reserved_bytes": 14659092480,
+    "optimizer_update": 140,
+    "reference_epoch": 0.2635294117647059,
+    "trace_file": null
+  },
+  "seconds_per_update_estimate": 0.6171695118071512,
+  "remaining_training_hours_estimate": 45.51367995614487,
+  "estimate_excludes": "checkpoint IO variation, validation, final 9000-image retraining and testing"
+}

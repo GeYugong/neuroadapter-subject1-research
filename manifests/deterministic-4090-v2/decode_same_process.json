@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "gate": "decode_determinism",
+  "gate_script_sha256": "c0688413fa3520213a0a48f12d5b11544f98590c36200b96b308a63ab68e29de",
+  "comparison_implementation_sha256": "a4ecdd344ba8cac81c4cd89a9580eefd79a3c73c048413ec392a4e164774f933",
+  "gate_script_repository_commit": "1a1fcfa66e06de07a04dfbb48cc6f9ad108ed567",
+  "status": "passed",
+  "config_sha256": "7e12cca6093733c598d2877838d8c31a53961c9dd93857efb33bd99f45f93077",
+  "method_fingerprint": "b59f30fe2f1bdc54fc5b9404aae71f6cb8dd6dc21209aa368a6d0cc21c7802ce",
+  "gate_requirements_sha256": "c2c81cf80f226efb9ba5e01b9d74fd5b085f36a5d00be39f5f9d45d72d638d09",
+  "left_input_sha256": "88d7f4a2b34949df33237d9becf39e77778f444ab507e54a5f975074cf68575c",
+  "right_input_sha256": "88d7f4a2b34949df33237d9becf39e77778f444ab507e54a5f975074cf68575c",
+  "evidence": {
+    "decode_manifest_structural_sha256": "59217c797c6f70db677b7184196e027d924dc25cbc46c49e3305ebf66c6de1c2",
+    "png_count": 64
+  }
+}

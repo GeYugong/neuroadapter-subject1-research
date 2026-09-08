@@ -1,0 +1,17 @@
+{
+  "status": "verified",
+  "purpose": "diagnostic only; does not replace any v2 gate",
+  "old_protocol_commit": "bce13f220c30494104a397c18fd91009b1e12993",
+  "new_protocol_commit": "1a1fcfa66e06de07a04dfbb48cc6f9ad108ed567",
+  "compared_updates": 532,
+  "compared_log_records": 144,
+  "compared_fields": [
+    "optimizer_update",
+    "images_seen",
+    "loss",
+    "gradient_norm_before_clip",
+    "learning_rate"
+  ],
+  "snapshot_structural_sha256": "ea0eeb3d597ae901b24b47612dcfc27ae2a63de7a71bcf7cdd7fcef3f554ad83",
+  "training_values_and_snapshot_bitwise_equal": true
+}

@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "protocol_commit": "1a1fcfa66e06de07a04dfbb48cc6f9ad108ed567",
+  "environment_lock": "../deterministic-4090/requirements-freeze.txt",
+  "files": [
+    {
+      "path": "canonical_manifest.json",
+      "source": "artifacts/deterministic-4090-v2/canonical_manifest.json",
+      "source_sha256": "08bd2bf4baa7d515f89f74041b4e33f2993f36a8e967db89f51385fc1f9ad4b8",
+      "sha256": "08bd2bf4baa7d515f89f74041b4e33f2993f36a8e967db89f51385fc1f9ad4b8"
+    },
+    {
+      "path": "preferred_config.json",
+      "source": "configs/calibration/subject01_4090_deterministic_v2_preferred.yaml",
+      "source_sha256": "7e12cca6093733c598d2877838d8c31a53961c9dd93857efb33bd99f45f93077",
+      "sha256": "1542c01a18bbe739204fad27e0cea413647344ec35da7c69d2226272147e77ca"
+    },
+    {
+      "path": "fallback_config.json",
+      "source": "configs/calibration/subject01_4090_deterministic_v2_fallback.yaml",
+      "source_sha256": "eb77aaf063a7498de43cd41303c192a4df4c8be488c42bfd43093c4ac9509283",
+      "sha256": "059c65f2ad130f088476a53d51d38e47b2c091eca17f89d9284abd23d07bf5a8"
+    },
+    {
+      "path": "effective_run.json",
+      "source": "runs/selection/subject01-selection-4090-deterministic-v2/effective_run.json",
+      "source_sha256": "cffa295efd00e7f905090e53e5762d9c6195078cff7ba7484443aa1b8c408c54",
+      "sha256": "37ddf61e1e378213c1d55c2d7fb52d142644454fb901f22ac13dbad8d2d40a3f"
+    },
+    {
+      "path": "cpu_preflight.json",
+      "source": "artifacts/gates-4090-deterministic-v2/cpu_preflight.json",
+      "source_sha256": "ef2743f21a1bab695f742d9275fd2ffde9432f039c69ec13d3a930c87d2933ee",
+      "sha256": "ef2743f21a1bab695f742d9275fd2ffde9432f039c69ec13d3a930c87d2933ee"
+    },
+    {
+      "path": "calibration_code_equivalence.json",
+      "source": "artifacts/gates-4090-deterministic-v2/calibration_code_equivalence.json",
+      "source_sha256": "edb45cb5a283fe1987021a2164e2c159e24bc2959acd467fac7bbccb3e18fe40",
+      "sha256": "edb45cb5a283fe1987021a2164e2c159e24bc2959acd467fac7bbccb3e18fe40"
+    },
+    {
+      "path": "hardware_gate.json",
+      "source": "artifacts/gates-4090-deterministic-v2/hardware_gate.json",
+      "source_sha256": "1c142507208cff53cfd28fc614bfd05dafd81797995afc3ea7822f9b5bc2fe6a",
+      "sha256": "1c142507208cff53cfd28fc614bfd05dafd81797995afc3ea7822f9b5bc2fe6a"
+    },
+    {
+      "path": "forward_alignment.json",
+      "source": "artifacts/gates-4090-deterministic-v2/forward_alignment.json",
+      "source_sha256": "ec79847ceea2b4c20f09436f1b1a702f31b5febf686fd60a299b821b7db4da9d",
+      "sha256": "ec79847ceea2b4c20f09436f1b1a702f31b5febf686fd60a299b821b7db4da9d"
+    },
+    {
+      "path": "batch_gate.json",
+      "source": "artifacts/gates-4090-deterministic-v2/batch_gate.json",
+      "source_sha256": "a49edb1c16b250cf03f8d51d921824ba6384525aa0fe16428703444f27df4f18",
+      "sha256": "a49edb1c16b250cf03f8d51d921824ba6384525aa0fe16428703444f27df4f18"
+    },
+    {
+      "path": "resume_equivalence.json",
+      "source": "artifacts/gates-4090-deterministic-v2/resume_equivalence.json",
+      "source_sha256": "382e8979aa5d345cdf984a0899d4173d2975c0312b500c1bc22bb206995cfd66",
+      "sha256": "382e8979aa5d345cdf984a0899d4173d2975c0312b500c1bc22bb206995cfd66"
+    },
+    {
+      "path": "decode_same_process.json",
+      "source": "artifacts/gates-4090-deterministic-v2/decode_same_process.json",
+      "source_sha256": "d8d30a331d9a39db5eaed2dd26b1b69ae0e4bd838f297aa5eda51a141f0c1c7c",
+      "sha256": "d8d30a331d9a39db5eaed2dd26b1b69ae0e4bd838f297aa5eda51a141f0c1c7c"
+    },
+    {
+      "path": "decode_determinism.json",
+      "source": "artifacts/gates-4090-deterministic-v2/decode_determinism.json",
+      "source_sha256": "d8d30a331d9a39db5eaed2dd26b1b69ae0e4bd838f297aa5eda51a141f0c1c7c",
+      "sha256": "d8d30a331d9a39db5eaed2dd26b1b69ae0e4bd838f297aa5eda51a141f0c1c7c"
+    },
+    {
+      "path": "evaluator_repeatability.json",
+      "source": "artifacts/gates-4090-deterministic-v2/evaluator_repeatability.json",
+      "source_sha256": "e6a8e9b1edcf390d9da1c9ad6c61d352e20ca6f6aabe35c6124ecc674e55ab30",
+      "sha256": "e6a8e9b1edcf390d9da1c9ad6c61d352e20ca6f6aabe35c6124ecc674e55ab30"
+    },
+    {
+      "path": "selection_approval.json",
+      "source": "artifacts/gates-4090-deterministic-v2/selection_approval.json",
+      "source_sha256": "b581a0a9269dac6774b53f3e1235426a3eed0791ea015dc9133b91b979af6996",
+      "sha256": "b581a0a9269dac6774b53f3e1235426a3eed0791ea015dc9133b91b979af6996"
+    },
+    {
+      "path": "formal_start_verified.json",
+      "source": "artifacts/gates-4090-deterministic-v2/formal_start_verified.json",
+      "source_sha256": "51795933c1ae74c9738e952eeeee84f174f9e6019eaf4deeed8ded8226727f73",
+      "sha256": "09f66168dcf0e8088c2705b97235a92d81999eb261cb705f23c1b0854fe52911"
+    }
+  ]
+}

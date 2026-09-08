@@ -69,7 +69,15 @@ Python 下载脚本同样要求 `--project-root "$PROJECT_ROOT"`。训练 YAML �
 
 ## 当前正式训练状态
 
-当前正在完成双 RTX 4090 迁移与验收，正式训练尚未启动。硬件变更不改变 Subject 1 数据划分、200 个 parcel、模型结构、学习率、global batch 16 或 selection 评价计划；单卡 microbatch 和梯度累积必须重新实测并冻结。
+2026-09-08 15:10:49，双 RTX 4090 的六项验收和正式许可全部通过，**正式 selection 训练已启动**。训练代码固定为 `1a1fcfa66e06de07a04dfbb48cc6f9ad108ed567`，运行名为 `subject01-selection-4090-deterministic-v2`；后续报告提交不改动冻结运行目录。
+
+- 8500 张训练图、500 张内部验证图，200 个 parcel；标准测试集不参与选择。
+- 双卡每卡 microbatch 4、梯度累积 2、global batch 16；BF16、确定性计算、AdamW、学习率 `1e-4`。
+- 从固定 canonical 初始化和全新优化器开始，selection 上限 265625 updates，固定保留 20 个验证候选 snapshot。
+- 运行目录：`runs/selection/subject01-selection-4090-deterministic-v2`；实际正式配置：`configs/formal/subject01_selection_v2.yaml`；训练记录：该运行目录的 `training.jsonl`。
+- 可公开复核证据见 `manifests/deterministic-4090-v2/`，连续时间线见 `EXPERIMENT_LOG.md`。此前 det-v1 的许可失败记录保留，不能作为本轮正式训练记录。
+
+当前不是最终 9000 图重训，也尚未产生锁定模型。Selection 完成后仍需按冻结计划比较内部验证结果、选定训练时长，再从相同初始化用全部 9000 张训练图重训最终权重。
 
 decoder 训练所用 atlas 已单独完成审计：CBIG 来源、左右 annotation、每侧 500 parcels、top-SNR 排序、最终 200-token 顺序和 `max_voxels=626` 均可验证，当前 9000 图训练缓存无需重建。公开 `whole_brain_encoder` parcel 文件与作者内部训练资产的关系仍无法由公开材料证明，因此该问题只阻断模型锁定后的 brain encoder forward/test 门禁，不再错误阻断 decoder 的 selection/final 训练。
 
