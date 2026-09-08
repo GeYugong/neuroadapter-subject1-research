@@ -23,7 +23,7 @@
 - 在模型锁定后进行一次标准测试集评价；
 - 导出唯一的正式权重及其完整审计材料。
 
-当前准备工作结束后停在正式训练启动之前。两张 RTX 5090 上已有的其他任务不得被终止、暂停或抢占。
+自 2026-09-08 起，项目迁移到双 RTX 4090 服务器，旧 RTX 5090 服务器仅保留迁移源，不再承载后续运行。任何服务器上其他人的任务都不得被终止、暂停或抢占。迁移校验及正式训练门禁全部通过后才允许启动 selection。
 
 ## 证据优先级
 
@@ -69,8 +69,18 @@ Python 下载脚本同样要求 `--project-root "$PROJECT_ROOT"`。训练 YAML �
 
 ## 当前正式训练状态
 
-正式配置仍为 `draft`，两张 RTX 5090 门禁尚未执行，正式训练未启动。
+当前正在完成双 RTX 4090 迁移与验收，正式训练尚未启动。硬件变更不改变 Subject 1 数据划分、200 个 parcel、模型结构、学习率、global batch 16 或 selection 评价计划；单卡 microbatch 和梯度累积必须重新实测并冻结。
 
 decoder 训练所用 atlas 已单独完成审计：CBIG 来源、左右 annotation、每侧 500 parcels、top-SNR 排序、最终 200-token 顺序和 `max_voxels=626` 均可验证，当前 9000 图训练缓存无需重建。公开 `whole_brain_encoder` parcel 文件与作者内部训练资产的关系仍无法由公开材料证明，因此该问题只阻断模型锁定后的 brain encoder forward/test 门禁，不再错误阻断 decoder 的 selection/final 训练。
 
 正式执行还受到以下条件约束：固定 GPU 门禁全部通过、正式 YAML 与 protocol commit 冻结、canonical initialization 标记为 `frozen`、selection/final approval 闭合。仓库按研究协作需要保持公开。
+
+## 当前服务器入口
+
+本机 SSH 别名：`neuroadapter-4090`（中文别名 `双卡4090`）。VS Code Remote-SSH 连接后打开：
+
+```text
+/data1/matengyu/geyugong/neuroadapter-subject1-research/repo
+```
+
+实验根目录下 `data/`、`models/`、`envs/`、`runs/`、`logs/`、`configs/` 与 `repo/` 并列，全部属于同一次研究项目。完整迁移流程和验收证据见 `docs/SERVER_MIGRATION.md` 与主日志。SSH 密码、私钥和代理凭据不进入 Git。

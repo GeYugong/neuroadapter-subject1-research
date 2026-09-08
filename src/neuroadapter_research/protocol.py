@@ -22,15 +22,15 @@ if TYPE_CHECKING:
 SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 FIXED_GATE_REQUIREMENTS: dict[str, Any] = {
     "schema_version": 1,
-    "required_cuda_arch": "sm_120",
-    "required_compute_capability": [12, 0],
+    "required_cuda_arch": "sm_86",
+    "required_compute_capability": [8, 9],
     "required_world_size": 2,
-    "required_gpu_name": "NVIDIA GeForce RTX 5090",
+    "required_gpu_name": "NVIDIA GeForce RTX 4090",
     "required_bf16": True,
     "forward_atol": 1.0e-6,
     "batch_minimum_updates": 532,
     "stress_minimum_seconds": 1800,
-    "max_reserved_memory_bytes": 31_138_512_896,
+    "max_reserved_memory_bytes": 23_622_320_128,
     "require_xid_check": True,
 }
 SELECTION_FIXED_VALUES: dict[str, Any] = {

@@ -43,8 +43,8 @@ training:
   max_updates: 265625
   world_size: 2
   global_batch_size: 16
-  micro_batch_size: 8
-  gradient_accumulation_steps: 1
+  micro_batch_size: 4
+  gradient_accumulation_steps: 2
   dataloader_workers: 4
   learning_rate: 0.0001
   adam_beta1: 0.9

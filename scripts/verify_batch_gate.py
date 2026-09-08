@@ -68,12 +68,12 @@ def main() -> None:
     common = {"world_size": 2, "global_batch_size": 16}
     preferred = load_run(
         args.preferred_run,
-        {**common, "micro_batch_size": 8, "gradient_accumulation_steps": 1},
+        {**common, "micro_batch_size": 4, "gradient_accumulation_steps": 2},
         minimum_updates,
     )
     fallback = load_run(
         args.fallback_run,
-        {**common, "micro_batch_size": 4, "gradient_accumulation_steps": 2},
+        {**common, "micro_batch_size": 2, "gradient_accumulation_steps": 4},
         minimum_updates,
     )
     for name in ("backend", "canonical_initialization_sha256"):

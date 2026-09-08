@@ -120,7 +120,7 @@ def test_hardware_gate_requires_gpu_identity_inventory(tmp_path: Path) -> None:
     requirements = load_gate_requirements(requirements_path)
     rank = {
         "device_name": FIXED_GATE_REQUIREMENTS["required_gpu_name"],
-        "compute_capability": [12, 0],
+        "compute_capability": FIXED_GATE_REQUIREMENTS["required_compute_capability"],
         "bf16_supported": True,
         "bf16_matmul_finite": True,
         "bf16_conv_backward_finite": True,
@@ -133,7 +133,7 @@ def test_hardware_gate_requires_gpu_identity_inventory(tmp_path: Path) -> None:
         "config_sha256": "a" * 64,
         "method_fingerprint": "b" * 64,
         "gate_requirements_sha256": requirements.sha256,
-        "required_cuda_arch": "sm_120",
+        "required_cuda_arch": FIXED_GATE_REQUIREMENTS["required_cuda_arch"],
         "native_arch_available": True,
         "stress_duration_seconds": 1800.0,
         "xid_check_passed": True,

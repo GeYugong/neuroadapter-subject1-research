@@ -1,11 +1,11 @@
 schema_version: 1
-required_cuda_arch: sm_120
-required_compute_capability: [12, 0]
+required_cuda_arch: sm_86
+required_compute_capability: [8, 9]
 required_world_size: 2
-required_gpu_name: NVIDIA GeForce RTX 5090
+required_gpu_name: NVIDIA GeForce RTX 4090
 required_bf16: true
 forward_atol: 0.000001
 batch_minimum_updates: 532
 stress_minimum_seconds: 1800
-max_reserved_memory_bytes: 31138512896
+max_reserved_memory_bytes: 23622320128
 require_xid_check: true

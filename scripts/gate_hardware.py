@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the frozen two-GPU RTX 5090/NCCL/BF16 hardware gate under torchrun."""
+"""Run the frozen two-GPU RTX 4090/NCCL/BF16 hardware gate under torchrun."""
 
 from __future__ import annotations
 
@@ -86,9 +86,8 @@ def main() -> None:
     properties = torch.cuda.get_device_properties(device)
     capability = list(torch.cuda.get_device_capability(device))
     arch_list = torch.cuda.get_arch_list()
-    left = torch.arange(2048 * 2048, device=device, dtype=torch.bfloat16).reshape(
-        2048, 2048
-    )
+    torch.manual_seed(20260908 + rank)
+    left = torch.randn((2048, 2048), device=device, dtype=torch.bfloat16) / 32
     product = left @ left.T
     convolution = nn.Conv2d(32, 32, 3, padding=1, bias=True).to(
         device=device, dtype=torch.bfloat16
@@ -112,7 +111,13 @@ def main() -> None:
     nccl_verified = True
     stress_finite = True
     minimum_seconds = int(required["stress_minimum_seconds"])
-    while time.perf_counter() - started < minimum_seconds:
+    # Continue until every rank has met the duration, on one collective sequence.
+    keep_running = torch.ones((), device=device, dtype=torch.int32)
+    while True:
+        keep_running.fill_(time.perf_counter() - started < minimum_seconds)
+        dist.all_reduce(keep_running, op=dist.ReduceOp.MAX)
+        if not keep_running.item():
+            break
         left.grad = None
         stress_input = left.detach().requires_grad_(True)
         stress_loss = (stress_input @ stress_input.T).float().square().mean()

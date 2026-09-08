@@ -37,7 +37,7 @@ PYTHONPATH=src "$PROJECT_ROOT/envs/neuroadapter/bin/python" \
   --output "$PROJECT_ROOT/data/gates/forward_alignment.json"
 ```
 
-硬件门禁的 `sm_120`、双 RTX 5090、BF16、NCCL、30 分钟压力时长、Xid 检查和 GPU UUID 均来自固定 `gate_requirements.yaml`。随后分别运行 `8/GPU x accumulation 1` 与 `4/GPU x accumulation 2` 至少 532 updates。两者只比较稳定性和显存，不声明严格权重等价；用 `verify_batch_gate.py` 选择一种，所选方案峰值 reserved memory 必须小于等于 29 GiB。
+硬件门禁要求双 RTX 4090（compute capability 8.9），固定 wheel 的兼容 `sm_86` cubin、BF16、NCCL、30 分钟压力时长、Xid 检查和 GPU UUID 均来自固定 `gate_requirements.yaml`。随后分别运行 `4/GPU x accumulation 2` 与 `2/GPU x accumulation 4` 至少 532 updates。两者只比较稳定性和显存，不声明严格权重等价；用 `verify_batch_gate.py` 选择一种，两个 rank 的峰值 reserved memory 都必须小于等于 22 GiB。硬件迁移理由见 `SERVER_MIGRATION.md`。
 
 ## 4. 恢复、解码和评价重复性
 

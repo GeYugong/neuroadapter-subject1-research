@@ -1117,3 +1117,55 @@ MODEL_LOCK.json             不存在
 ```
 
 下一步仍不是直接训练。必须等待两张 RTX 5090 同时空闲，冻结最终 protocol commit、canonical manifest 和正式 selection YAML，再依次执行固定 GPU/forward/batch/resume/decode/evaluator 门禁。
+
+## 2026-09-08：切换双 RTX 4090，启动完整项目迁移
+
+### 决策与范围
+
+根据新的服务器安排，后续工作转到双 RTX 4090，不再等待旧服务器。旧端项目保留作来源与备份，未停止或修改任何其他项目任务。GitHub 仍使用公开仓库 `GeYugong/neuroadapter-subject1-research`。
+
+旧端源提交：`61dcf52715693117771f97ed2746583d515af813`，源 Git 工作区干净，正式训练未启动。原始数据、转换结果和模型直接迁移，不重新随机划分或重复从外网下载。
+
+### 服务器初检
+
+2026-09-08 11:48（北京时间）：Ubuntu 22.04.5，driver 580.173.02，两张 RTX 4090，各 24564 MiB 显存；显存使用 54/15 MiB，GPU 利用率均为 0%，无 compute process。主机内存 125 GiB，可用约 117 GiB。系统盘仅约 91 GiB 可用，`/data1` 约 1.2 TiB 可用。
+
+新实验根目录：`/data1/matengyu/geyugong/neuroadapter-subject1-research`，代码目录为其 `repo/`。本机新增 SSH 别名 `neuroadapter-4090` / `双卡4090`，安装公开 SSH 公钥；密码与私钥不写入仓库。新端 kernel journal 可读。
+
+### 迁移命令与证据
+
+服务器间 rsync 使用只读、仅限旧项目的临时 SSH 授权，禁止端口与 agent 转发。传输 `repo/`、`cache/`、`models/`、`data/`，不传输 `credentials/`。核心命令结构如下（`RSYNC_RSH` 只引用服务器内临时私钥路径，不包含私钥文本）：
+
+```bash
+rsync -a --no-owner --no-group --safe-links --partial \
+  --partial-dir=.rsync-partial --info=progress2 --bwlimit=80000 \
+  matengyu@SOURCE_HOST:data/ "$PROJECT_ROOT/data/"
+```
+
+源数据 SHA inventory 用基线仓库 `scripts/hash_tree.py` 对完整 `data/` 生成；目标端用 `scripts/verify_migration.py` 对每个文件验证大小与 SHA-256，不以 rsync 退出成功代替内容校验。
+
+旧环境初次 conda-pack 因 setuptools 的 Conda/pip 元数据不一致失败。记录后使用 conda-pack 0.8.1 的 `--ignore-missing-files --ignore-editable-packages --format tar` 打包实际环境；不修改旧环境。新端必须执行 conda-unpack、重新绑定 editable 包、依赖检查与 CPU/CUDA 测试，才能宣布环境迁移成功。
+
+### 代码与配置修订
+
+固定硬件要求改为双 RTX 4090、compute capability 8.9、现有 wheel 的兼容 `sm_86` cubin；30 分钟压力时长和 Xid 检查不变，显存上限改为 22 GiB/GPU。首选 `4/GPU × accumulation 2`，备用 `2/GPU × accumulation 4`，保持 global batch 16。测试两种配置不等于接续正式训练，门禁权重不作为正式结果。
+
+修复压力测试各 rank 独立计时退出可能造成 collective 顺序不一致的问题，改为 all-reduce 统一退出判断。训练日志的峰值显存改为全 rank 最大值，避免仅记录 rank 0 而漏掉另一张卡超限。增加迁移校验 CLI、硬件配置一致性测试、环境入口和项目级 AGENTS 指令。
+
+### 此时状态
+
+本条记录时迁移仍在进行，尚未完成源/目标 SHA 校验，尚未完成新环境验收，正式 selection 未启动。后续实际结果继续追加，不覆盖本条阶段记录。
+
+### 12:16：新端环境恢复与 CPU 验收完成
+
+环境归档 SHA-256：`6e347a27fa92f9aca88b03faf777d3b0ad544ffd6380a46a9f4b168db9ebe0bd`，在新端提取前核对一致。`conda-unpack`、CLIP 与本项目 editable 路径重绑定完成，`pip check` 无依赖冲突。旧 freeze 中的 116 个固定发行包版本全部匹配，无缺包或版本差异。
+
+```text
+59 passed, 14 warnings in 5.73s
+compileall passed
+environment parity: verified, pinned_distribution_count=116, errors=[]
+```
+
+14 个 warning 均来自固定上游 matplotlib/pyparsing 的弃用提示。日志：新实验根目录 `logs/migration-environment-20260908.log`；版本核对：`artifacts/migration-20260908/environment-parity.json`。此时源端完整数据 SHA 清单已生成，新端原始 NSD 仍在传输。
+
+训练代码将以干净提交复制到独立 `runtime/`，正式配置的源码、selection plan、gate requirements 路径绑定该副本；`repo/` 继续记录日志和报告，避免文档提交改变正在运行的 protocol HEAD。复制后的 Git 与 vendor 状态仍须验证，不能只复制 Python 文件。

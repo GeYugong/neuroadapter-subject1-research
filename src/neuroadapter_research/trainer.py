@@ -672,6 +672,13 @@ def run_training(
             or next_update == max_updates
             or update < trace_updates
         )
+        if should_log:
+            peak_memory = torch.tensor(
+                torch.cuda.max_memory_reserved(context.device),
+                dtype=torch.int64,
+                device=context.device,
+            )
+            dist.all_reduce(peak_memory, op=dist.ReduceOp.MAX)
         if context.is_main and should_log:
             append_json_line(
                 log_path,
@@ -685,9 +692,7 @@ def run_training(
                     "gradient_norm_before_clip": float(gradient_norm.cpu()),
                     "learning_rate": optimizer.param_groups[0]["lr"],
                     "elapsed_seconds": time.perf_counter() - started,
-                    "max_memory_reserved_bytes": torch.cuda.max_memory_reserved(
-                        context.device
-                    ),
+                    "max_memory_reserved_bytes": int(peak_memory.item()),
                     "trace_file": trace_path.relative_to(output_dir).as_posix()
                     if update < trace_updates
                     else None,

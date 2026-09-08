@@ -10,17 +10,17 @@
 
 ```text
 global batch = 16
-per-GPU batch = 8
-gradient accumulation = 1
+per-GPU batch = 4
+gradient accumulation = 2
 ```
 
-若正式训练前出现 OOM，只允许切换为保持 global batch 16 的 `4/GPU x accumulation 2`，并在正式 selection run 前永久冻结。
+双 RTX 4090 的备用方案是保持 global batch 16 的 `2/GPU x accumulation 4`，必须在正式 selection run 前实测并永久冻结。
 
 ## D002：BF16 是明确冻结的工程选择
 
 固定提交的 `acc_config.yaml` 写 BF16，而参数解析器默认 FP16，shell 未显式传递该参数，因此无法仅凭公开仓库确定论文正式权重的精度。
 
-本阶段在 RTX 5090 上优先测试 BF16。只有通过 forward、梯度、NCCL、恢复一致性和压力测试后才将其写入最终环境锁。正式报告不把 BF16 描述为已经证实的作者原始配置。
+本阶段在 RTX 4090 上优先测试 BF16。只有通过 forward、梯度、NCCL、恢复一致性和压力测试后才将其写入最终环境锁。正式报告不把 BF16 描述为已经证实的作者原始配置。
 
 ## D003：使用可完整恢复的新训练器
 
@@ -68,11 +68,11 @@ selection 使用 8500 张图，final 使用 9000 张图。直接复用同一 epo
 
 ## D013：batch fallback 不声明严格权重等价
 
-`8/GPU x 1` 与 `4/GPU x accumulation 2` 具有相同样本顺序和 global batch，但当前随机张量按 microbatch shape 生成，不能保证每个样本获得完全相同的 VAE epsilon、diffusion noise、timestep 和 token mask。因此不再要求两种配置权重逐步等价；只分别做数值稳定性检查，并在 selection 前冻结一种配置，selection 与 final 不得切换。
+当前 `4/GPU x 2` 与 `2/GPU x accumulation 4` 具有相同样本顺序和 global batch，但随机张量按 microbatch shape 生成，不能保证每个样本获得完全相同的 VAE epsilon、diffusion noise、timestep 和 token mask。因此不要求两种配置权重逐步等价；只分别做数值稳定性检查，并在 selection 前冻结一种配置，selection 与 final 不得切换。
 
 ## D014：执行后端显式冻结
 
-当前候选配置明确使用 `allow_tf32=true`、`cudnn_benchmark=false`、`deterministic_algorithms=false`、`adamw_fused=false`、`adamw_foreach=false`。这些是待 RTX 5090 门禁验证的工程选择，不作为作者原始设置。selection 与 final 必须保持一致。
+当前候选配置明确使用 `allow_tf32=true`、`cudnn_benchmark=false`、`deterministic_algorithms=false`、`adamw_fused=false`、`adamw_foreach=false`。这些是待 RTX 4090 门禁验证的工程选择，不作为作者原始设置。selection 与 final 必须保持一致。
 
 ## D015：图像 resize 实现不同
 

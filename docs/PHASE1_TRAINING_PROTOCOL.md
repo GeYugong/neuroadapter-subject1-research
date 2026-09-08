@@ -146,13 +146,13 @@ Accelerate 和其他依赖只在完整兼容性测试通过后冻结。必须记
 
 硬件门禁：
 
-- 恰好识别 2 张 RTX 5090；
-- PyTorch wheel 原生支持 `sm_120`；
+- 恰好识别 2 张 RTX 4090（compute capability 8.9）；
+- PyTorch wheel 包含在 8.9 上兼容的 `sm_86` cubin，实测通过，不声称含原生 `sm_89`；
 - BF16 matmul、卷积和 forward/backward 通过；
 - NCCL all-reduce 通过；
 - 双卡压力测试至少 30 分钟；
 - 无 Xid、NCCL timeout 和数值异常；
-- 首选配置峰值 reserved memory 不超过 29.0 GiB/GPU。
+- 所选配置两个 rank 的峰值 reserved memory 不超过 22.0 GiB/GPU。
 
 ## 5. 科学方法与正式配置
 
@@ -177,8 +177,8 @@ scheduler                 none
 gradient clipping         1.0
 precision                 BF16 after gate
 global batch              16
-preferred micro batch     8/GPU, accumulation 1
-OOM fallback              4/GPU, accumulation 2
+preferred micro batch     4/GPU, accumulation 2
+OOM fallback              2/GPU, accumulation 4
 selection upper bound     500 reference epochs
 allow TF32                true（待门禁）
 cuDNN benchmark           false
@@ -235,7 +235,7 @@ checkpoint 只在 optimizer update 边界保存。收到 SIGTERM 时只设置退
 
 1. 冻结模块与可训练模块审计；
 2. 新训练器和固定上游 forward/loss 对齐；
-3. `8/GPU x 1` 与 `4/GPU x 2` 分别完成数值稳定性和显存测试，并冻结其中一种；
+3. `4/GPU x 2` 与 `2/GPU x 4` 分别完成数值稳定性和显存测试，并冻结其中一种；
 4. 连续 100 updates 与 `50 + save + 新进程恢复 + 50` 等价测试；
 5. 一个完整 reference epoch 的吞吐和显存测试；
 6. 8 张固定 validation 图片、每张 8 candidates 的端到端解码；
@@ -244,7 +244,7 @@ checkpoint 只在 optimizer update 边界保存。收到 SIGTERM 时只设置退
 
 恢复测试必须比较两个 rank 各自的 `trace-rank-XXXXX.jsonl`；样本 ID、VAE latent、timestep、noise 和 dropout checksum 必须完全一致。BF16/DDP 权重若不能 bitwise 一致，必须在正式运行前冻结严格数值容差。所有门禁权重在验证后删除，不得进入正式结果。
 
-固定 `gate_requirements.yaml` 规定 GPU 名称/数量、`sm_120`、BF16、forward tolerance `1e-6`、batch 最少 532 updates、压力测试至少 1800 秒、reserved memory 上限 29 GiB 和 Xid 检查。命令行不得降低这些阈值。
+固定 `gate_requirements.yaml` 规定双 RTX 4090、compute capability 8.9、兼容 `sm_86` cubin、BF16、forward tolerance `1e-6`、batch 最少 532 updates、压力测试至少 1800 秒、reserved memory 上限 22 GiB 和 Xid 检查。命令行不得降低这些阈值。2026-09-08 硬件迁移在正式训练前完成协议修订，不在 selection/final 中途切换。
 
 正式 approval 必须逐项绑定完整 config、`method_fingerprint`、protocol commit、environment lock、hardware、forward alignment、batch、resume、decode、evaluator、data fingerprint、training cache verification、NSD 图像映射、decoder atlas、model assets 和 canonical initialization 的 SHA-256。`method_fingerprint` 包含科学超参数、执行后端、数据/缓存/模型/环境/源码身份，排除 `run_name`、`run_kind`、`split_ids`、`output_dir` 和 `max_updates` 等运行字段。训练器还会重新全量哈希 `nsd_stimuli.hdf5`，逐文件验证 Stable Diffusion tree，并核对五个 vendor submodule HEAD；只验证 manifest 文件本身不构成通过。
 
