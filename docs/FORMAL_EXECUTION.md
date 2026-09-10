@@ -93,6 +93,8 @@ shortlist 阶段要求输入 update 集合与固定 20 点完全一致；final �
 
 ## 6. Approval、Final 与测试集
 
+**2026-09-10 更新：本节中的 9000 图 final 重训、final approval 与对应模型导出流程已经取消，不得执行。** 当前仅从完成的 selection snapshot 选优，保留原始训练身份，用独立 `RESEARCH_WEIGHT_LOCK.json` 记录后停止。以下命令保留作历史协议说明，不代表当前授权。标准测试集仍不得用于选择权重。
+
 全部六项 GPU/重复性门禁通过、canonical manifest 为 `frozen`、decoder atlas 为 `verified` 后，生成 selection approval：
 
 ```bash

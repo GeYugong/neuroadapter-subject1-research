@@ -1741,3 +1741,26 @@ export PYTHONPATH="$PROJECT_ROOT/runtime/subject01-4090-1a1fcfa/src"
 ```
 
 下一步：保持冻结配置连续完成 selection；随后对预定 20 个 snapshot 执行内部验证及 shortlist/full-candidate 选择，依据选定更新数，用全部 9000 张训练图从同一初始化重新训练 final。当前后台流程只承载 selection，不自动宣称 final 或模型锁已完成。Brain encoder parcel 来源问题仍只阻断后续 encoder-selected 标准测试，不影响本轮 decoder 训练。
+
+### 2026-09-09T01:05:46+08:00：正式 selection 运行状态检查
+
+- 仅进行状态读取，未修改训练配置、冻结代码、数据或模型，未中断任何进程。
+- 两次读取步数从 62250 增至 62300，进度 23.45%；已运行约 9 小时 54 分钟。tmux `neuroadapter-4090-det-v2` 和原训练 PID 487927、487928 均仍存在，未生成正式任务退出状态文件。
+- 检查全部 6320 条 `training.jsonl` 记录：更新步数严格递增，loss 与 gradient_norm 全部有限，学习率始终为 0.0001。控制台未见异常退出，只有既有 barrier 提示。
+- 双 RTX 4090 占用分别为 99%、100%，显存约 14.4 GiB/卡，温度 61°C、60°C；`/data1` 剩余约 967 GiB。
+- 最新完整 checkpoint 为 60000 步，包含 COMPLETE、MANIFEST、模型、optimizer、trainer 与两个 rank 状态文件；55000 步完整 checkpoint 同时保留。此检查核对文件存在和大小，没有重新加载或全量重算 checkpoint SHA。
+- 已保留四个推理 snapshot：13282、26563、39844、53125 步。尚未进行本轮正式验证解码，不能把运行正常解释为重建效果已达标。
+- 最近 1000 步约 0.5706 秒/步，估计 selection 剩余约 32.23 小时，约于 2026-09-10 09:20 完成。估计不含后续验证筛选、final 重训，且可能随运行速度和 IO 变化。
+- 核查对象为 `runs/selection/subject01-selection-4090-deterministic-v2/training.jsonl`、同目录 checkpoint/snapshot、`logs/4090-det-v2-formal-selection.log`，以及 `tmux list-sessions`、`nvidia-smi` 和 `df -h /data1` 输出。结论：保持当前冻结配置继续训练。
+
+结果：退出码 0，耗时 152280 秒；证据保存在上述输出路径。
+
+### 2026-09-10T09:50:59+08:00：完成训练，变更为现有权重选优并公开备份
+
+- selection 于 09:28:49 正常结束：265625 updates / 500 reference epochs，运行及总流程退出码均为 0。20 个推理 snapshot 和最后两个完整 checkpoint 保留；两张 GPU 已释放。该状态不代表已经比较重建效果。
+- 最新明确决策覆盖原有计划：从现有 20 个 snapshot 按既定内部验证规则选择一个，选定后汇报并停止，不执行任何续训、重训或 9000 图 final。选中模型仍记录为 8500 张训练图训练，验证图数 500，标准 test 不参与选优。
+- HF 账号由用户明确为 `gugabobo`；凭据位于项目独立 `credentials/hf-upload`。最初只查询了服务器 home 默认登录，未对该默认账号创建仓库或上传。上传脚本强制读取项目 token 并核验 `whoami == gugabobo`，禁止 fallback 到默认登录。凭据内容未输出、不进入 Git 或上传目录。
+- 新增 `backup_selection_to_hf.py`：白名单备份 20 个 snapshot（约 8.7 GiB）、最后完整 checkpoint（约 1.3 GiB）、训练配置和必要校验记录到公开 HF 模型仓库；不上传 fMRI、刺激图、完整基础模型或凭据。上传后核验远端大小及 LFS SHA，小文件下载回校验。
+- 新增 `select_existing_weights.py`：两张卡分别处理不同 snapshot，沿用冻结 runtime 的 validation_loss、decode、evaluator 和 select_checkpoint，不改指标、500 图顺序、扩散步数、随机种子、初筛 2 candidates、复评 8 candidates 或 bootstrap 规则。只允许四个验证工具，训练/重训/全量模型导出命令被拒绝。
+- 本轮测试：服务器全套 70 passed，14 条上游弃用警告，3.78 秒；两个新入口 CLI 检查通过。测试包含禁止启动训练或全量重训导出的约束。
+- 网络：服务器直接访问 HF 超时，原 17897 转发不可用；使用本机现有 10808 代理经独立 SSH localhost 17899 转发连接 HF。该连接只服务上传；离线选优不依赖本机代理。尚未在本条记录中宣称上传完成或已选定最佳权重。

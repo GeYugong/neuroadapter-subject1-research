@@ -13,6 +13,8 @@
 
 ## 当前阶段边界
 
+**2026-09-10 决定更新：不再进行任何续训或 9000 图全量重训。** 保留原定 500 图验证、20 候选初筛和 5 候选复评规则，从已经完成的 selection 权重中选定一个，汇报后直接用于后续研究。该权重的真实训练样本数仍为 8500，不改写为全量训练模型。公开 HF 备份只使用 `gugabobo` 项目独立凭据。下方完整阶段列表为原始计划，涉及全量重训的步骤现已取消。
+
 当前阶段包含：
 
 - 从官方来源重新下载数据、代码和模型资产；
@@ -69,7 +71,7 @@ Python 下载脚本同样要求 `--project-root "$PROJECT_ROOT"`。训练 YAML �
 
 ## 当前正式训练状态
 
-2026-09-08 15:10:49，双 RTX 4090 的六项验收和正式许可全部通过，**正式 selection 训练已启动**。训练代码固定为 `1a1fcfa66e06de07a04dfbb48cc6f9ad108ed567`，运行名为 `subject01-selection-4090-deterministic-v2`；后续报告提交不改动冻结运行目录。
+正式 selection 已于 **2026-09-10 09:28:49 完成**，共 265625 updates / 500 epochs，退出码 0，耗时 42 小时 18 分钟。训练代码固定为 `1a1fcfa66e06de07a04dfbb48cc6f9ad108ed567`，运行名为 `subject01-selection-4090-deterministic-v2`；后续报告提交不改动冻结运行目录。
 
 - 8500 张训练图、500 张内部验证图，200 个 parcel；标准测试集不参与选择。
 - 双卡每卡 microbatch 4、梯度累积 2、global batch 16；BF16、确定性计算、AdamW、学习率 `1e-4`。
@@ -77,7 +79,7 @@ Python 下载脚本同样要求 `--project-root "$PROJECT_ROOT"`。训练 YAML �
 - 运行目录：`runs/selection/subject01-selection-4090-deterministic-v2`；实际正式配置：`configs/formal/subject01_selection_v2.yaml`；训练记录：该运行目录的 `training.jsonl`。
 - 可公开复核证据见 `manifests/deterministic-4090-v2/`，连续时间线见 `EXPERIMENT_LOG.md`。此前 det-v1 的许可失败记录保留，不能作为本轮正式训练记录。
 
-当前不是最终 9000 图重训，也尚未产生锁定模型。Selection 完成后仍需按冻结计划比较内部验证结果、选定训练时长，再从相同初始化用全部 9000 张训练图重训最终权重。
+当前任务是备份现有 20 个权重，并按原定内部验证规则直接选定研究用权重。`scripts/select_existing_weights.py` 只允许调用四个验证/选优工具，不包含训练入口；结束时生成 `RESEARCH_WEIGHT_LOCK.json` 和报告，不调用面向全量重训的 `export_final_model.py`，不生成冒充 9000 图模型的锁定材料。
 
 decoder 训练所用 atlas 已单独完成审计：CBIG 来源、左右 annotation、每侧 500 parcels、top-SNR 排序、最终 200-token 顺序和 `max_voxels=626` 均可验证，当前 9000 图训练缓存无需重建。公开 `whole_brain_encoder` parcel 文件与作者内部训练资产的关系仍无法由公开材料证明，因此该问题只阻断模型锁定后的 brain encoder forward/test 门禁，不再错误阻断 decoder 的 selection/final 训练。
 
