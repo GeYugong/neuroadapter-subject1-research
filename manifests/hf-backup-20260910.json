@@ -1,0 +1,11 @@
+{
+  "status": "verified",
+  "repo_id": "gugabobo/neuroadapter-subject1-selection-4090",
+  "url": "https://huggingface.co/gugabobo/neuroadapter-subject1-selection-4090",
+  "revision": "01cffabf712dcce25ca7bc0d84f994327c015648",
+  "public": true,
+  "file_count": 95,
+  "snapshot_count": 20,
+  "source_config_sha256": "7e12cca6093733c598d2877838d8c31a53961c9dd93857efb33bd99f45f93077",
+  "backup_manifest_sha256": "4ed6142684ffe6666390c2ad9538988eec20e64436907f1de399d18540405e3e"
+}
