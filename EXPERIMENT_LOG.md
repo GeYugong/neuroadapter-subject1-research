@@ -2651,16 +2651,16 @@ CUDA_VISIBLE_DEVICES= PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-
 ### 2026-09-10T20:10:54.135514+08:00：现有权重选优
 
 现有权重选优阶段关闭：19:53:07 控制器正常退出（exit=0），20 个初筛、5 个复评全部完成，选定 239063 步；两卡已释放，未续训或 9000 图重训。权重 SHA-256：bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217。实际训练样本数 8500，验证样本数 500。
-    
+
 关闭审计使用 repo/scripts/finalize_existing_selection.py，CPU-only：核验 25 组评价完成状态、40000 张 PNG 数量、snapshot/来源哈希、selected_snapshot 与原 snapshot 哈希；冻结 select_checkpoint.py 的初筛和最终统计重新执行后与原 JSON 完全一致。未重新运行 GPU 指标或全量 PNG 哈希校验。命令：
-    
+
 PROJECT_ROOT=/data1/matengyu/geyugong/neuroadapter-subject1-research
 PYTHONPATH=$PROJECT_ROOT/runtime/subject01-4090-1a1fcfa/src CUDA_VISIBLE_DEVICES= $PROJECT_ROOT/envs/neuroadapter/bin/python $PROJECT_ROOT/repo/scripts/finalize_existing_selection.py --project-root $PROJECT_ROOT
-    
+
 两页对照图已逐行视觉检查，按固定顺序等距 12 张图展示五个候选和选定权重额外 seed，失败样本保留；观察和全部八指标见 repo/docs/SELECTION_RESULT.md。含图报告：artifacts/final-selection-20260910/REPORT.md，已同步到本地项目同名 artifacts 目录；含刺激图的图片不进入 Git/HF。闭合统计和锁定证据导出到 repo/manifests/selection-20260910。结果只代表冻结候选集和内部验证规则下的选择，不代表达到论文性能或证明后期权重统计等价。
-    
+
 使用 repo/scripts/publish_selected_weight.py 读取项目独立凭据并再次验证 gugabobo；原17899专用转发已断开，只恢复这一转发后上传。33 个白名单文本/JSON（含 HF README、结果说明及锁定记录）提交到 HF，逐文件下载回做 SHA 校验，同时复核远端选定模型 LFS SHA 不变；public=true。HF revision=dd7c329ef010bbc2a498d0542fe9124e2e98a686，证据 artifacts/hf-selection-published-20260910.json。命令：HTTP_PROXY=http://127.0.0.1:17899 HTTPS_PROXY=http://127.0.0.1:17899 HF_HUB_OFFLINE=0 $PROJECT_ROOT/envs/neuroadapter/bin/python $PROJECT_ROOT/repo/scripts/publish_selected_weight.py --project-root $PROJECT_ROOT。凭据未打印、未上传，没有上传刺激图。
-    
+
 回归测试首次因从服务器 home 运行且 PYTHONPATH 仅含 src，导致 scripts 模块无法导入，6 个收集错误；补入项目 repo 路径后通过，未修改算法或测试。最终命令：PYTHONPATH=$PROJECT_ROOT/repo:$PROJECT_ROOT/repo/src PYTHONDONTWRITEBYTECODE=1 CUDA_VISIBLE_DEVICES= $PROJECT_ROOT/envs/neuroadapter/bin/python -m pytest $PROJECT_ROOT/repo/tests -q。70 passed，16 warnings（14 条既有弃用提示和 2 条 CPU-only autocast 提示），3.25 秒；git diff --check 通过。
-    
+
 后续固定使用 runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/selected_snapshot，锁定记录 RESEARCH_WEIGHT_LOCK.json 保留真实来源。本次关闭后仅汇报结果、同步并提交文档，停用完成检查；不再启动训练或推理。
