@@ -1923,3 +1923,744 @@ HF 公开备份完成验收：任务于 2026-09-10 10:27:50 正常退出（exit=
 - 本次通过 SSH 检查任务状态、退出码和已有逐文件校验报告，未重复上传、未启动训练或修改验证协议。
 - 10:52 检查：13282、26563、53125 三个候选已完成初筛全部解码与评价，39844 已生成 902/1000 张，79688 正在开始验证；尚未产生最终选择。初筛单 checkpoint 解码实测约 27.5–32.4 分钟，评价约 40–54 秒。后续仍需完成 20 候选初筛及 5 候选 8-seed 复评，不能把上传完成误认为选优完成。
 - 选优在服务器离线运行，不再需要本机保持代理以完成本轮大文件备份。后续上传小型选优结果时需重新确认网络。只选择现有 8500 图训练权重，不执行任何续训或 9000 图重训。
+
+### 2026-09-10T10:55:14.887456+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00039844/decode_validation.py` 退出码 0，耗时 1694.0 秒。
+
+### 2026-09-10T10:55:14.887569+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00039844`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00039844/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00039844/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00039844/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00039844/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00039844/evaluation.csv
+```
+
+### 2026-09-10T10:55:53.444556+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00039844/evaluate_validation.py` 退出码 0，耗时 38.6 秒。
+
+### 2026-09-10T10:55:53.444693+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00066407 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/loss.csv
+```
+
+### 2026-09-10T10:56:18.280777+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/validation_loss.py` 退出码 0，耗时 24.8 秒。
+
+### 2026-09-10T10:56:18.280893+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00066407 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/decode
+```
+
+### 2026-09-10T11:19:57.063560+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00079688/decode_validation.py` 退出码 0，耗时 1637.0 秒。
+
+### 2026-09-10T11:19:57.063675+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00079688`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00079688/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00079688/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00079688/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00079688/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00079688/evaluation.csv
+```
+
+### 2026-09-10T11:20:36.887882+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00079688/evaluate_validation.py` 退出码 0，耗时 39.8 秒。
+
+### 2026-09-10T11:20:36.888043+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00106250 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/loss.csv
+```
+
+### 2026-09-10T11:21:02.207292+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/validation_loss.py` 退出码 0，耗时 25.3 秒。
+
+### 2026-09-10T11:21:02.207399+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00106250 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/decode
+```
+
+### 2026-09-10T11:23:44.464788+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/decode_validation.py` 退出码 0，耗时 1646.2 秒。
+
+### 2026-09-10T11:23:44.464903+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/evaluation.csv
+```
+
+### 2026-09-10T11:24:23.255820+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/evaluate_validation.py` 退出码 0，耗时 38.8 秒。
+
+### 2026-09-10T11:24:23.255963+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00092969 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/loss.csv
+```
+
+### 2026-09-10T11:24:48.083369+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/validation_loss.py` 退出码 0，耗时 24.8 秒。
+
+### 2026-09-10T11:24:48.083484+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00092969 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/decode
+```
+
+### 2026-09-10T11:47:09.709480+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/decode_validation.py` 退出码 0，耗时 1567.5 秒。
+
+### 2026-09-10T11:47:09.709607+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/evaluation.csv
+```
+
+### 2026-09-10T11:47:49.725561+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/evaluate_validation.py` 退出码 0，耗时 40.0 秒。
+
+### 2026-09-10T11:47:49.725697+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00132813 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/loss.csv
+```
+
+### 2026-09-10T11:48:15.120023+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/validation_loss.py` 退出码 0，耗时 25.4 秒。
+
+### 2026-09-10T11:48:15.120155+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00132813 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/decode
+```
+
+### 2026-09-10T11:51:01.269634+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/decode_validation.py` 退出码 0，耗时 1573.2 秒。
+
+### 2026-09-10T11:51:01.269746+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/evaluation.csv
+```
+
+### 2026-09-10T11:51:40.127281+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/evaluate_validation.py` 退出码 0，耗时 38.9 秒。
+
+### 2026-09-10T11:51:40.127430+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00119532 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/loss.csv
+```
+
+### 2026-09-10T11:52:04.954975+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/validation_loss.py` 退出码 0，耗时 24.8 秒。
+
+### 2026-09-10T11:52:04.955085+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00119532 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/decode
+```
+
+### 2026-09-10T12:14:37.332852+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/decode_validation.py` 退出码 0，耗时 1582.2 秒。
+
+### 2026-09-10T12:14:37.332972+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/evaluation.csv
+```
+
+### 2026-09-10T12:15:17.298385+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/evaluate_validation.py` 退出码 0，耗时 40.0 秒。
+
+### 2026-09-10T12:15:17.298525+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00159375 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/loss.csv
+```
+
+### 2026-09-10T12:15:42.676642+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/validation_loss.py` 退出码 0，耗时 25.4 秒。
+
+### 2026-09-10T12:15:42.676753+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00159375 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/decode
+```
+
+### 2026-09-10T12:18:18.109828+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/decode_validation.py` 退出码 0，耗时 1573.2 秒。
+
+### 2026-09-10T12:18:18.109941+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/evaluation.csv
+```
+
+### 2026-09-10T12:18:56.950777+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/evaluate_validation.py` 退出码 0，耗时 38.8 秒。
+
+### 2026-09-10T12:18:56.950925+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00146094 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/loss.csv
+```
+
+### 2026-09-10T12:19:21.711814+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/validation_loss.py` 退出码 0，耗时 24.8 秒。
+
+### 2026-09-10T12:19:21.711947+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00146094 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/decode
+```
+
+### 2026-09-10T12:42:29.947331+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/decode_validation.py` 退出码 0，耗时 1607.3 秒。
+
+### 2026-09-10T12:42:29.947441+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/evaluation.csv
+```
+
+### 2026-09-10T12:43:10.213875+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/evaluate_validation.py` 退出码 0，耗时 40.3 秒。
+
+### 2026-09-10T12:43:10.214013+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00185938 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/loss.csv
+```
+
+### 2026-09-10T12:43:35.533242+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/validation_loss.py` 退出码 0，耗时 25.3 秒。
+
+### 2026-09-10T12:43:35.533350+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00185938 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/decode
+```
+
+### 2026-09-10T12:45:47.829692+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/decode_validation.py` 退出码 0，耗时 1586.1 秒。
+
+### 2026-09-10T12:45:47.829803+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/evaluation.csv
+```
+
+### 2026-09-10T12:46:26.520358+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/evaluate_validation.py` 退出码 0，耗时 38.7 秒。
+
+### 2026-09-10T12:46:26.520503+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00172657 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/loss.csv
+```
+
+### 2026-09-10T12:46:51.265418+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/validation_loss.py` 退出码 0，耗时 24.7 秒。
+
+### 2026-09-10T12:46:51.265537+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00172657 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/decode
+```
+
+### 2026-09-10T13:09:30.690712+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/decode_validation.py` 退出码 0，耗时 1555.2 秒。
+
+### 2026-09-10T13:09:30.690849+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/evaluation.csv
+```
+
+### 2026-09-10T13:10:10.898175+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/evaluate_validation.py` 退出码 0，耗时 40.2 秒。
+
+### 2026-09-10T13:10:10.898311+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00212500 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/loss.csv
+```
+
+### 2026-09-10T13:10:36.284941+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/validation_loss.py` 退出码 0，耗时 25.4 秒。
+
+### 2026-09-10T13:10:36.285058+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00212500 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/decode
+```
+
+### 2026-09-10T13:13:16.691345+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/decode_validation.py` 退出码 0，耗时 1585.4 秒。
+
+### 2026-09-10T13:13:16.691456+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/evaluation.csv
+```
+
+### 2026-09-10T13:13:55.207210+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/evaluate_validation.py` 退出码 0，耗时 38.5 秒。
+
+### 2026-09-10T13:13:55.207371+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00199219 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/loss.csv
+```
+
+### 2026-09-10T13:14:20.084907+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/validation_loss.py` 退出码 0，耗时 24.9 秒。
+
+### 2026-09-10T13:14:20.085018+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00199219 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/decode
+```
+
+### 2026-09-10T13:37:13.001774+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/decode_validation.py` 退出码 0，耗时 1596.7 秒。
+
+### 2026-09-10T13:37:13.001884+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/evaluation.csv
+```
+
+### 2026-09-10T13:37:52.717827+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/evaluate_validation.py` 退出码 0，耗时 39.7 秒。
+
+### 2026-09-10T13:37:52.717972+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00239063 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/loss.csv
+```
+
+### 2026-09-10T13:38:18.028784+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/validation_loss.py` 退出码 0，耗时 25.3 秒。
+
+### 2026-09-10T13:38:18.028898+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00239063 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/decode
+```
+
+### 2026-09-10T13:40:22.866996+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/decode_validation.py` 退出码 0，耗时 1562.8 秒。
+
+### 2026-09-10T13:40:22.867114+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/evaluation.csv
+```
+
+### 2026-09-10T13:41:01.791373+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/evaluate_validation.py` 退出码 0，耗时 38.9 秒。
+
+### 2026-09-10T13:41:01.791514+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00225782 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/loss.csv
+```
+
+### 2026-09-10T13:41:26.577381+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/validation_loss.py` 退出码 0，耗时 24.8 秒。
+
+### 2026-09-10T13:41:26.577492+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00225782 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/decode
+```
+
+### 2026-09-10T14:04:41.982935+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/decode_validation.py` 退出码 0，耗时 1584.0 秒。
+
+### 2026-09-10T14:04:41.983052+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/evaluation.csv
+```
+
+### 2026-09-10T14:05:22.081397+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/evaluate_validation.py` 退出码 0，耗时 40.1 秒。
+
+### 2026-09-10T14:05:22.081535+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00265625 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/loss.csv
+```
+
+### 2026-09-10T14:05:47.434667+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/validation_loss.py` 退出码 0，耗时 25.4 秒。
+
+### 2026-09-10T14:05:47.434773+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00265625 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/decode
+```
+
+### 2026-09-10T14:07:38.482640+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/decode_validation.py` 退出码 0，耗时 1571.9 秒。
+
+### 2026-09-10T14:07:38.482753+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/evaluation.csv
+```
+
+### 2026-09-10T14:08:18.006727+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/evaluate_validation.py` 退出码 0，耗时 39.5 秒。
+
+### 2026-09-10T14:08:18.016938+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/validation_loss.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/validation_loss.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00252344 --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/loss.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/loss.csv
+```
+
+### 2026-09-10T14:08:42.884133+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/validation_loss.py` 退出码 0，耗时 24.9 秒。
+
+### 2026-09-10T14:08:42.884243+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00252344 --stage screening --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/decode
+```
+
+### 2026-09-10T14:32:08.549665+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/decode_validation.py` 退出码 0，耗时 1581.1 秒。
+
+### 2026-09-10T14:32:08.549775+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/evaluation.csv
+```
+
+### 2026-09-10T14:32:48.632247+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/evaluate_validation.py` 退出码 0，耗时 40.1 秒。
+
+### 2026-09-10T14:34:45.985124+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/decode_validation.py` 退出码 0，耗时 1563.1 秒。
+
+### 2026-09-10T14:34:45.985629+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/evaluation.csv
+```
+
+### 2026-09-10T14:35:23.847513+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/evaluate_validation.py` 退出码 0，耗时 37.9 秒。
+
+### 2026-09-10T14:35:23.849025+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/shortlist`；GPU：`None`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/shortlist/select_checkpoint.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES= PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/select_checkpoint.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --stage shortlist --input /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00013282/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00026563/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00039844/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00053125/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00066407/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00079688/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00092969/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00106250/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00119532/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00132813/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00146094/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00159375/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00172657/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00185938/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00225782/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00252344/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/evaluation.json --output /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/shortlist.json
+```
+
+### 2026-09-10T14:35:24.548758+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/shortlist/select_checkpoint.py` 退出码 0，耗时 0.7 秒。
+
+### 2026-09-10T14:35:24.602329+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00212500`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00212500/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00212500 --stage final --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00212500/decode
+```
+
+### 2026-09-10T14:35:24.603453+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00199219`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00199219/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00199219 --stage final --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00199219/decode
+```
+
+### 2026-09-10T15:05:55.172850+08:00：现有权重选优
+
+初步视觉检查（非最终选优）：CPU 运行 migration/preview_selection_20260910.py，按固定验证顺序等距抽取 12 张图（np.linspace(0,499,12)），比较 13282、39844、199219、212500、265625 步的 candidate-00，并展示 199219 的 candidate-01；不按效果挑图、不修改验证协议、不增加 GPU 任务。预览及抽样清单位于 artifacts/selection-preview-20260910，已同步本地 D:/0code/Research/.codex-tmp/selection-preview-20260910。两张预览均实际视觉检查：后期能恢复部分浴室、厨房、食物、动物等大类别，但布局/数量/具体物体常不一致；披萨样本重建完全错误，棒球样本偏成网球，小孩进食样本跨 seed/权重有明显类别漂移。初筛 500 图、2 候选均值指标：199219 步 CLIP 二选一识别率 86.72385%、PixCorr 0.07710457、SSIM 0.28422198；13282 步对应 67.23587%、-0.00658971、0.31802998。语义提升不等于像素级忠实还原，CLIP 识别率不等于图片相似度百分比，不能直接与不同标准测试/候选筛选协议的论文数字比较。仅作当前效果说明，不据这 12 张图决定最终权重；完整 8 候选复评继续进行。
+
+### 2026-09-10T16:16:30.021644+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00199219/decode_validation.py` 退出码 0，耗时 6065.4 秒。
+
+### 2026-09-10T16:16:30.021841+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00199219`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00199219/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00199219/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00199219/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00199219/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00199219/evaluation.csv
+```
+
+### 2026-09-10T16:17:38.172698+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00212500/decode_validation.py` 退出码 0，耗时 6133.6 秒。
+
+### 2026-09-10T16:17:38.172850+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00212500`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00212500/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00212500/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00212500/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00212500/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00212500/evaluation.csv
+```
+
+### 2026-09-10T16:18:48.123482+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00199219/evaluate_validation.py` 退出码 0，耗时 138.1 秒。
+
+### 2026-09-10T16:18:48.124135+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00265625`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00265625/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00265625 --stage final --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00265625/decode
+```
+
+### 2026-09-10T16:19:55.322412+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00212500/evaluate_validation.py` 退出码 0，耗时 137.1 秒。
+
+### 2026-09-10T16:19:55.322552+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00239063`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00239063/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00239063 --stage final --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00239063/decode
+```
+
+### 2026-09-10T17:59:42.552550+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00265625/decode_validation.py` 退出码 0，耗时 6054.4 秒。
+
+### 2026-09-10T17:59:42.552743+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00265625`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00265625/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00265625/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00265625/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00265625/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00265625/evaluation.csv
+```
+
+### 2026-09-10T18:01:26.626926+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00239063/decode_validation.py` 退出码 0，耗时 6091.3 秒。
+
+### 2026-09-10T18:01:26.627074+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00239063`；GPU：`1`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00239063/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00239063/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00239063/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00239063/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00239063/evaluation.csv
+```
+
+### 2026-09-10T18:01:49.228852+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00265625/evaluate_validation.py` 退出码 0，耗时 126.7 秒。
+
+### 2026-09-10T18:01:49.229015+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00039844`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00039844/decode_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/decode_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --snapshot /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00039844 --stage final --output-dir /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00039844/decode
+```
+
+### 2026-09-10T18:03:35.883311+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00239063/evaluate_validation.py` 退出码 0，耗时 129.3 秒。
+
+### 2026-09-10T19:51:05.058340+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00039844/decode_validation.py` 退出码 0，耗时 6555.8 秒。
+
+### 2026-09-10T19:51:05.058841+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00039844`；GPU：`0`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00039844/evaluate_validation.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/evaluate_validation.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --decode-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00039844/decode/decode_manifest.json --validation-loss /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/screening/update-00039844/loss.json --output-json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00039844/evaluation.json --output-csv /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00039844/evaluation.csv
+```
+
+### 2026-09-10T19:53:05.891970+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00039844/evaluate_validation.py` 退出码 0，耗时 120.8 秒。
+
+### 2026-09-10T19:53:05.904656+08:00：现有权重选优
+
+阶段目录：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/selection`；GPU：`None`；控制台：`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/selection/select_checkpoint.py.log`。
+
+```bash
+CUDA_VISIBLE_DEVICES= PYTHONPATH=/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/src /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/subject01-4090-1a1fcfa/scripts/select_checkpoint.py --config /data1/matengyu/geyugong/neuroadapter-subject1-research/configs/formal/subject01_selection_v2.yaml --stage final --shortlist-manifest /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/shortlist.json --input /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00039844/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00199219/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00212500/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00239063/evaluation.json /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final/update-00265625/evaluation.json --output /data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/final_selection.json
+```
+
+### 2026-09-10T19:53:06.592912+08:00：现有权重选优
+
+`runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/selection/select_checkpoint.py` 退出码 0，耗时 0.7 秒。
+
+### 2026-09-10T19:53:07.485146+08:00：现有权重选优
+
+现有权重选优完成：update=239063，SHA=`bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217`；报告 `runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/SELECTION_REPORT.md`。流程已停止，不执行续训或全量重训。
+
+### 2026-09-10T20:10:54.135514+08:00：现有权重选优
+
+现有权重选优阶段关闭：19:53:07 控制器正常退出（exit=0），20 个初筛、5 个复评全部完成，选定 239063 步；两卡已释放，未续训或 9000 图重训。权重 SHA-256：bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217。实际训练样本数 8500，验证样本数 500。
+    
+关闭审计使用 repo/scripts/finalize_existing_selection.py，CPU-only：核验 25 组评价完成状态、40000 张 PNG 数量、snapshot/来源哈希、selected_snapshot 与原 snapshot 哈希；冻结 select_checkpoint.py 的初筛和最终统计重新执行后与原 JSON 完全一致。未重新运行 GPU 指标或全量 PNG 哈希校验。命令：
+    
+PROJECT_ROOT=/data1/matengyu/geyugong/neuroadapter-subject1-research
+PYTHONPATH=$PROJECT_ROOT/runtime/subject01-4090-1a1fcfa/src CUDA_VISIBLE_DEVICES= $PROJECT_ROOT/envs/neuroadapter/bin/python $PROJECT_ROOT/repo/scripts/finalize_existing_selection.py --project-root $PROJECT_ROOT
+    
+两页对照图已逐行视觉检查，按固定顺序等距 12 张图展示五个候选和选定权重额外 seed，失败样本保留；观察和全部八指标见 repo/docs/SELECTION_RESULT.md。含图报告：artifacts/final-selection-20260910/REPORT.md，已同步到本地项目同名 artifacts 目录；含刺激图的图片不进入 Git/HF。闭合统计和锁定证据导出到 repo/manifests/selection-20260910。结果只代表冻结候选集和内部验证规则下的选择，不代表达到论文性能或证明后期权重统计等价。
+    
+使用 repo/scripts/publish_selected_weight.py 读取项目独立凭据并再次验证 gugabobo；原17899专用转发已断开，只恢复这一转发后上传。33 个白名单文本/JSON（含 HF README、结果说明及锁定记录）提交到 HF，逐文件下载回做 SHA 校验，同时复核远端选定模型 LFS SHA 不变；public=true。HF revision=dd7c329ef010bbc2a498d0542fe9124e2e98a686，证据 artifacts/hf-selection-published-20260910.json。命令：HTTP_PROXY=http://127.0.0.1:17899 HTTPS_PROXY=http://127.0.0.1:17899 HF_HUB_OFFLINE=0 $PROJECT_ROOT/envs/neuroadapter/bin/python $PROJECT_ROOT/repo/scripts/publish_selected_weight.py --project-root $PROJECT_ROOT。凭据未打印、未上传，没有上传刺激图。
+    
+回归测试首次因从服务器 home 运行且 PYTHONPATH 仅含 src，导致 scripts 模块无法导入，6 个收集错误；补入项目 repo 路径后通过，未修改算法或测试。最终命令：PYTHONPATH=$PROJECT_ROOT/repo:$PROJECT_ROOT/repo/src PYTHONDONTWRITEBYTECODE=1 CUDA_VISIBLE_DEVICES= $PROJECT_ROOT/envs/neuroadapter/bin/python -m pytest $PROJECT_ROOT/repo/tests -q。70 passed，16 warnings（14 条既有弃用提示和 2 条 CPU-only autocast 提示），3.25 秒；git diff --check 通过。
+    
+后续固定使用 runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/selected_snapshot，锁定记录 RESEARCH_WEIGHT_LOCK.json 保留真实来源。本次关闭后仅汇报结果、同步并提交文档，停用完成检查；不再启动训练或推理。

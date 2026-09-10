@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "stage": "shortlist",
+  "status": "complete",
+  "config_sha256": "7e12cca6093733c598d2877838d8c31a53961c9dd93857efb33bd99f45f93077",
+  "method_fingerprint": "b59f30fe2f1bdc54fc5b9404aae71f6cb8dd6dc21209aa368a6d0cc21c7802ce",
+  "image_count": 500,
+  "candidate_count": 2,
+  "negative_pool": "the same 500 unique validation image IDs for every candidate seed",
+  "candidate_aggregation": "per-image arithmetic mean after fixed-pool scoring",
+  "evaluation_manifest_sha256": "ddbc8da4e11c766e4e6ac8362d9d22d3e8d246f4072db91fda16c053af2a9e33",
+  "validation_ids_sha256": "73137068416d3400708e1a3d5bda09600be4ea7b2164f11322a26f4de1b37c55",
+  "image_order_sha256": "1eb801c0460754e803c9d86f6c60aec0512da0a49205971d1efb0fef1cc256ad",
+  "selection_plan_sha256": "1cf772d05ce9a7bc389f759bf2ac6532971cb87017f2e6b7e52ed965c7f3dce2",
+  "metric_implementation_sha256": "aec036bffe87ff6adfc580986ba3fd6a9ffe0dd7d8b9adbbd7f3276219decf02",
+  "protocol_namespace": "subject01-selection-v1",
+  "selection_stage": "screening",
+  "denoising_steps": 50,
+  "guidance_scale": 4.0,
+  "evaluation_batch_size": 16,
+  "repository_commit": "1a1fcfa66e06de07a04dfbb48cc6f9ad108ed567",
+  "sources": [
+    {
+      "name": "evaluation.json",
+      "sha256": "2459f49e2d3d84382cab75d81afe42af253abe47abc302e2e394e16151d69b43"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "5da20219fb81f67e180666479e628361b3b6033e281643321d4b3ea4e63551aa"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "0a88796b8b06a1d382ed2436e96c6c47313d362f1389dda9793f946f6d740905"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "9ee8b1580644183e54af66a6d5fefa23287f4c0895f66c330a40ec25b3cd6ed7"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "470a195af2c00fd9fa73cab959b443e297d6021aa59599f68a55a3bdd9c49b12"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "ebcbcc9e75a55a5f3cbaecb6ac6d9057208ff222a1a2340f277847da6889119a"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "b6f837c8284e41beaef8e9ebb147c25f09decf6335a883154e756e65da4cdcf2"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "66cded14da4c25031fcaf472a9ef7483a457b85e4a82816cfb39f1f8e7035fc6"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "c22b4a1830b5ec48412743f1a9a3fb05719435d8021f0b4ac3670d8b9399ad6c"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "cc582b96af1246309e7ecded2dc6cea2e4b637a264ec85c976e2763a313393c2"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "dc9c39794a9f4fb8d78abf1d3e23ffefff7db2ed28ded8bc8da91135be21f138"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "18558f52e075502c388b02d6b1e99d09a2e4a06beb57544f5f00eb58b8b7fe3f"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "2ec9e34cc815599df30cbece12c642a9530f3a5fd5ff3c3060b55c1a66e3289d"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "59807d5cc8dc0b463d7940c2e23ceba95570bcf549c310c726268701efc41072"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "7483fbd1bca4f44a7b006a1f0cec23020037afd22f901791e7ac67793804979e"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "cb03c93916cc12c9b8d350a4eb38b69330480f786125bdfdc0bb027c0c91ec5f"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "9e91f7ba324480ea40cb3c5891210f0f58e06b46adb88f7e056c7e6ca6b252da"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "75d2cf1730c002eb12d8387085bc2ff0ea11571bd39173b594dd59d857229b92"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "3f1e67cf765a8f20616dd927dc98531a97b7cd6da7a65b9429ab2e8449e493c7"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "c6efe85640c8ca40917d2d8aaba7f28bce0b32f22493d9dfdcd098544cdab0f0"
+    }
+  ],
+  "expected_snapshot_updates": [
+    13282,
+    26563,
+    39844,
+    53125,
+    66407,
+    79688,
+    92969,
+    106250,
+    119532,
+    132813,
+    146094,
+    159375,
+    172657,
+    185938,
+    199219,
+    212500,
+    225782,
+    239063,
+    252344,
+    265625
+  ],
+  "shortlist_updates": [
+    199219,
+    212500,
+    265625,
+    239063,
+    39844
+  ]
+}

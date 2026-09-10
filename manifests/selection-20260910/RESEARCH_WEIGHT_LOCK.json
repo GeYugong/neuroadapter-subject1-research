@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "status": "selected_existing_weight",
+  "no_more_training": true,
+  "training_run_kind": "selection",
+  "training_image_count": 8500,
+  "validation_image_count": 500,
+  "retrained_on_9000": false,
+  "standard_test_used": false,
+  "selected_update": 239063,
+  "model_sha256": "bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217",
+  "snapshot_relative_path": "runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00239063",
+  "selected_snapshot_relative_path": "runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/selected_snapshot",
+  "selection_manifest_sha256": "b0cc42ee7b22a48472f7c26c045528d5555d3c1f2cde6bd1c442565d640be50b",
+  "protocol_commit": "1a1fcfa66e06de07a04dfbb48cc6f9ad108ed567",
+  "config_sha256": "7e12cca6093733c598d2877838d8c31a53961c9dd93857efb33bd99f45f93077",
+  "method_fingerprint": "b59f30fe2f1bdc54fc5b9404aae71f6cb8dd6dc21209aa368a6d0cc21c7802ce"
+}

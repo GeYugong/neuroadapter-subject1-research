@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "stage": "final_selection",
+  "status": "complete",
+  "config_sha256": "7e12cca6093733c598d2877838d8c31a53961c9dd93857efb33bd99f45f93077",
+  "method_fingerprint": "b59f30fe2f1bdc54fc5b9404aae71f6cb8dd6dc21209aa368a6d0cc21c7802ce",
+  "image_count": 500,
+  "candidate_count": 8,
+  "negative_pool": "the same 500 unique validation image IDs for every candidate seed",
+  "candidate_aggregation": "per-image arithmetic mean after fixed-pool scoring",
+  "evaluation_manifest_sha256": "ddbc8da4e11c766e4e6ac8362d9d22d3e8d246f4072db91fda16c053af2a9e33",
+  "validation_ids_sha256": "73137068416d3400708e1a3d5bda09600be4ea7b2164f11322a26f4de1b37c55",
+  "image_order_sha256": "1eb801c0460754e803c9d86f6c60aec0512da0a49205971d1efb0fef1cc256ad",
+  "selection_plan_sha256": "1cf772d05ce9a7bc389f759bf2ac6532971cb87017f2e6b7e52ed965c7f3dce2",
+  "metric_implementation_sha256": "aec036bffe87ff6adfc580986ba3fd6a9ffe0dd7d8b9adbbd7f3276219decf02",
+  "protocol_namespace": "subject01-selection-v1",
+  "selection_stage": "final",
+  "denoising_steps": 50,
+  "guidance_scale": 4.0,
+  "evaluation_batch_size": 16,
+  "repository_commit": "1a1fcfa66e06de07a04dfbb48cc6f9ad108ed567",
+  "sources": [
+    {
+      "name": "evaluation.json",
+      "sha256": "fa3650348bb8de43e02a60f6ebd54e6ac97bdbf2ddaa3f27c8141c75a7bfef23"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "e5007d49554593a1fce7b90445518e7d28402123edb6feeb550ddf9341bf5f3c"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "9d9f55766aeda60679772596df9da7354d05d6c9c9355091e4934bde64c0ca3d"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "db66d541593d3da1d199c3decddff0d7ec2d666d965708b7daf8c618ab2fd9e6"
+    },
+    {
+      "name": "evaluation.json",
+      "sha256": "87349128ab427fbebdbd842e3cf56baa0fc3b7a29456bd7dab9a3f7c975d3fe3"
+    }
+  ],
+  "shortlist_manifest_sha256": "88aac81b682b790d769151f7cb31aa25b66e66e6deea49d47e8439994c3b3f4f",
+  "shortlist_updates": [
+    199219,
+    212500,
+    265625,
+    239063,
+    39844
+  ],
+  "bootstrap_draws": 10000,
+  "bootstrap_seed": 20260901,
+  "selected_update_u_star": 239063,
+  "selected_images_seen": 3825008,
+  "best_semantic_update": 212500,
+  "one_se_updates": [
+    199219,
+    212500,
+    239063,
+    265625
+  ],
+  "diagnostics": {
+    "39844": {
+      "semantic_mean": 79.53072812291249,
+      "difference_from_best": 6.634619238476954,
+      "paired_bootstrap_standard_error": 0.44967096911659155
+    },
+    "199219": {
+      "semantic_mean": 86.04978289913159,
+      "difference_from_best": 0.11556446225784904,
+      "paired_bootstrap_standard_error": 0.29217910692554416,
+      "low_level_rank": 3.3333333333333335,
+      "high_level_rank": 2.4,
+      "balanced_rank": 2.8666666666666667
+    },
+    "212500": {
+      "semantic_mean": 86.16534736138945,
+      "difference_from_best": 0.0,
+      "paired_bootstrap_standard_error": 0.0,
+      "low_level_rank": 3.0,
+      "high_level_rank": 3.2,
+      "balanced_rank": 3.1
+    },
+    "239063": {
+      "semantic_mean": 86.03021042084167,
+      "difference_from_best": 0.13513694054776226,
+      "paired_bootstrap_standard_error": 0.3173916339318406,
+      "low_level_rank": 1.0,
+      "high_level_rank": 2.0,
+      "balanced_rank": 1.5
+    },
+    "265625": {
+      "semantic_mean": 86.02703740814962,
+      "difference_from_best": 0.13830995323981304,
+      "paired_bootstrap_standard_error": 0.31628969349619845,
+      "low_level_rank": 2.6666666666666665,
+      "high_level_rank": 2.4,
+      "balanced_rank": 2.533333333333333
+    }
+  }
+}

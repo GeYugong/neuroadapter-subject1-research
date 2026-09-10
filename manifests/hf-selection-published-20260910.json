@@ -1,0 +1,11 @@
+{
+  "status": "verified",
+  "repo_id": "gugabobo/neuroadapter-subject1-selection-4090",
+  "public": true,
+  "revision": "dd7c329ef010bbc2a498d0542fe9124e2e98a686",
+  "selected_update": 239063,
+  "model_path": "snapshots/snapshot-update-00239063/model.pt",
+  "model_sha256": "bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217",
+  "published_file_count": 33,
+  "no_more_training": true
+}

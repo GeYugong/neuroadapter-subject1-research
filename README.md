@@ -79,7 +79,11 @@ Python 下载脚本同样要求 `--project-root "$PROJECT_ROOT"`。训练 YAML �
 - 运行目录：`runs/selection/subject01-selection-4090-deterministic-v2`；实际正式配置：`configs/formal/subject01_selection_v2.yaml`；训练记录：该运行目录的 `training.jsonl`。
 - 可公开复核证据见 `manifests/deterministic-4090-v2/`，连续时间线见 `EXPERIMENT_LOG.md`。此前 det-v1 的许可失败记录保留，不能作为本轮正式训练记录。
 
-当前任务是备份现有 20 个权重，并按原定内部验证规则直接选定研究用权重。`scripts/select_existing_weights.py` 只允许调用四个验证/选优工具，不包含训练入口；结束时生成 `RESEARCH_WEIGHT_LOCK.json` 和报告，不调用面向全量重训的 `export_final_model.py`，不生成冒充 9000 图模型的锁定材料。
+**选优已于 2026-09-10 19:53:07 完成，固定使用 239063 步权重，不再训练。** 20 个候选初筛和 5 个候选复评全部结束，两张 GPU 已释放。模型 SHA-256：`bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217`。该权重来自 8500 图训练，未进行 9000 图重训，尚不能宣称达到论文性能。
+
+结果和选择依据见 [选优报告](docs/SELECTION_RESULT.md)，复核材料见 `manifests/selection-20260910/`。权重及完整状态已备份至 [Hugging Face](https://huggingface.co/gugabobo/neuroadapter-subject1-selection-4090)；后续取 `snapshots/snapshot-update-00239063/` 全部文件。本地含图报告位于 `artifacts/final-selection-20260910/REPORT.md`，刺激原图不进入公开仓库。
+
+`scripts/select_existing_weights.py` 只允许四个验证/选优工具，不包含训练入口；最终锁定记录为 `RESEARCH_WEIGHT_LOCK.json`，不调用全量重训导出工具，也不生成冒充 9000 图模型的锁定材料。
 
 decoder 训练所用 atlas 已单独完成审计：CBIG 来源、左右 annotation、每侧 500 parcels、top-SNR 排序、最终 200-token 顺序和 `max_voxels=626` 均可验证，当前 9000 图训练缓存无需重建。公开 `whole_brain_encoder` parcel 文件与作者内部训练资产的关系仍无法由公开材料证明，因此该问题只阻断模型锁定后的 brain encoder forward/test 门禁，不再错误阻断 decoder 的 selection/final 训练。
 
