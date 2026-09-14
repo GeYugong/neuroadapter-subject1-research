@@ -2718,3 +2718,21 @@ CPU 收尾命令：`CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=4 PYTHONPATH=$ROOT/run
 B1 命令 `python $ROOT/repo/scripts/audit_signal_generalization_v2.py --root $ROOT --phase input`。从 `data/derived/neural_data/betas_sub-01.h5` 读取 64 图各三次原始 presentation；独立核对 SNR 选区、LH/RH、逐 token 顶点顺序、session/trial，并用 float32 显式相加平均、重新 padding。结果 **64/64 逐元素完全一致，最大差值 0，padding 全零，全部有限**。审计 `signal/input_audit.json`，顶点顺序保存在私有运行产物 `signal/vertex_order.json`。
 
 A 正式命令分别以 `CUDA_VISIBLE_DEVICES=0/1 CUBLAS_WORKSPACE_CONFIG=:4096:8 OMP_NUM_THREADS=4` 运行 `python $ROOT/repo/scripts/diagnose_generalization_v2.py --root $ROOT --phase run --split train/validation`，日志 `train-console.log`、`validation-console.log`。CPU B 命令 `CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 python $ROOT/repo/scripts/audit_signal_generalization_v2.py --root $ROOT --phase full`，日志 `signal-console.log`。A 保存每图四份去噪 epsilon/noise，跨三个 checkpoint 共用；原完整生成使用旧混合精度噪声银行，不改变候选/批次/扩散设置。B 仅对 9000 训练池图的 27000 presentation 做内容检查，不重新扫描所有原数据哈希；训练侧共同基线采用 leave-image-out，对异图配对比较再同时排除控制图，质量分层预定为训练侧重复特异性三分位数，不依据生成结果选择。
+
+### 2026-09-15：A/B 完成、证据分析与关闭
+
+A 六个分组阶段均退出码 0，新增 512 张图、复用 256 张旧图、3840 对去噪比较完成。训练阶段 106250/159375/239063 分别 210.557/211.431/34.161 秒，验证分别 213.543/214.454/34.381 秒；最后一个 checkpoint 只新增去噪计算，不重新生成旧图。B2/B3 完整审查 364.758 秒，选定顶点值及全部相关系数有限。未启动训练、C 探针或标准 test。
+
+完整 8500/500 的重复特异性均值 0.214628/0.213060，验证减训练 -0.001568，探索性区间 [-0.011874,0.008797]；没有观察到验证池整体重复质量更差。异图对照 26680/27000 匹配完整 session 组合，其余匹配被替换响应的 session。训练側基线排除自身图；异图比较同时排除训练控制图，不让其自我包含制造特异性优势。逐顶点分布在私有 `signal/vertex_distribution.npz`，每 parcel、LH/RH 重复结果在 `signal/parcel_repeat_summary.csv`，逐图质量在 `signal/per_image_quality.csv`。模型输入未重归一化。
+
+评分命令 `CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=4 PYTHONPATH=$ROOT/runtime/subject01-4090-1a1fcfa/src $ROOT/envs/neuroadapter/bin/python $ROOT/repo/scripts/summarize_generalization_v2.py --root $ROOT --phase scores`，日志 `summary-console.log`；CPU 同入口 `--phase join`，日志 `join-console.log`。均退出码 0。239063 的 CLIP 数值与前轮相同；训练正确 CLIP 为 0.665499→0.702764→0.747590，验证为 0.638438→0.640803→0.633064。训练两段提升区间均大于零，验证两段均跨零，结论是验证语义平台化而非已证明显著退化。验证最后一段 PixCorr +0.041882、SSIM -0.015925，不将所有指标概括成变差。所有 bootstrap 先在图内平均候选或四个去噪 draw，A 区间条件于冻结 donor。
+
+训练侧质量三分位边界为 0.158513/0.262829，当前低/中/高质量层均保留约 0.110/0.149/0.092 的训练减验证 CLIP 差距。验证 16800 重复一致性较高但仍将滑板生成飞机，是不能把失败简单归因于低质量的例子；其较高极值比例和同 session 三次重复也保留。完整 session 分布总变差距离 0.0702，32 图子集 0.4271，明确小样本时段构成不平衡的限制。GT-donor cosine 训练 0.527858、验证 0.561214，不能单靠 A 比较两组，主量 S 不依赖 donor 分数。
+
+完整 16 页训练/验证、正确/错配图册全部逐页视觉检查。训练机车、飞机、行李、电脑等后期改善；验证甜甜圈→海浪、滑板→飞机、门廊→厨房等错误仍在，也有切蛋糕/电脑场景改善。未挑图、未按单图挑 checkpoint。报告 `docs/GENERALIZATION_DIAGNOSIS_V2.md`；含图版 `artifacts/generalization-diagnosis-v2/REPORT.md`。图片、噪声、脑响应数组不进 Git，public 只保留代码、中文报告和小型统计证据。
+
+下一项只确定为待授权的分支 2：同一 159375 snapshot、两组全新相同 AdamW、LR 1e-4 对 1e-5、最多 5000 更新，固定其余随机性/dropout/Min-SNR/batch，观察 0/1000/2500/5000。本轮不执行，不自动延长，不替换当前权重。A/B 足以优先安排这个检验，因此暂不触发 C；不能将此描述为病因已唯一确认或低学习率必然有效。
+
+测试先为新增/相关 9 passed，最终完整 CPU 回归 79 passed、16 条既有警告，2.91 秒。归档入口 `CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=2 PYTHONPATH=$ROOT/runtime/subject01-4090-1a1fcfa/src $ROOT/envs/neuroadapter/bin/python $ROOT/repo/scripts/archive_generalization_v2.py --root $ROOT`，检查三份模型 SHA 不变、runtime clean、输出数量和阶段完成信息。A/B 源码提交 `419a3f76240cb1b0b268056eea713b4f4fb8b121`；评分/归档后续修改另外由源 SHA 和最终报告提交追溯，不冒充最初推理提交。收尾 GPU0/GPU1 均 0%，47/15 MiB 显示占用，无遗留计算进程。生成与信号审查全部会话已退出。
+
+本地含图报告同步完成，16/16 图片引用存在；轨迹、逐图分数和质量联表 CSV 同目录可用。public 归档 70 份来源文件，本地工作文件与 INDEX 全部匹配；再直接读取 Git 暂存 blob，70/70 源 SHA 一致。本轮 CSV 固定 LF，不再触发上一轮 CRLF 归一化问题。仅提交代码/报告/小型统计与哈希证据，不提交生成图、噪声、beta 数组或凭据。

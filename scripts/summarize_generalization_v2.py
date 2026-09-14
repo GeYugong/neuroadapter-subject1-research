@@ -160,6 +160,43 @@ def join_signal(root):
                         "advantage_clip":float(np.mean([float(r["advantage_clip"]) for r in group]))})
     csv_rows(out/"quality_stratified_scores.csv",strata)
     write_json_atomic(out/"quality_generation_associations.json",associations)
+    pool_ids = np.load(out/"signal/pool_ids.npy")
+    repeats = np.load(out/"signal/repeat_correlations.npy",mmap_mode="r")
+    parcel_summary = []
+    for split in ("train","validation"):
+        for sampled in (False,True):
+            mask = np.array([quality[int(i)]["split"]==split for i in pool_ids])
+            if sampled:
+                chosen = {int(r["image_id"]) for r in scores if r["split"]==split}
+                mask &= np.isin(pool_ids,list(chosen))
+            avg = repeats[mask].mean((0,1))
+            for token in range(203):
+                parcel_summary.append({"split":split,"sampled32":sampled,"token":token,
+                    "raw_repeat_corr":float(avg[0,token]),"centered_repeat_corr":float(avg[1,token]),
+                    "raw_different_corr":float(avg[2,token]),"centered_specificity":float(avg[3,token])})
+    csv_rows(out/"signal/parcel_repeat_summary.csv",parcel_summary)
+    sessions = json.loads((out/"signal/session_distribution.json").read_text())
+    differences = {}
+    for sampled in (False,True):
+        groups = []
+        for split in ("train","validation"):
+            selected = {int(r["image_id"]) for r in scores if r["split"]==split}
+            groups.append([q for i,q in quality.items() if q["split"]==split and (not sampled or i in selected)])
+        group_result = {}
+        for key in ("rms","centered_repeat_corr","centered_repeat_specificity"):
+            x,y = [np.array([float(q[key]) for q in group]) for group in groups]
+            rng = np.random.default_rng(20260915)
+            boot = []
+            for _ in range(100):
+                boot.extend(y[rng.integers(len(y),size=(100,len(y)))].mean(1)
+                            - x[rng.integers(len(x),size=(100,len(x)))].mean(1))
+            group_result[key] = {"validation_minus_train":float(y.mean()-x.mean()),
+                                "ci95_exploratory":np.quantile(boot,[.025,.975]).tolist()}
+        names = ("train32","validation32") if sampled else ("train8500","validation500")
+        h = [np.array(list(sessions[n].values()),dtype=float) for n in names]
+        group_result["session_total_variation"] = float(np.abs(h[0]/h[0].sum()-h[1]/h[1].sum()).sum()/2)
+        differences["sample32" if sampled else "full_pool"] = group_result
+    write_json_atomic(out/"signal/distribution_differences.json",differences)
 
 
 if __name__ == "__main__":

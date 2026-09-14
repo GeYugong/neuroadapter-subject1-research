@@ -1,0 +1,31 @@
+{
+  "checkpoint_hashes_unchanged": true,
+  "frozen_runtime_clean": true,
+  "neuroadapter_parameter_updates": 0,
+  "new_images": 512,
+  "reused_images": 256,
+  "denoising_comparisons": 3840,
+  "new_denoising_noise_banks": 64,
+  "galleries": 16,
+  "input_reconstruction_exact": 64,
+  "seconds_by_worker_stage": {
+    "train_106250": 210.55695509910583,
+    "validation_106250": 213.5426905155182,
+    "train_159375": 211.43107318878174,
+    "validation_159375": 214.45413851737976,
+    "train_239063": 34.160839557647705,
+    "validation_239063": 34.38096809387207
+  },
+  "head_at_archive": "419a3f76240cb1b0b268056eea713b4f4fb8b121",
+  "inference_and_signal_script_commit": "419a3f76240cb1b0b268056eea713b4f4fb8b121",
+  "provenance_note": "scoring/archiving may be later working-tree changes; exact source hashes below are authoritative",
+  "source_sha256": {
+    "diagnose_generalization_v2.py": "a41116ee413f2cb1c2f5beaf6d17ffc9e72e13eaa3fadbcf1ca9899f271a74fb",
+    "summarize_generalization_v2.py": "703b0e8884baaee89966c29d7f3e4cb91a0fd5931d679113db25bb27adeb2ebb",
+    "audit_signal_generalization_v2.py": "d7e3782fffdb452bd413e51be4d144ac24473f4106351f939f6f81b7eaf5c33e",
+    "archive_generalization_v2.py": "22ff28baf0115c4d3a24be287f0be8fa3e1bf94cf061433dc81523843d85d4a9"
+  },
+  "old_protocol_sha256": "8fe04623a09bf9861db8d6d0ea3863c25c51c0d688934787519b4fd2c685c6b5",
+  "next_branch": "2: paired low-learning-rate experiment, not executed",
+  "probe_C": "not triggered: A/B suffice to prioritize next controlled experiment, not to prove unique cause"
+}

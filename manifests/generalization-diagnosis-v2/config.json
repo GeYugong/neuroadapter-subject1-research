@@ -1,0 +1,294 @@
+{
+  "name": "generalization-diagnosis-v2",
+  "weights": {
+    "106250": "139dccbf42830845b24731efcc444642cbebe6fd27826ffceb7456908d8bf93c",
+    "159375": "909357e478b171347630f1d709268225661bcad904637edaa1379a8871d32180",
+    "239063": "bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217"
+  },
+  "pairs": {
+    "train": [
+      {
+        "image_id": 16584,
+        "donor_id": 40682
+      },
+      {
+        "image_id": 40682,
+        "donor_id": 38942
+      },
+      {
+        "image_id": 38942,
+        "donor_id": 4905
+      },
+      {
+        "image_id": 4905,
+        "donor_id": 17344
+      },
+      {
+        "image_id": 17344,
+        "donor_id": 32725
+      },
+      {
+        "image_id": 32725,
+        "donor_id": 28449
+      },
+      {
+        "image_id": 28449,
+        "donor_id": 4723
+      },
+      {
+        "image_id": 4723,
+        "donor_id": 70126
+      },
+      {
+        "image_id": 70126,
+        "donor_id": 26393
+      },
+      {
+        "image_id": 26393,
+        "donor_id": 33748
+      },
+      {
+        "image_id": 33748,
+        "donor_id": 57293
+      },
+      {
+        "image_id": 57293,
+        "donor_id": 20217
+      },
+      {
+        "image_id": 20217,
+        "donor_id": 15879
+      },
+      {
+        "image_id": 15879,
+        "donor_id": 69036
+      },
+      {
+        "image_id": 69036,
+        "donor_id": 3625
+      },
+      {
+        "image_id": 3625,
+        "donor_id": 23696
+      },
+      {
+        "image_id": 23696,
+        "donor_id": 44010
+      },
+      {
+        "image_id": 44010,
+        "donor_id": 21652
+      },
+      {
+        "image_id": 21652,
+        "donor_id": 6970
+      },
+      {
+        "image_id": 6970,
+        "donor_id": 35190
+      },
+      {
+        "image_id": 35190,
+        "donor_id": 50780
+      },
+      {
+        "image_id": 50780,
+        "donor_id": 45620
+      },
+      {
+        "image_id": 45620,
+        "donor_id": 27323
+      },
+      {
+        "image_id": 27323,
+        "donor_id": 51581
+      },
+      {
+        "image_id": 51581,
+        "donor_id": 7163
+      },
+      {
+        "image_id": 7163,
+        "donor_id": 50828
+      },
+      {
+        "image_id": 50828,
+        "donor_id": 53785
+      },
+      {
+        "image_id": 53785,
+        "donor_id": 1851
+      },
+      {
+        "image_id": 1851,
+        "donor_id": 29558
+      },
+      {
+        "image_id": 29558,
+        "donor_id": 59471
+      },
+      {
+        "image_id": 59471,
+        "donor_id": 59462
+      },
+      {
+        "image_id": 59462,
+        "donor_id": 16584
+      }
+    ],
+    "validation": [
+      {
+        "image_id": 43211,
+        "donor_id": 17865
+      },
+      {
+        "image_id": 17865,
+        "donor_id": 54054
+      },
+      {
+        "image_id": 54054,
+        "donor_id": 25374
+      },
+      {
+        "image_id": 25374,
+        "donor_id": 48911
+      },
+      {
+        "image_id": 48911,
+        "donor_id": 15191
+      },
+      {
+        "image_id": 15191,
+        "donor_id": 28157
+      },
+      {
+        "image_id": 28157,
+        "donor_id": 29610
+      },
+      {
+        "image_id": 29610,
+        "donor_id": 13223
+      },
+      {
+        "image_id": 13223,
+        "donor_id": 62587
+      },
+      {
+        "image_id": 62587,
+        "donor_id": 34998
+      },
+      {
+        "image_id": 34998,
+        "donor_id": 29815
+      },
+      {
+        "image_id": 29815,
+        "donor_id": 42302
+      },
+      {
+        "image_id": 42302,
+        "donor_id": 68553
+      },
+      {
+        "image_id": 68553,
+        "donor_id": 65690
+      },
+      {
+        "image_id": 65690,
+        "donor_id": 41120
+      },
+      {
+        "image_id": 41120,
+        "donor_id": 64050
+      },
+      {
+        "image_id": 64050,
+        "donor_id": 21558
+      },
+      {
+        "image_id": 21558,
+        "donor_id": 16800
+      },
+      {
+        "image_id": 16800,
+        "donor_id": 5683
+      },
+      {
+        "image_id": 5683,
+        "donor_id": 29400
+      },
+      {
+        "image_id": 29400,
+        "donor_id": 51865
+      },
+      {
+        "image_id": 51865,
+        "donor_id": 37899
+      },
+      {
+        "image_id": 37899,
+        "donor_id": 33256
+      },
+      {
+        "image_id": 33256,
+        "donor_id": 56963
+      },
+      {
+        "image_id": 56963,
+        "donor_id": 71264
+      },
+      {
+        "image_id": 71264,
+        "donor_id": 38887
+      },
+      {
+        "image_id": 38887,
+        "donor_id": 59101
+      },
+      {
+        "image_id": 59101,
+        "donor_id": 29511
+      },
+      {
+        "image_id": 29511,
+        "donor_id": 58157
+      },
+      {
+        "image_id": 58157,
+        "donor_id": 31251
+      },
+      {
+        "image_id": 31251,
+        "donor_id": 67261
+      },
+      {
+        "image_id": 67261,
+        "donor_id": 43211
+      }
+    ]
+  },
+  "old_protocol_sha256": "8fe04623a09bf9861db8d6d0ea3863c25c51c0d688934787519b4fd2c685c6b5",
+  "config_sha256": "7e12cca6093733c598d2877838d8c31a53961c9dd93857efb33bd99f45f93077",
+  "helper_sha256": "0ccfc1753d19490d722dd0e615a72df8b66dd989197264c44d61dee2a16b9aa0",
+  "script_sha256": "a41116ee413f2cb1c2f5beaf6d17ffc9e72e13eaa3fadbcf1ca9899f271a74fb",
+  "candidate_batch": 2,
+  "candidate_count": 2,
+  "steps": 50,
+  "guidance": 4,
+  "precision": "bf16",
+  "timesteps": [
+    50,
+    200,
+    500,
+    800,
+    950
+  ],
+  "denoising_draws": 4,
+  "priority_cosine_delta": 0.01,
+  "training": false,
+  "test_access": false,
+  "checkpoint_reselection": false,
+  "statistics": "candidate/draw mean within image; paired image bootstrap; fixed donor conditional",
+  "quality_strata": "training-only repeat-specificity tertiles; no outcome-informed boundaries",
+  "extreme_values": "abs(value - train vertex mean) > 5 * train vertex std"
+}

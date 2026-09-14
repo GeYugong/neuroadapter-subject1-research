@@ -1,0 +1,8 @@
+{
+  "checkpoint_sha256": "bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217",
+  "config_sha256": "1cbc75ef2e96beeb3049c406649dc583b600ae5cb39a2b2a4a65490e5c61e8ad",
+  "script_sha256": "a41116ee413f2cb1c2f5beaf6d17ffc9e72e13eaa3fadbcf1ca9899f271a74fb",
+  "torch": "2.11.0+cu128",
+  "device": "NVIDIA GeForce RTX 4090",
+  "grad_enabled": false
+}
