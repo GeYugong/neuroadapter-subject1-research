@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from scripts.diagnose_condition_path import NoiseReplay, choose_pairs
+from scripts.diagnose_condition_path import NoiseReplay, choose_pairs, prepare_noise
 
 
 def test_frozen_selection_and_whole_sample_derangement():
@@ -30,3 +30,10 @@ def test_noise_replay_rejects_shape_and_unconsumed_draws():
         replay.complete()
     with pytest.raises(AssertionError):
         replay.take((1, 4), "cpu", torch.float32)
+
+
+def test_noise_bank_preserves_current_mixed_precision_draws():
+    from types import SimpleNamespace
+    scheduler = SimpleNamespace(timesteps=[1, 0], set_timesteps=lambda *a, **k: None)
+    bank = prepare_noise(SimpleNamespace(noise_scheduler=scheduler), 1, "train", torch.device("cpu"))
+    assert [value.dtype for value in bank] == [torch.bfloat16, torch.float32, torch.bfloat16]

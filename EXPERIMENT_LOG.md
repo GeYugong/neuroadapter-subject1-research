@@ -2674,3 +2674,7 @@ PYTHONPATH=$PROJECT_ROOT/runtime/subject01-4090-1a1fcfa/src CUDA_VISIBLE_DEVICES
 运行目录：`runs/diagnostics/20260914-condition-path`。首先比较新加载原始精度的 FP32 与当前 BF16 VAE 往返，包含后验 mode 和固定噪声 sample；其次比较 t=50/200/500/800/950 的正确/错配条件原始去噪 MSE；随后固定每图两个候选、50 步 DDPM、guidance=4 生成。实际初始及逐步噪声预生成并保存，对照回放同一张量，首张图须与未修改的当前生成函数完全一致。只有前序检查未发现基础异常后，才运行 FP32 参考与 guidance=2/6。
 
 训练实现通过 `PYTHONPATH=$ROOT/runtime/subject01-4090-1a1fcfa/src` 引用冻结快照，不编辑 runtime。命令模板：`CUBLAS_WORKSPACE_CONFIG=:4096:8 OMP_NUM_THREADS=4 PYTHONPATH=$ROOT/runtime/subject01-4090-1a1fcfa/src $ROOT/envs/neuroadapter/bin/python $ROOT/repo/scripts/diagnose_condition_path.py --project-root $ROOT --phase PHASE --split SPLIT --device cuda:GPU`。PHASE 为 freeze、vae、bf16，后续阶段待检查；train 使用 GPU0，validation 使用 GPU1。逐次命令、用时、输出及失败在运行产物与后续日志中记录。图片和噪声不进入 public Git。
+
+VAE 阶段使用代码提交 `1fa3d3a` 完成，train/validation 分别耗时 29.1/23.4 秒；64 张图、两种精度、mode/sample 共 256 次往返均有限值。8 页完整拼图逐行视觉检查，未发现明显颜色、缩放或结构错误。FP32/BF16 mode RGB MSE：训练 0.002557/0.002541，验证 0.002338/0.002324；只能排除基础通路异常。
+
+BF16 首次尝试在两组首图均触发原函数与回放函数的逐元素一致性断言，退出码 1，未接受生成结果。抓取实际 52 次随机调用发现：第 0 次是 BF16，第 1 次初始扩散噪声是 FP32，其余 DDPM 噪声为 BF16；初版预生成误将第 1 次设成 BF16，最大张量差 0.0078123。使用抓取的实际噪声回放后与原函数完全相等（max=0）。修正仅限诊断噪声生成的 dtype，不改变模型、原推理或数据选择；增加回归测试。原冻结 protocol 保留，修正用绑定原 protocol SHA 的 `code_amendment.json` 记录；失败目录保留为 `bf16-failed-noise-v1`。首次 bundle 上传因服务器尚无 archives 目录失败，创建项目内目录后重传成功，无训练资产变动。

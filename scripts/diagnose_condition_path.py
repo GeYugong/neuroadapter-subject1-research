@@ -88,9 +88,11 @@ def prepare_noise(backbone, image_id, split, device):
     from diffusers.utils.torch_utils import randn_tensor
     generators = [torch.Generator(device=device).manual_seed(
         inference.sample_seed(NAMESPACE, split, image_id, j)) for j in range(2)]
+    # The current zero-image latent arithmetic promotes the second draw to FP32.
+    # Its VAE posterior epsilon and DDPM variance draws are still BF16.
     values = [inference._randn_per_generator(
-        (4, 64, 64), generators, device=device, dtype=torch.bfloat16).cpu()
-        for _ in range(2)]
+        (4, 64, 64), generators, device=device, dtype=dtype).cpu()
+        for dtype in (torch.bfloat16, torch.float32)]
     backbone.noise_scheduler.set_timesteps(50, device=device)
     for timestep in backbone.noise_scheduler.timesteps:
         if int(timestep) > 0:
@@ -165,7 +167,11 @@ def worker(config, out, snapshot, split, phase, device):
     started = time.time()
     protocol = json.loads((out / "protocol.json").read_text())
     assert sha256_file(snapshot / "model.pt") == protocol["checkpoint_sha256"]
-    assert sha256_file(Path(__file__)) == protocol["diagnostic_script_sha256"]
+    script_hash = sha256_file(Path(__file__))
+    if script_hash != protocol["diagnostic_script_sha256"]:
+        amendment = json.loads((out / "code_amendment.json").read_text())
+        assert amendment["protocol_sha256"] == sha256_file(out / "protocol.json")
+        assert amendment["diagnostic_script_sha256"] == script_hash
     target = out / split / phase
     target.mkdir(parents=True, exist_ok=False)
     dataset = Subject1TrainingDataset(config.paths["training_cache"], config.paths["stimuli"],
