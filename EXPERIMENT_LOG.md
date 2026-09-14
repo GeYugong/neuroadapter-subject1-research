@@ -2736,3 +2736,15 @@ A 六个分组阶段均退出码 0，新增 512 张图、复用 256 张旧图、
 测试先为新增/相关 9 passed，最终完整 CPU 回归 79 passed、16 条既有警告，2.91 秒。归档入口 `CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=2 PYTHONPATH=$ROOT/runtime/subject01-4090-1a1fcfa/src $ROOT/envs/neuroadapter/bin/python $ROOT/repo/scripts/archive_generalization_v2.py --root $ROOT`，检查三份模型 SHA 不变、runtime clean、输出数量和阶段完成信息。A/B 源码提交 `419a3f76240cb1b0b268056eea713b4f4fb8b121`；评分/归档后续修改另外由源 SHA 和最终报告提交追溯，不冒充最初推理提交。收尾 GPU0/GPU1 均 0%，47/15 MiB 显示占用，无遗留计算进程。生成与信号审查全部会话已退出。
 
 本地含图报告同步完成，16/16 图片引用存在；轨迹、逐图分数和质量联表 CSV 同目录可用。public 归档 70 份来源文件，本地工作文件与 INDEX 全部匹配；再直接读取 Git 暂存 blob，70/70 源 SHA 一致。本轮 CSV 固定 LF，不再触发上一轮 CRLF 归一化问题。仅提交代码/报告/小型统计与哈希证据，不提交生成图、噪声、beta 数组或凭据。
+
+## 2026-09-15：paired-lr-probe-v1 授权与启动前预检
+
+收到新的配对学习率实验请求，允许从原159375开始两条各5000更新的小微调；这覆盖此前“不新增训练”的阶段限制，但不授权延长、独立seed复验、C实验或自动更换正式权重。B0与R只评价，H使用1e-4、L使用1e-5，两组AdamW全部重置，依次使用双4090，global batch16、每卡4、累积2，pair seed20260915。原8500训练/500验证划分保持，标准test不使用。仅保存0/1000/2500/5000；中途节点只作诊断，不选优。
+
+独立配置 `configs/experiments/paired_lr_probe_v1.yaml`，入口 `scripts/train_lr_probe.py`，顺序执行器 `scripts/run_lr_probe.py`，评价 `scripts/evaluate_lr_probe.py`。冻结runtime仍为 `subject01-4090-1a1fcfa`，不修改旧LR保护或伪造formal approval。输出位于项目根 `runs/experiments/paired-lr-probe-v1`；原权重、数据与历史日志保留。
+
+H/L各一次隔离预检更新完成，没有把预检模型用于正式微调。两rank的样本、实际随机输入、更新前loss、梯度SHA以及配置差异检查均通过；三个可训练组件都确实更新。rank0两micro loss为0.0897054523/0.0711589381，rank1为0.1114085093/0.0216751788；更新前梯度SHA为 `adf40f7dd178769f83c307f5d9c9f447a00ca609cdb275338245f70552dd2a1f`。完整预检JSON和终端日志保留在preflight目录。第一次直接torchrun因SSH PATH缺python退出，未训练；改用环境Python的 `-m torch.distributed.run` 后通过，不改共享PATH。
+
+完整500验证图参考复用核验通过：B0/R共2000个原两候选PNG的SHA全部符合原manifest，各重放2图×2候选，共8/8逐像素相同。完整500份实际采样噪声已保存并绑定SHA。后续新模型使用相同噪声，不混用八候选平均。主指标图内两候选CLIP cosine平均；主比较L−B0、L−H使用同一10000次图级bootstrap、各97.5%区间，实际改善阈值0.01；辅指标与视觉退步分别报告。完整验证仍属已用于选优的探索性内部验证。
+
+启动前GPU均空闲，数据盘可用约942GiB。执行器在每个阶段向本主日志追加中文记录及命令索引；异常停止不自动延长。完整终点评分之后还须完成小样本轨迹汇总、全部图册视觉检查和报告，不能把训练结束写成实验全部完成。

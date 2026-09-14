@@ -1,0 +1,45 @@
+experiment_type: paired_lr_probe
+name: paired-lr-probe-v1
+source_update: 159375
+source_sha256: 909357e478b171347630f1d709268225661bcad904637edaa1379a8871d32180
+reference_update: 239063
+reference_sha256: bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217
+optimizer_reset: true
+pair_seed: 20260915
+max_local_updates: 5000
+save_local_updates: [0, 1000, 2500, 5000]
+arms:
+  H: 0.0001
+  L: 0.00001
+execution_order: [H, L]
+world_size: 2
+micro_batch_size: 4
+gradient_accumulation_steps: 2
+global_batch_size: 16
+evaluation:
+  diagnostic_images_per_split: 32
+  internal_validation_images: 500
+  candidates: 2
+  candidate_batch_size: 2
+  denoising_steps: 50
+  guidance: 4.0
+  precision: bf16
+  intermediate_updates: [0, 1000, 2500, 5000]
+  endpoint_models: [B0, H5000, L5000, R]
+  primary_metric: clip_cosine_image_mean
+  primary_comparisons: [L5000_minus_B0, L5000_minus_H5000]
+  secondary_comparison: L5000_minus_R
+  bootstrap_draws: 10000
+  bootstrap_seed: 20260915
+  individual_interval_coverage: 0.975
+  practical_clip_improvement: 0.01
+  auxiliary_metrics: [PixCorr, SSIM, AlexNet2, AlexNet5, Inception, CLIP_identification, EfficientNet, SwAV]
+  no_brain_encoder_selection: true
+  standard_test_access: false
+  checkpoint_reselection: false
+  automatic_extension: false
+decision:
+  useful: L_minus_B0_mean_at_least_0.01_and_both_primary_intervals_positive
+  useful_next: request_second_paired_training_seed_not_execute
+  otherwise_next: semantic_probe_C_not_execute_in_parallel
+  always: inspect_other_metrics_and_layout_tradeoffs_no_automatic_weight_replacement
