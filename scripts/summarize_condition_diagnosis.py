@@ -53,7 +53,8 @@ def gallery(out, split, name, pairs, columns):
                     value = source.convert("RGB").resize((160, 160))
                 canvas.paste(value, (c * 160, r * 190 + 30))
                 draw.text((c * 160 + 2, r * 190 + 2), label, fill="black")
-                draw.text((c * 160 + 2, r * 190 + 15), f"id={pair['image_id']}", fill="black")
+                shown_id = pair["donor_id"] if label == "Donor GT" else pair["image_id"]
+                draw.text((c * 160 + 2, r * 190 + 15), f"id={shown_id}", fill="black")
         relative = Path("galleries") / f"{split}-{name}-{start//8+1}.jpg"
         (out / relative).parent.mkdir(exist_ok=True)
         canvas.save(out / relative, quality=92)

@@ -1,0 +1,12 @@
+{
+  "decision": "proceed_to_fp32_reference",
+  "basis": [
+    "VAE: 64 images visually checked; no gross color/geometry/numerical anomaly",
+    "Current/noise-replayed BF16 generation exactly equal for first train and validation samples",
+    "All 320 denoising pairs finite; validation advantage positive at t=500/800/950",
+    "All 256 BF16 outputs retained and visually inspected; correct conditioning has useful target information but substantial validation failures remain"
+  ],
+  "no_training": true,
+  "no_model_change": true,
+  "next": "same 64 images, 2 candidates, identical stored noise tensors, DDPM 50 steps, guidance 4, fresh FP32 weights, autocast and TF32 disabled"
+}

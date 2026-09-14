@@ -1,0 +1,69 @@
+{
+  "status": "complete_and_verified",
+  "runtime_clean": true,
+  "weight_unchanged": true,
+  "checkpoint_sha256": "bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217",
+  "training_performed": false,
+  "accepted_as_formal_model": false,
+  "raw_generation_pngs": 768,
+  "vae_outputs": 256,
+  "gt_images": 64,
+  "noise_banks": 64,
+  "paired_denoising_comparisons": 320,
+  "all_generated_image_hashes_verified": true,
+  "all_noise_hash_bindings_verified": true,
+  "phases": [
+    {
+      "split": "train",
+      "phase": "vae",
+      "status": "complete",
+      "seconds": 29.063846349716187
+    },
+    {
+      "split": "train",
+      "phase": "bf16",
+      "status": "complete",
+      "seconds": 190.07156419754028
+    },
+    {
+      "split": "train",
+      "phase": "fp32",
+      "status": "complete",
+      "seconds": 431.3758773803711
+    },
+    {
+      "split": "train",
+      "phase": "guidance",
+      "status": "complete",
+      "seconds": 178.32478070259094
+    },
+    {
+      "split": "validation",
+      "phase": "vae",
+      "status": "complete",
+      "seconds": 23.411456823349
+    },
+    {
+      "split": "validation",
+      "phase": "bf16",
+      "status": "complete",
+      "seconds": 192.9955198764801
+    },
+    {
+      "split": "validation",
+      "phase": "fp32",
+      "status": "complete",
+      "seconds": 434.44391322135925
+    },
+    {
+      "split": "validation",
+      "phase": "guidance",
+      "status": "complete",
+      "seconds": 181.4575653076172
+    }
+  ],
+  "image_gallery_count": 32,
+  "public_export": "JSON/JSONL/CSV only; no image, fMRI, noise tensor or credential",
+  "summarizer_sha256": "08c36c83045c607988ab3b21783581bd1a9992abf266d9392600c2c19ea1e27b",
+  "audit_script_sha256": "68a5c9e049caed86085ebad3ad7358e807b16a103b2c692b5c2b679eb2070197"
+}

@@ -1,0 +1,13 @@
+{
+  "clip": "paired image embedding cosine, not identification accuracy",
+  "clip_asset": {
+    "path": "models/evaluation/clip/ViT-L-14.pt",
+    "size": 932768134,
+    "sha256": "b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836"
+  },
+  "ground_truth": "actual preprocessed 512x512 RGB, PNG quantized",
+  "pixel_metrics": "frozen helper at resize 425; not a replacement for official evaluation",
+  "aggregation": "average the two fixed candidates per image, then average 32 images",
+  "ci": "10000 bootstrap draws over 32 image-level paired means, seed 20260914; exploratory and unadjusted",
+  "guidance": "BF16 g2 and g6 vs BF16 g4; no per-image choice and no FP32-guidance interaction tested"
+}

@@ -1,0 +1,303 @@
+{
+  "namespace": "condition-diagnosis-20260914-v1",
+  "status": "frozen_exploratory_diagnostic",
+  "checkpoint_role": "diagnostic_object_not_performance_accepted",
+  "checkpoint": "/data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/selected_snapshot",
+  "checkpoint_sha256": "bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217",
+  "runtime_commit": "1a1fcfa66e06de07a04dfbb48cc6f9ad108ed567",
+  "config_sha256": "7e12cca6093733c598d2877838d8c31a53961c9dd93857efb33bd99f45f93077",
+  "diagnostic_script_sha256": "4aec495169bfc6a9c4a9cfee5e12e4aee71454776755a3d2affca89e089e745a",
+  "diagnostic_commit": "1fa3d3a00ad75b192179ca0a64fa83a9a8fc7ace",
+  "split_hashes": {
+    "train": "a13ad80a744e19c22e8309bc9ffe3cd49bd5ad1a4058921adec37fdd686614ea",
+    "validation": "73137068416d3400708e1a3d5bda09600be4ea7b2164f11322a26f4de1b37c55"
+  },
+  "selection": "lowest SHA256(namespace:split:image_id); cyclic donor derangement",
+  "pairs": {
+    "train": [
+      {
+        "image_id": 16584,
+        "donor_id": 40682
+      },
+      {
+        "image_id": 40682,
+        "donor_id": 38942
+      },
+      {
+        "image_id": 38942,
+        "donor_id": 4905
+      },
+      {
+        "image_id": 4905,
+        "donor_id": 17344
+      },
+      {
+        "image_id": 17344,
+        "donor_id": 32725
+      },
+      {
+        "image_id": 32725,
+        "donor_id": 28449
+      },
+      {
+        "image_id": 28449,
+        "donor_id": 4723
+      },
+      {
+        "image_id": 4723,
+        "donor_id": 70126
+      },
+      {
+        "image_id": 70126,
+        "donor_id": 26393
+      },
+      {
+        "image_id": 26393,
+        "donor_id": 33748
+      },
+      {
+        "image_id": 33748,
+        "donor_id": 57293
+      },
+      {
+        "image_id": 57293,
+        "donor_id": 20217
+      },
+      {
+        "image_id": 20217,
+        "donor_id": 15879
+      },
+      {
+        "image_id": 15879,
+        "donor_id": 69036
+      },
+      {
+        "image_id": 69036,
+        "donor_id": 3625
+      },
+      {
+        "image_id": 3625,
+        "donor_id": 23696
+      },
+      {
+        "image_id": 23696,
+        "donor_id": 44010
+      },
+      {
+        "image_id": 44010,
+        "donor_id": 21652
+      },
+      {
+        "image_id": 21652,
+        "donor_id": 6970
+      },
+      {
+        "image_id": 6970,
+        "donor_id": 35190
+      },
+      {
+        "image_id": 35190,
+        "donor_id": 50780
+      },
+      {
+        "image_id": 50780,
+        "donor_id": 45620
+      },
+      {
+        "image_id": 45620,
+        "donor_id": 27323
+      },
+      {
+        "image_id": 27323,
+        "donor_id": 51581
+      },
+      {
+        "image_id": 51581,
+        "donor_id": 7163
+      },
+      {
+        "image_id": 7163,
+        "donor_id": 50828
+      },
+      {
+        "image_id": 50828,
+        "donor_id": 53785
+      },
+      {
+        "image_id": 53785,
+        "donor_id": 1851
+      },
+      {
+        "image_id": 1851,
+        "donor_id": 29558
+      },
+      {
+        "image_id": 29558,
+        "donor_id": 59471
+      },
+      {
+        "image_id": 59471,
+        "donor_id": 59462
+      },
+      {
+        "image_id": 59462,
+        "donor_id": 16584
+      }
+    ],
+    "validation": [
+      {
+        "image_id": 43211,
+        "donor_id": 17865
+      },
+      {
+        "image_id": 17865,
+        "donor_id": 54054
+      },
+      {
+        "image_id": 54054,
+        "donor_id": 25374
+      },
+      {
+        "image_id": 25374,
+        "donor_id": 48911
+      },
+      {
+        "image_id": 48911,
+        "donor_id": 15191
+      },
+      {
+        "image_id": 15191,
+        "donor_id": 28157
+      },
+      {
+        "image_id": 28157,
+        "donor_id": 29610
+      },
+      {
+        "image_id": 29610,
+        "donor_id": 13223
+      },
+      {
+        "image_id": 13223,
+        "donor_id": 62587
+      },
+      {
+        "image_id": 62587,
+        "donor_id": 34998
+      },
+      {
+        "image_id": 34998,
+        "donor_id": 29815
+      },
+      {
+        "image_id": 29815,
+        "donor_id": 42302
+      },
+      {
+        "image_id": 42302,
+        "donor_id": 68553
+      },
+      {
+        "image_id": 68553,
+        "donor_id": 65690
+      },
+      {
+        "image_id": 65690,
+        "donor_id": 41120
+      },
+      {
+        "image_id": 41120,
+        "donor_id": 64050
+      },
+      {
+        "image_id": 64050,
+        "donor_id": 21558
+      },
+      {
+        "image_id": 21558,
+        "donor_id": 16800
+      },
+      {
+        "image_id": 16800,
+        "donor_id": 5683
+      },
+      {
+        "image_id": 5683,
+        "donor_id": 29400
+      },
+      {
+        "image_id": 29400,
+        "donor_id": 51865
+      },
+      {
+        "image_id": 51865,
+        "donor_id": 37899
+      },
+      {
+        "image_id": 37899,
+        "donor_id": 33256
+      },
+      {
+        "image_id": 33256,
+        "donor_id": 56963
+      },
+      {
+        "image_id": 56963,
+        "donor_id": 71264
+      },
+      {
+        "image_id": 71264,
+        "donor_id": 38887
+      },
+      {
+        "image_id": 38887,
+        "donor_id": 59101
+      },
+      {
+        "image_id": 59101,
+        "donor_id": 29511
+      },
+      {
+        "image_id": 29511,
+        "donor_id": 58157
+      },
+      {
+        "image_id": 58157,
+        "donor_id": 31251
+      },
+      {
+        "image_id": 31251,
+        "donor_id": 67261
+      },
+      {
+        "image_id": 67261,
+        "donor_id": 43211
+      }
+    ]
+  },
+  "candidate_count": 2,
+  "candidate_batch_size": 2,
+  "steps": 50,
+  "timesteps": [
+    50,
+    200,
+    500,
+    800,
+    950
+  ],
+  "guidance": [
+    4.0,
+    2.0,
+    6.0
+  ],
+  "noise": "pre-generated current BF16 tensors; exact values replayed in FP32",
+  "fp32_reference": "fresh source weights; autocast off; TF32 off",
+  "statistics": "image-level paired means over two candidates; exploratory bootstrap CI; no selection",
+  "limitations": [
+    "previously used internal validation",
+    "one fixed donor per target",
+    "32 images per split",
+    "no independent test",
+    "no checkpoint selection"
+  ]
+}

@@ -2678,3 +2678,29 @@ PYTHONPATH=$PROJECT_ROOT/runtime/subject01-4090-1a1fcfa/src CUDA_VISIBLE_DEVICES
 VAE 阶段使用代码提交 `1fa3d3a` 完成，train/validation 分别耗时 29.1/23.4 秒；64 张图、两种精度、mode/sample 共 256 次往返均有限值。8 页完整拼图逐行视觉检查，未发现明显颜色、缩放或结构错误。FP32/BF16 mode RGB MSE：训练 0.002557/0.002541，验证 0.002338/0.002324；只能排除基础通路异常。
 
 BF16 首次尝试在两组首图均触发原函数与回放函数的逐元素一致性断言，退出码 1，未接受生成结果。抓取实际 52 次随机调用发现：第 0 次是 BF16，第 1 次初始扩散噪声是 FP32，其余 DDPM 噪声为 BF16；初版预生成误将第 1 次设成 BF16，最大张量差 0.0078123。使用抓取的实际噪声回放后与原函数完全相等（max=0）。修正仅限诊断噪声生成的 dtype，不改变模型、原推理或数据选择；增加回归测试。原冻结 protocol 保留，修正用绑定原 protocol SHA 的 `code_amendment.json` 记录；失败目录保留为 `bf16-failed-noise-v1`。首次 bundle 上传因服务器尚无 archives 目录失败，创建项目内目录后重传成功，无训练资产变动。
+
+修正代码提交 `1bcef92` 后，BF16 两组正式运行完成（32 图/组、320 对 timestep loss、256 张生成 PNG）；首图逐元素一致性在 train/validation 均通过，52 次噪声调用全部消费且检查形状与跨精度值一致。train 控制台末行耗时 190.1 秒；具体完成耗时以各组 `complete.json` 为准。命令采用前述模板 `--phase bf16 --split train --device cuda:0` 与 `--split validation --device cuda:1`，stdout/stderr 保留在 `train-bf16-console.log` 和 `validation-bf16-console.log`。
+
+`scripts/summarize_condition_diagnosis.py --project-root $ROOT` 输出完整逐图 CSV、bootstrap 描述性区间与所有拼图。基线摘要备份为 `summary-bf16.json`。训练/验证正确脑输入的目标 CLIP 优势分别为 0.228116/0.086353，对应 31/32、23/32 张图为正；验证低噪声 t=50/200 优势不稳定，高噪声阶段仍有目标相关优势。全部 8 页生成图逐行检查，有效类别信息与明显失败共存，不能说模型完全没有利用 fMRI。仅能排除已检查的通路问题，不能据此完成正式验收。
+
+通过 `stage4_gate.json` 记录继续精度对照的依据后，在相同 GPU 分工上运行 `--phase fp32`。精度参考从原始权重新加载，禁用 autocast/TF32，候选批次仍为 2、guidance=4、DDPM 50 步，回放同一实际噪声文件。没有训练或修改冻结 runtime。README/AGENTS 更新当前诊断边界。CPU 回归命令 `PYTHONPATH=.:src PYTHONDONTWRITEBYTECODE=1 CUDA_VISIBLE_DEVICES= ../envs/neuroadapter/bin/python -m pytest tests -q`：74 passed，16 条既有 warning，4.10 秒。拼图 donor 列标题中的 ID 后续修正为真实 donor ID，不改变生成图或评分。
+
+FP32 两组正常完成，控制台末行耗时 train=431.4 秒、validation=434.4 秒，共 256 张 PNG，全部 8 页拼图已视觉检查。再次用相同汇总命令评价，保存 `summary-fp32.json` 与 `summary-fp32-console.log`。正确脑输入下 FP32−BF16 的验证 CLIP/PixCorr/SSIM 变化为 +0.000670/+0.001762/+0.001215，三个探索性区间均跨零，主要错误仍存在，没有支持仅升精度即可修复的证据。
+
+`guidance_gate.json` 记录继续预设 guidance 对照的依据。使用 `--phase guidance --split train --device cuda:0` 和 `--split validation --device cuda:1`；控制台分别保存到 `train-guidance-console.log`、`validation-guidance-console.log`。仍是 BF16 路径，仅比较 guidance=2/6 与原 g4；每图两个候选、同一噪声、只用正确脑输入，没有跨 precision 联合调参或逐图选最优。
+
+### 2026-09-14：四步诊断完成与关闭
+
+Guidance 两组正常结束：train=178.325 秒、validation=181.458 秒。验证组 g2 相对 g4：CLIP -0.002843、PixCorr -0.023083、SSIM +0.030338；g6 相对 g4：CLIP -0.007924、PixCorr -0.013763、SSIM -0.034731。全部 8 页 guidance 图检查完成；g2 更平滑，g6 通常对比度/饱和度更高，但甜甜圈生成海浪、滑板生成飞机等主要错误没有修复。没有按 GT 逐图选设置，保留默认 g4，不继续搜索或训练。
+
+补正前述“FP32 关闭 autocast”的记录：PyTorch `2.11.0+cu128` 下，原生成函数 `autocast(dtype=float32)` 的上下文开关实际保持开启，目标类型为 FP32，不是 BF16/FP16 运算。新增 `scripts/check_fp32_reference.py` 检查两组冻结首图（16584、43211），每图两个候选：FP32 目标上下文与显式关闭 autocast 的输出张量完全一致，max=0，并与既有 PNG 一致。六类模块输出 dtype 均为 FP32，TF32 关闭。只核验这两张图，不将其描述成全量 64 图重复测试。原冻结 protocol 不覆盖改写，差异与证据保留在 `fp32_reference_audit.json`。命令：`CUDA_VISIBLE_DEVICES=1 CUBLAS_WORKSPACE_CONFIG=:4096:8 OMP_NUM_THREADS=4 PYTHONPATH=$ROOT/runtime/subject01-4090-1a1fcfa/src $ROOT/envs/neuroadapter/bin/python $ROOT/repo/scripts/check_fp32_reference.py --project-root $ROOT`，控制台 `fp32-reference-audit-console.log`，退出码 0。
+
+最终汇总命令：`CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=4 PYTHONPATH=$ROOT/runtime/subject01-4090-1a1fcfa/src $ROOT/envs/neuroadapter/bin/python $ROOT/repo/scripts/summarize_condition_diagnosis.py --project-root $ROOT`，控制台 `summary-final-console.log`，退出码 0。保存 768 行逐候选分数、256 行正确/错配配对分数、320 对去噪误差和完整 bootstrap 摘要。
+
+CPU 收尾命令：`CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=4 PYTHONPATH=$ROOT/runtime/subject01-4090-1a1fcfa/src $ROOT/envs/neuroadapter/bin/python $ROOT/repo/scripts/archive_condition_diagnosis.py --project-root $ROOT`。退出码 0；验证 runtime clean、原模型 SHA 不变、8 个正式分组阶段 complete、全部 768 张生成 PNG 哈希、64 个噪声银行及其跨条件/精度/guidance 绑定、逐图评分 ID 与哈希绑定。正式产物另含 256 张 VAE 图和 64 张预处理 GT；32 页拼图全部逐行视觉检查。两张 GPU 在收尾时为 0% 利用率、47/15 MiB 显示占用，无计算进程，未终止任何其他用户任务。
+
+中文结果报告 `docs/CONDITION_DIAGNOSIS_20260914.md`；public 小型证据 `manifests/diagnosis-20260914`。含图报告及逐图 CSV 同步至本地 `artifacts/diagnosis-20260914/REPORT.md` 和同目录；32 个图片引用检查全部存在。原始 PNG、噪声和脑数据没有上传 Git/HF，服务器完整原图和输出仍保留。
+
+阶段结论：图像通路未发现明显异常，模型确实利用目标相关 fMRI；训练语义优势强于验证，验证低噪声去噪优势弱，值得进一步定位泛化与数据/目标差异。本轮 FP32 和 guidance 候选没有提供明显整体修复，不据此把权重验收为正式研究模型，也不推断“所有无需重训的修复都不可能”。本轮到此关闭，保持同一权重、默认配置，不启动后续训练、额外参数搜索或独立测试。
+
+提交前发现 Git 会自动将导出的 CSV 从 CRLF 转为 LF，导致归档字节与 INDEX 中原始 SHA 不一致。仅为本轮证据 CSV 增加 `.gitattributes` 的 `-text` 规则，保留原始字节，不改变评分内容；提交索引中的全部来源文件将按 INDEX 再次核验。凭据模式检查未命中，图片及噪声文件未加入暂存区。

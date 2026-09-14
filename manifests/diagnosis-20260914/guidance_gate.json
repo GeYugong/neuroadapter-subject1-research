@@ -1,0 +1,7 @@
+{
+  "decision": "proceed_to_prespecified_guidance_2_and_6",
+  "basis": "FP32 reference complete and visually reviewed; no gross numerical issue, no clear metric improvement; do not change baseline path",
+  "fixed": "same BF16 path, IDs, two candidates, stored noise and DDPM settings; only guidance changes",
+  "no_per_image_selection": true,
+  "no_training": true
+}

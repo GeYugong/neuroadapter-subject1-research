@@ -1,0 +1,110 @@
+{
+  "torch": "2.11.0+cu128",
+  "fp32_context_enabled": true,
+  "fp32_autocast_target": "torch.float32",
+  "tf32": false,
+  "correction": "In PyTorch 2.11 the frozen generator's FP32-target autocast context remains enabled; it is not low-precision autocast. Two fixed first-image cases were tested against explicitly disabled autocast.",
+  "scope": "four candidate tensors, six module output dtype families; not a rerun of all 64 images",
+  "cases": [
+    {
+      "split": "train",
+      "image_id": 16584,
+      "candidate_count": 2,
+      "explicitly_disabled_equal": true,
+      "max_difference": 0.0,
+      "saved_png_equal": true,
+      "activation_dtypes": {
+        "fp32_target_autocast": {
+          "unet": [
+            "torch.float32"
+          ],
+          "text_encoder": [
+            "torch.float32"
+          ],
+          "vae_encoder": [
+            "torch.float32"
+          ],
+          "vae_decoder": [
+            "torch.float32"
+          ],
+          "guidance_generator": [
+            "torch.float32"
+          ],
+          "image_projection": [
+            "torch.float32"
+          ]
+        },
+        "explicitly_disabled": {
+          "unet": [
+            "torch.float32"
+          ],
+          "text_encoder": [
+            "torch.float32"
+          ],
+          "vae_encoder": [
+            "torch.float32"
+          ],
+          "vae_decoder": [
+            "torch.float32"
+          ],
+          "guidance_generator": [
+            "torch.float32"
+          ],
+          "image_projection": [
+            "torch.float32"
+          ]
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "image_id": 43211,
+      "candidate_count": 2,
+      "explicitly_disabled_equal": true,
+      "max_difference": 0.0,
+      "saved_png_equal": true,
+      "activation_dtypes": {
+        "fp32_target_autocast": {
+          "unet": [
+            "torch.float32"
+          ],
+          "text_encoder": [
+            "torch.float32"
+          ],
+          "vae_encoder": [
+            "torch.float32"
+          ],
+          "vae_decoder": [
+            "torch.float32"
+          ],
+          "guidance_generator": [
+            "torch.float32"
+          ],
+          "image_projection": [
+            "torch.float32"
+          ]
+        },
+        "explicitly_disabled": {
+          "unet": [
+            "torch.float32"
+          ],
+          "text_encoder": [
+            "torch.float32"
+          ],
+          "vae_encoder": [
+            "torch.float32"
+          ],
+          "vae_decoder": [
+            "torch.float32"
+          ],
+          "guidance_generator": [
+            "torch.float32"
+          ],
+          "image_projection": [
+            "torch.float32"
+          ]
+        }
+      }
+    }
+  ]
+}

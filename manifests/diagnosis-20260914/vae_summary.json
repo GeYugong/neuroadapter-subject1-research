@@ -1,0 +1,95 @@
+{
+  "exploratory": true,
+  "vae": {
+    "train": {
+      "fp32_mode": {
+        "n_images": 32,
+        "mean": 0.0025573300899850437,
+        "ci95_exploratory": [
+          0.0019117950114605265,
+          0.0033124908950640016
+        ],
+        "positive_images": 32
+      },
+      "fp32_sample": {
+        "n_images": 32,
+        "mean": 0.0025573294506102684,
+        "ci95_exploratory": [
+          0.0019117964282941101,
+          0.0033124902910230958
+        ],
+        "positive_images": 32
+      },
+      "bf16_mode": {
+        "n_images": 32,
+        "mean": 0.002540885121561587,
+        "ci95_exploratory": [
+          0.0018979956584416868,
+          0.0032937118406834998
+        ],
+        "positive_images": 32
+      },
+      "bf16_sample": {
+        "n_images": 32,
+        "mean": 0.002540705446335778,
+        "ci95_exploratory": [
+          0.0018978104113102745,
+          0.003293704891143534
+        ],
+        "positive_images": 32
+      }
+    },
+    "validation": {
+      "fp32_mode": {
+        "n_images": 32,
+        "mean": 0.0023376879526040284,
+        "ci95_exploratory": [
+          0.001542095776721908,
+          0.003391262610875853
+        ],
+        "positive_images": 32
+      },
+      "fp32_sample": {
+        "n_images": 32,
+        "mean": 0.002337688829356921,
+        "ci95_exploratory": [
+          0.001542102989014893,
+          0.0033912480427034067
+        ],
+        "positive_images": 32
+      },
+      "bf16_mode": {
+        "n_images": 32,
+        "mean": 0.002324040999155841,
+        "ci95_exploratory": [
+          0.0015300765649953973,
+          0.003378729082874085
+        ],
+        "positive_images": 32
+      },
+      "bf16_sample": {
+        "n_images": 32,
+        "mean": 0.0023239358743012417,
+        "ci95_exploratory": [
+          0.0015298365660328273,
+          0.0033787842886795227
+        ],
+        "positive_images": 32
+      }
+    }
+  },
+  "denoising": {},
+  "generation": {},
+  "precision": {},
+  "guidance": {},
+  "galleries": [
+    "galleries/train-vae-1.jpg",
+    "galleries/train-vae-2.jpg",
+    "galleries/train-vae-3.jpg",
+    "galleries/train-vae-4.jpg",
+    "galleries/validation-vae-1.jpg",
+    "galleries/validation-vae-2.jpg",
+    "galleries/validation-vae-3.jpg",
+    "galleries/validation-vae-4.jpg"
+  ]
+}

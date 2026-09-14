@@ -1,0 +1,2 @@
+# Keep archived evidence bytes identical to their SHA-256 source manifests.
+manifests/diagnosis-20260914/**/*.csv -text whitespace=cr-at-eol
