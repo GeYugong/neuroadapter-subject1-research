@@ -2706,3 +2706,15 @@ CPU 收尾命令：`CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=4 PYTHONPATH=$ROOT/run
 提交前发现 Git 会自动将导出的 CSV 从 CRLF 转为 LF，导致归档字节与 INDEX 中原始 SHA 不一致。仅为本轮证据 CSV 增加 `.gitattributes` 的 `-text` 规则，保留原始字节，不改变评分内容；提交索引中的全部来源文件将按 INDEX 再次核验。凭据模式检查未命中，图片及噪声文件未加入暂存区。
 
 代码、报告与证据首先同步并推送为 `73b9751`，服务器最终 CPU 回归 74 passed、16 条既有 warning，2.90 秒；无新增 GPU 任务。随后直接校验 Git blob 发现：四个 CSV 的首次暂存早于 `.gitattributes`，普通再次 add 没有刷新缓存，导致 Git blob 仍是 LF，而运行原件与本地工作文件是 CRLF。使用 `git add --renormalize` 仅重暂存这四个 CSV，保留实际源字节；`whitespace=cr-at-eol` 将证据 CSV 的 CRLF 识别为合法行结束。数值、指标、图像和噪声完全不变，修正只针对公开归档校验。需以修正提交的 blob 与工作文件再次通过全部 INDEX 校验为关闭标准。
+
+### 2026-09-15：generalization-diagnosis-v2 启动，输入一致性通过
+
+按新增用户执行文档开展 A（三个 checkpoint 轨迹）和 B（脑输入与重复一致性）诊断；C 仅在 A/B 解释不足时触发。所有 NeuroAdapter 参数、原数据与缓存只读，标准 test 图像/脑响应不读取，原冻结 runtime 不修改，不选新正式权重，不启动任何微调或训练。起始代码 HEAD 为 `836b6ce3badc5b359384b62e6e08d52925dd80b7`，本轮新脚本 SHA 随 config/environment 保存。
+
+服务器 `$ROOT=/data1/matengyu/geyugong/neuroadapter-subject1-research`，新输出 `$ROOT/runs/diagnostics/generalization-diagnosis-v2`。双卡 4090 启动前均 0% 利用率、仅显示占用 47/15 MiB，无其他计算任务。脚本位于 `$ROOT/repo/scripts/`，`PYTHONPATH=$ROOT/runtime/subject01-4090-1a1fcfa/src`，使用 `$ROOT/envs/neuroadapter/bin/python`。
+
+三个白名单 model.pt SHA：106250=`139dccbf42830845b24731efcc444642cbebe6fd27826ffceb7456908d8bf93c`；159375=`909357e478b171347630f1d709268225661bcad904637edaa1379a8871d32180`；239063=`bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217`。完整校验三者文件；旧 protocol SHA、split SHA、64 份 52-draw 实际噪声、256 张 BF16/g4 图片、condition/candidate/donor/ID 绑定全部通过。239063 原图直接复用，不重生成。命令 `python $ROOT/repo/scripts/diagnose_generalization_v2.py --root $ROOT --phase freeze`。
+
+B1 命令 `python $ROOT/repo/scripts/audit_signal_generalization_v2.py --root $ROOT --phase input`。从 `data/derived/neural_data/betas_sub-01.h5` 读取 64 图各三次原始 presentation；独立核对 SNR 选区、LH/RH、逐 token 顶点顺序、session/trial，并用 float32 显式相加平均、重新 padding。结果 **64/64 逐元素完全一致，最大差值 0，padding 全零，全部有限**。审计 `signal/input_audit.json`，顶点顺序保存在私有运行产物 `signal/vertex_order.json`。
+
+A 正式命令分别以 `CUDA_VISIBLE_DEVICES=0/1 CUBLAS_WORKSPACE_CONFIG=:4096:8 OMP_NUM_THREADS=4` 运行 `python $ROOT/repo/scripts/diagnose_generalization_v2.py --root $ROOT --phase run --split train/validation`，日志 `train-console.log`、`validation-console.log`。CPU B 命令 `CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 python $ROOT/repo/scripts/audit_signal_generalization_v2.py --root $ROOT --phase full`，日志 `signal-console.log`。A 保存每图四份去噪 epsilon/noise，跨三个 checkpoint 共用；原完整生成使用旧混合精度噪声银行，不改变候选/批次/扩散设置。B 仅对 9000 训练池图的 27000 presentation 做内容检查，不重新扫描所有原数据哈希；训练侧共同基线采用 leave-image-out，对异图配对比较再同时排除控制图，质量分层预定为训练侧重复特异性三分位数，不依据生成结果选择。
