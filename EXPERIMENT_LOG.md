@@ -2704,3 +2704,5 @@ CPU 收尾命令：`CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=4 PYTHONPATH=$ROOT/run
 阶段结论：图像通路未发现明显异常，模型确实利用目标相关 fMRI；训练语义优势强于验证，验证低噪声去噪优势弱，值得进一步定位泛化与数据/目标差异。本轮 FP32 和 guidance 候选没有提供明显整体修复，不据此把权重验收为正式研究模型，也不推断“所有无需重训的修复都不可能”。本轮到此关闭，保持同一权重、默认配置，不启动后续训练、额外参数搜索或独立测试。
 
 提交前发现 Git 会自动将导出的 CSV 从 CRLF 转为 LF，导致归档字节与 INDEX 中原始 SHA 不一致。仅为本轮证据 CSV 增加 `.gitattributes` 的 `-text` 规则，保留原始字节，不改变评分内容；提交索引中的全部来源文件将按 INDEX 再次核验。凭据模式检查未命中，图片及噪声文件未加入暂存区。
+
+代码、报告与证据首先同步并推送为 `73b9751`，服务器最终 CPU 回归 74 passed、16 条既有 warning，2.90 秒；无新增 GPU 任务。随后直接校验 Git blob 发现：四个 CSV 的首次暂存早于 `.gitattributes`，普通再次 add 没有刷新缓存，导致 Git blob 仍是 LF，而运行原件与本地工作文件是 CRLF。使用 `git add --renormalize` 仅重暂存这四个 CSV，保留实际源字节；`whitespace=cr-at-eol` 将证据 CSV 的 CRLF 识别为合法行结束。数值、指标、图像和噪声完全不变，修正只针对公开归档校验。需以修正提交的 blob 与工作文件再次通过全部 INDEX 校验为关闭标准。
