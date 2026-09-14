@@ -2664,3 +2664,13 @@ PYTHONPATH=$PROJECT_ROOT/runtime/subject01-4090-1a1fcfa/src CUDA_VISIBLE_DEVICES
 回归测试首次因从服务器 home 运行且 PYTHONPATH 仅含 src，导致 scripts 模块无法导入，6 个收集错误；补入项目 repo 路径后通过，未修改算法或测试。最终命令：PYTHONPATH=$PROJECT_ROOT/repo:$PROJECT_ROOT/repo/src PYTHONDONTWRITEBYTECODE=1 CUDA_VISIBLE_DEVICES= $PROJECT_ROOT/envs/neuroadapter/bin/python -m pytest $PROJECT_ROOT/repo/tests -q。70 passed，16 warnings（14 条既有弃用提示和 2 条 CPU-only autocast 提示），3.25 秒；git diff --check 通过。
 
 后续固定使用 runs/selection/subject01-selection-4090-deterministic-v2/evaluation-20260910/selected_snapshot，锁定记录 RESEARCH_WEIGHT_LOCK.json 保留真实来源。本次关闭后仅汇报结果、同步并提交文档，停用完成检查；不再启动训练或推理。
+
+### 2026-09-14：启动固定权重的探索性诊断
+
+根据新的明确要求，仅恢复诊断推理，不进行任何训练、续训或重新选权重。239063 步快照作为诊断对象，尚未通过重建性能验收；历史选优及锁定记录不修改。两张 RTX 4090 检查时均无计算任务。
+
+新增 `scripts/diagnose_condition_path.py` 和针对抽样、错配与噪声回放的测试。冻结从 8500 张训练图、500 张既有验证图中分别按命名空间与图像 ID 的 SHA256 排序选出 32 张；组内循环错配完整 `[200,626]` fMRI，不打乱 parcel。验证数据已经用于选优，本轮不是独立测试。
+
+运行目录：`runs/diagnostics/20260914-condition-path`。首先比较新加载原始精度的 FP32 与当前 BF16 VAE 往返，包含后验 mode 和固定噪声 sample；其次比较 t=50/200/500/800/950 的正确/错配条件原始去噪 MSE；随后固定每图两个候选、50 步 DDPM、guidance=4 生成。实际初始及逐步噪声预生成并保存，对照回放同一张量，首张图须与未修改的当前生成函数完全一致。只有前序检查未发现基础异常后，才运行 FP32 参考与 guidance=2/6。
+
+训练实现通过 `PYTHONPATH=$ROOT/runtime/subject01-4090-1a1fcfa/src` 引用冻结快照，不编辑 runtime。命令模板：`CUBLAS_WORKSPACE_CONFIG=:4096:8 OMP_NUM_THREADS=4 PYTHONPATH=$ROOT/runtime/subject01-4090-1a1fcfa/src $ROOT/envs/neuroadapter/bin/python $ROOT/repo/scripts/diagnose_condition_path.py --project-root $ROOT --phase PHASE --split SPLIT --device cuda:GPU`。PHASE 为 freeze、vae、bf16，后续阶段待检查；train 使用 GPU0，validation 使用 GPU1。逐次命令、用时、输出及失败在运行产物与后续日志中记录。图片和噪声不进入 public Git。
