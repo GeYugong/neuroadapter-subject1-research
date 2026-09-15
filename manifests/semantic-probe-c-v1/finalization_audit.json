@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "mean_feature_max_error": 0.0,
+  "bootstrap_interval_max_error": 0.0,
+  "bootstrap_comparisons": 32,
+  "archive_files_verified": 18,
+  "feature_files_verified": 3,
+  "report_sha256": "98306a2d65cba34de9f5a59e67b6610f30298ae4a3a082a1c5b6f0300bab7714",
+  "code_sha256": "fc61de7a1339bbfee8dffb609a2591ad672f887e0c65bbba116e410626656549",
+  "additional_model_fitting": false,
+  "additional_diffusion_generation": false
+}

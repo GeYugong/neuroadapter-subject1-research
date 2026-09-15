@@ -2869,3 +2869,9 @@ C配置 `configs/experiments/semantic_probe_c_v1.json` 在执行前固定：原8
 C 选中 PCA1024、alpha0.1，tune 前向识别率89.8692%；8500 refit 后500验证为90.1860%，Top1=13.0%，Top5=32.4%。R/L同口径识别率为85.3126%/85.4643%；C−R为+4.8733百分点，97.5%区间[3.3479,6.4169]，C−L为+4.7216百分点，区间[3.3160,6.1728]。均值50%，五次打乱49.73%至50.61%。CPU拟合96.07秒，GPU仅用于CLIP特征提取；新增NeuroAdapter更新0，新增扩散图0，标准test未访问。
 
 独立审计确认六组拟合产物的预测重放误差0、九种方法的独立排名评分误差0，四份原权重SHA保留。结论限定为输入有可读语义信号、独立特征读出优于现有生成图的同口径检索；不能单独定位ParcelMapper或等同生成质量改善。选参位于搜索边界，不扩大搜索、不替换R、不再训练。
+
+## 2026-09-15：原始目标逐项验收
+
+在结果提交9e94270基础上执行 `scripts/finalize_semantic_probe.py --root /data1/matengyu/geyugong/neuroadapter-subject1-research`，使用该项目 `envs/neuroadapter/bin/python`，退出码0。验证18份原始归档与服务器来源SHA一致、3份特征文件SHA一致；独立由8500训练标签重算均值预测误差0；逐次重算32组图级bootstrap区间误差0。新增 `finalization_audit.json` 保存证据，原completion_audit保持不变。服务器约定目录的REPORT.md已补齐，本地含可用相对证据链接的副本在 `artifacts/semantic-probe-c-v1/REPORT.md`。32页已审阅LR图册再次核验SHA，内容没有变化。
+
+首次从服务器home启动pytest时，仅设置runtime/src，因缺repo模块搜索路径出现7个收集错误，未执行测试。补齐PYTHONPATH为 `repo:runtime/subject01-4090-1a1fcfa/src`（均为项目绝对路径）后，使用 `python -m pytest <ROOT>/repo/tests -q --basetemp=<ROOT>/runs/diagnostics/semantic-probe-final-tests`，89 passed、14条依赖弃用警告、5.65秒。未修改环境或测试代码。nvidia-smi计算进程查询为空，无本项目GPU训练或推理任务。至此学习率收尾、独立探针、对照、评分、报告和结果归档全部完成，不追加实验。
