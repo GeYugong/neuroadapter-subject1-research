@@ -2891,3 +2891,7 @@ C 选中 PCA1024、alpha0.1，tune 前向识别率89.8692%；8500 refit 后500�
 `report_semantic_rerank.py --root <ROOT>`及`audit_semantic_rerank.py --root <ROOT>`退出0，核验全部选择索引、GT隔离函数接口、oracle标记、逐图分数拼接、主比较bootstrap和固定32图对应关系。全套pytest92 passed、14条依赖警告、5.61秒。新增NeuroAdapter更新0、C拟合0、扩散图0，未访问标准test，未扩大候选池。保留原权重，不提升正式R+C管线，不恢复ROI/IBBI。后续排序适配只是研究方向，本轮不自动执行。
 
 完整含图报告在本地 `artifacts/semantic-rerank-d-v1/REPORT.md` 与服务器 `runs/diagnostics/semantic-rerank-d-v1/REPORT.md`；公开摘要 `docs/SEMANTIC_RERANK_D_V1.md`，完整小型证据 `manifests/semantic-rerank-d-v1/`。原始评分时的visual_review_complete=false保留历史，完成审计与visual_review_summary为后续审查完成证据。
+
+## 2026-09-15：E 固定去均值排序启动
+
+按新请求仅执行 `(原始C预测−8500训练单位CLIP均值)·单位候选`，无可调系数。新增独立入口run_residual_rerank.py，不修改D冻结函数。使用C/D现有矩阵与五组冻结无固定点错配；均值先验证全行相同，再按8500训练ID重算交叉检查。不读取脑数组、不调用评价网络、不训练、不生成。两主比较E−Uniform与E−原C，指标CLIP前向二选一，bootstrap seed20261001、10000次、97.5%区间。保留2百分点资源筛查规则；失败后不自动搜索lambda、白化或候选数。沿用D原32图标签，完整展示该固定样本中所有C/E不同选择，结果保存在新目录semantic-rerank-e-residual-v1。
