@@ -1,0 +1,187 @@
+{
+  "table": [
+    {
+      "label": "B0",
+      "split": "train",
+      "correct_clip": 0.7027638349682093,
+      "correct_pixcorr": 0.09228137395219654,
+      "correct_ssim": 0.3163930367221647,
+      "wrong_clip": 0.5278915539383888,
+      "wrong_pixcorr": -0.00143276116677461,
+      "wrong_ssim": 0.2822373428720462,
+      "advantage_clip": 0.17487228102982044
+    },
+    {
+      "label": "H1000",
+      "split": "train",
+      "correct_clip": 0.6980108497664332,
+      "correct_pixcorr": 0.09616262046123573,
+      "correct_ssim": 0.31575112949204176
+    },
+    {
+      "label": "L1000",
+      "split": "train",
+      "correct_clip": 0.6999483932740986,
+      "correct_pixcorr": 0.09339590644179804,
+      "correct_ssim": 0.31554651836950554
+    },
+    {
+      "label": "H2500",
+      "split": "train",
+      "correct_clip": 0.7046836689114571,
+      "correct_pixcorr": 0.07883555134882805,
+      "correct_ssim": 0.30396515300941224
+    },
+    {
+      "label": "L2500",
+      "split": "train",
+      "correct_clip": 0.7117506698705256,
+      "correct_pixcorr": 0.09685332492961939,
+      "correct_ssim": 0.313760212511499
+    },
+    {
+      "label": "H5000",
+      "split": "train",
+      "correct_clip": 0.6806180691346526,
+      "correct_pixcorr": 0.049240126939046135,
+      "correct_ssim": 0.31170065658344015,
+      "wrong_clip": 0.5352291995659471,
+      "wrong_pixcorr": 0.0016371305246172321,
+      "wrong_ssim": 0.27444763834124336,
+      "advantage_clip": 0.14538886956870556
+    },
+    {
+      "label": "L5000",
+      "split": "train",
+      "correct_clip": 0.7085316320881248,
+      "correct_pixcorr": 0.08549143930210676,
+      "correct_ssim": 0.31388774876826453,
+      "wrong_clip": 0.5274943406693637,
+      "wrong_pixcorr": 0.0005431047717966439,
+      "wrong_ssim": 0.273524278963354,
+      "advantage_clip": 0.18103729141876101
+    },
+    {
+      "label": "R",
+      "split": "train",
+      "correct_clip": 0.7475904198363423,
+      "correct_pixcorr": 0.10436082792904502,
+      "correct_ssim": 0.31190193147052253,
+      "wrong_clip": 0.5194746842607856,
+      "wrong_pixcorr": -0.01225992607279256,
+      "wrong_ssim": 0.2676600676235511,
+      "advantage_clip": 0.22811573557555676
+    },
+    {
+      "label": "B0",
+      "split": "validation",
+      "correct_clip": 0.6408033929765224,
+      "correct_pixcorr": 0.082480453644485,
+      "correct_ssim": 0.36251401515621606,
+      "wrong_clip": 0.5383630781434476,
+      "wrong_pixcorr": -0.01062005746424061,
+      "wrong_ssim": 0.3156818875302575,
+      "advantage_clip": 0.10244031483307481
+    },
+    {
+      "label": "H1000",
+      "split": "validation",
+      "correct_clip": 0.6310898805968463,
+      "correct_pixcorr": 0.09771475273775361,
+      "correct_ssim": 0.3587171775263264
+    },
+    {
+      "label": "L1000",
+      "split": "validation",
+      "correct_clip": 0.6451504249125719,
+      "correct_pixcorr": 0.08577800917662844,
+      "correct_ssim": 0.3586008976804095
+    },
+    {
+      "label": "H2500",
+      "split": "validation",
+      "correct_clip": 0.6400752626359463,
+      "correct_pixcorr": 0.09483652732583411,
+      "correct_ssim": 0.3496696352463341
+    },
+    {
+      "label": "L2500",
+      "split": "validation",
+      "correct_clip": 0.6397460736334324,
+      "correct_pixcorr": 0.08997801017758783,
+      "correct_ssim": 0.357978181683264
+    },
+    {
+      "label": "H5000",
+      "split": "validation",
+      "correct_clip": 0.6348880706354976,
+      "correct_pixcorr": 0.08842637765996704,
+      "correct_ssim": 0.34842866295048613,
+      "wrong_clip": 0.540358959697187,
+      "wrong_pixcorr": -0.011278817306468554,
+      "wrong_ssim": 0.31425180614151604,
+      "advantage_clip": 0.09452911093831062
+    },
+    {
+      "label": "L5000",
+      "split": "validation",
+      "correct_clip": 0.629589939955622,
+      "correct_pixcorr": 0.0952819217065107,
+      "correct_ssim": 0.3536292599415115,
+      "wrong_clip": 0.5407871780917048,
+      "wrong_pixcorr": -0.01375524587663757,
+      "wrong_ssim": 0.30887240592544074,
+      "advantage_clip": 0.08880276186391711
+    },
+    {
+      "label": "R",
+      "split": "validation",
+      "correct_clip": 0.6330641056410968,
+      "correct_pixcorr": 0.12436233543077291,
+      "correct_ssim": 0.34658937262016004,
+      "wrong_clip": 0.5467106737196445,
+      "wrong_pixcorr": -0.015308593732693054,
+      "wrong_ssim": 0.306096777915076,
+      "advantage_clip": 0.08635343192145228
+    }
+  ],
+  "galleries": [
+    "galleries/train-trajectory-c0-1.jpg",
+    "galleries/train-trajectory-c0-2.jpg",
+    "galleries/train-trajectory-c0-3.jpg",
+    "galleries/train-trajectory-c0-4.jpg",
+    "galleries/train-endpoint-c0-1.jpg",
+    "galleries/train-endpoint-c0-2.jpg",
+    "galleries/train-endpoint-c0-3.jpg",
+    "galleries/train-endpoint-c0-4.jpg",
+    "galleries/train-trajectory-c1-1.jpg",
+    "galleries/train-trajectory-c1-2.jpg",
+    "galleries/train-trajectory-c1-3.jpg",
+    "galleries/train-trajectory-c1-4.jpg",
+    "galleries/train-endpoint-c1-1.jpg",
+    "galleries/train-endpoint-c1-2.jpg",
+    "galleries/train-endpoint-c1-3.jpg",
+    "galleries/train-endpoint-c1-4.jpg",
+    "galleries/validation-trajectory-c0-1.jpg",
+    "galleries/validation-trajectory-c0-2.jpg",
+    "galleries/validation-trajectory-c0-3.jpg",
+    "galleries/validation-trajectory-c0-4.jpg",
+    "galleries/validation-endpoint-c0-1.jpg",
+    "galleries/validation-endpoint-c0-2.jpg",
+    "galleries/validation-endpoint-c0-3.jpg",
+    "galleries/validation-endpoint-c0-4.jpg",
+    "galleries/validation-trajectory-c1-1.jpg",
+    "galleries/validation-trajectory-c1-2.jpg",
+    "galleries/validation-trajectory-c1-3.jpg",
+    "galleries/validation-trajectory-c1-4.jpg",
+    "galleries/validation-endpoint-c1-1.jpg",
+    "galleries/validation-endpoint-c1-2.jpg",
+    "galleries/validation-endpoint-c1-3.jpg",
+    "galleries/validation-endpoint-c1-4.jpg"
+  ],
+  "new_diffusion_images": 0,
+  "neuroadapter_updates": 0,
+  "visual_review": "pending",
+  "intermediate_checkpoint_selection": false,
+  "candidate_unit": "average scores within image"
+}

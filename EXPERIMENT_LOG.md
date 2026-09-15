@@ -2851,3 +2851,13 @@ H/L各一次隔离预检更新完成，没有把预检模型用于正式微调�
 按要求从服务器同步完成日志和结果，归档入口 `scripts/archive_lr_probe.py --root /data1/matengyu/geyugong/neuroadapter-subject1-research`（使用项目Python及冻结runtime的PYTHONPATH）。输出 `manifests/paired-lr-probe-v1`，71份文件、2183068字节；INDEX逐份绑定来源SHA。保留原始终端日志，包括启动失败记录；不上传权重、图片、脑数据、实际噪声或凭据。中文数值摘要为 `docs/PAIRED_LR_PROBE_V1.md`。
 
 H/L均5000更新完成，耗时3095.57/3083.09秒，完整配对审计通过。500图CLIP cosine：B0=0.627465，H=0.626694，L=0.633071，R=0.628143。L−B0=+0.005605，97.5%区间[0.001563,0.009795]；L−H=+0.006377，区间[0.001582,0.011492]。虽有小幅正向收益，但未达到0.01预设实际阈值；相对R区间跨零。辅助指标非全面改善，不宣称修复或替换权重。归档不改变实际训练提交7cd3d25；仍待小样本轨迹汇总、完整视觉审查与最终报告。
+
+## 2026-09-15：学习率分支完整收尾，冻结独立语义探针C
+
+新的目标文件授权先完成旧输出收尾，再执行semantic-probe-c-v1；禁止追加NeuroAdapter更新、扩散生成、扫LR和标准test访问。使用 `scripts/summarize_lr_trajectory.py --root $ROOT`，GPU0仅运行固定CLIP评分，原PNG逐份SHA及donor/噪声绑定通过；终端 `runs/experiments/paired-lr-probe-v1/trajectory-console.log` 退出码0。64图轨迹、终点正确/错配评分均完整保存，32页完整图册已逐页视觉检查，没有新增扩散图片。公开收尾证据在 `manifests/paired-lr-probe-v1/closure/`，含图本地报告 `artifacts/paired-lr-probe-v1/REPORT.md`，中文报告 `docs/PAIRED_LR_PROBE_V1.md` 已更新为收尾版。
+
+32验证图L5000 CLIP=0.629590，比B0的0.640803低，与完整500图主分析不同；不据此推翻预定主比较，也不从中途节点选优。训练21652的H终点偏成马桶、L候选1也仍混入马桶；验证56963甜甜圈→海浪、16800滑板→飞机、51865门廊→厨房的错误持续。另有电脑工作台及局部人物主题改善。完整正确/错配图册显示更换完整脑输入能改变主题，但不等于准确重建。仅保留小幅内部验证增益，LR分支结束，保留B0/H/L/R全部权重。
+
+C配置 `configs/experiments/semantic_probe_c_v1.json` 在执行前固定：原8500训练按namespace+image_id哈希分为7500 fit/1000 tune；仅fit估计StandardScaler和PCA，PCA256/1024、randomized seed20260915、不whiten；alpha五档0.1/1/10/100/1000，Ridge带截距、求和损失定义。按tune1000池前向余弦二选一识别率选唯一配置，精确并列选256再大alpha，重新用8500拟合后才评价500。5个固定置换各重复10候选选参及8500重拟合，PCA只在同拟合范围内共享，因不依赖标签与分别计算等价。GT使用原终点评价imgBrick路径与固定CLIP；生成图R/L仅重评分。不访问标准test。
+
+新的前向检索固定预测行/GT列，二选一平局半分，Top-k平局按均匀排序期望计分；候选逐个评分后图内平均。平均特征必须产生平均二选一0.5、Top1=1/500、Top5=5/500。五次打乱为描述性对照，不报告精确置换p值；主要C−R/L图级bootstrap10000次、97.5%区间。当前环境sklearn1.6.1，不升级环境。代码与5项新增测试完整回归89 passed、16条既有警告、5.98秒。此时C尚未产生结果，不将实现完成写成实验完成。

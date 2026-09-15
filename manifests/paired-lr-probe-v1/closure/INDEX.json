@@ -1,0 +1,58 @@
+{
+  "sources": [
+    {
+      "path": "per_candidate_scores.csv",
+      "sha256": "fb3223d10f07b54d7266fdfd22f90c840710f6b888a7a8b6e71761b480067507"
+    },
+    {
+      "path": "per_image_scores.csv",
+      "sha256": "dadb8eb873d7ed4d7feb546642e15c377c9bb0c634eab8b61d3a2f11815ee43b"
+    },
+    {
+      "path": "trajectory.csv",
+      "sha256": "8770f02ac323dda9ce8c2e13c6c5fb3ef960c436e51197c8b3595ab1255c9ebd"
+    },
+    {
+      "path": "summary.json",
+      "sha256": "cd80d88c4de1542dc79e9cb3152d337b459db5f078a90a210609933e56d5a776"
+    }
+  ],
+  "visual_review": "all32 sheets inspected individually",
+  "gallery_sha256": {
+    "train-endpoint-c0-1.jpg": "dcf9fbaa6539784fd134967d0425ef29a6a8fe5d8b5588893d9102e7bac010f2",
+    "train-endpoint-c0-2.jpg": "2d5a46be529efd4247c4c68028dad5e529256df6d8c964674afe20d58510b467",
+    "train-endpoint-c0-3.jpg": "bc808801a5ecb8d207dcaf6486b9058931f48cc65fe0853fd8a34755da9204ab",
+    "train-endpoint-c0-4.jpg": "966a3f282e34c7acd297c640bb5bf582c03bf9913544cced7c78534b538ed360",
+    "train-endpoint-c1-1.jpg": "00cafb8a16e60f7705660b3fdeb8c59b0a523f5df83cedfe9e2fa854347fa694",
+    "train-endpoint-c1-2.jpg": "37f30cc4c63274dc7a15f3e9057f6385356abd59a98ae4d0128e781926377a78",
+    "train-endpoint-c1-3.jpg": "4a876e44640b7685270491f9358fd5f2c109928d274c6fbe2a398b54f7f39a31",
+    "train-endpoint-c1-4.jpg": "d3256c1a645d64428d15e6b73404e55498cdfe91c9ec12e937cc156086b91693",
+    "train-trajectory-c0-1.jpg": "218dacf520a18b42fe5d3bf714bf65f4665361d6cd7be52cdcb4e42913ec29f1",
+    "train-trajectory-c0-2.jpg": "d382488d15064e69da01f0d16559d39725416589c4d3d4924bd5a0240250ebf0",
+    "train-trajectory-c0-3.jpg": "dd1cdf1a6085c6feb35d94718ba2a47700a7c866439adfde97a2dea6bacc5951",
+    "train-trajectory-c0-4.jpg": "1bc2c83793e9f6458aa0a6c3fc47fbd1e3ceb9a206c597e58245a4ea180b7544",
+    "train-trajectory-c1-1.jpg": "164d894850c1dcd8c058298e6dcc1813b06cc41af3919cd292b1acecbe1db3db",
+    "train-trajectory-c1-2.jpg": "224fb2970aa965d45ced41988807cfc4b566286f20963a2459049636af0dee92",
+    "train-trajectory-c1-3.jpg": "6967ba9407db6df05c156292362ab8d958413e059fbd4c5e50b1c2b882c35c4b",
+    "train-trajectory-c1-4.jpg": "7a9103b3e5469e8eb38697aac8b6c6361ccdcaef85977898f32dd3ba06291140",
+    "validation-endpoint-c0-1.jpg": "10cec20db0723c9a4fbdc962cddbbfc2bb71c3d66e7f284a5fcc05a9490c9856",
+    "validation-endpoint-c0-2.jpg": "0c0b03afd182fc4b2409459f5fd1e8fd53ad31d74799a8f5344f487aa5a81ce1",
+    "validation-endpoint-c0-3.jpg": "307821cf6f59e8b29d577ead3927519656633a97dfa3b471dc3bfbc75b665509",
+    "validation-endpoint-c0-4.jpg": "82b920a8441354d1075de2976065c1841cecdaba9df4aacbab75313ccae8f55f",
+    "validation-endpoint-c1-1.jpg": "655d24c4b4aed2d7cd503791690fdcc227d2b24782db5916be8cfdf2ddf0d00c",
+    "validation-endpoint-c1-2.jpg": "a65a181f94627a476567a8921b9513805f4c7da5bd21398532c10f24ac8abb2b",
+    "validation-endpoint-c1-3.jpg": "869c77df2db17a431627b2e29ef03132862e8ace812966fc12632812f904db81",
+    "validation-endpoint-c1-4.jpg": "85c3cb3a7ce2d24411dc559e000f0c53a3b7e59427ab80468b4dffb08ee35e70",
+    "validation-trajectory-c0-1.jpg": "9a0fee46a74509fb799ce831433ae854fd1c7ea8412e0fcf9b9c11fc73984223",
+    "validation-trajectory-c0-2.jpg": "576df199964a9099d58ca3b3c1c62f1e0577f1ba9ba9393e95e210026095c5ea",
+    "validation-trajectory-c0-3.jpg": "9c8ab7d4a0848f2495bef208add360914b651da5a6ca3644d47c70b35b7f4295",
+    "validation-trajectory-c0-4.jpg": "1e3226b29ec420a866d0e8c46376982c91c898c3769f737e5c03fb2bc9042b0a",
+    "validation-trajectory-c1-1.jpg": "98d86dc9f962bef39f354f6798e0635b170ec0698b46855e593c357f47965b01",
+    "validation-trajectory-c1-2.jpg": "94c39e49791b6bfce36c2d6b30a56e51c43d60ed26b35da1dbe71ecc3fed4bf6",
+    "validation-trajectory-c1-3.jpg": "dbb18371200745a6d3419552f35815770594d7867c150e7c368abaa8a4c9a1b5",
+    "validation-trajectory-c1-4.jpg": "fa75052ec0a31ff6af2db1bd27074932cd2c37a2acc5e6792087f82813ac82f3"
+  },
+  "new_diffusion_images": 0,
+  "neuroadapter_updates": 0,
+  "note": "original summary retains pre-review pending status; this closure supersedes it"
+}
