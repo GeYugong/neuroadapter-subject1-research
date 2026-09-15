@@ -1,0 +1,572 @@
+{
+  "summary": {
+    "Uniform": {
+      "CLIP_cosine": 0.6293641927146418,
+      "CLIP_forward_two_way": 0.8517239478957915,
+      "CLIP_top1": 0.07175,
+      "CLIP_top5": 0.2315,
+      "AlexNet5_forward_two_way": 0.8626713426853707,
+      "Inception_forward_two_way": 0.7958522044088177,
+      "PixCorr": 0.08930222505640138,
+      "SSIM": 0.2905183675232925
+    },
+    "C-selected": {
+      "CLIP_cosine": 0.6765557420466514,
+      "CLIP_forward_two_way": 0.8574589178356714,
+      "CLIP_top1": 0.094,
+      "CLIP_top5": 0.262,
+      "AlexNet5_forward_two_way": 0.8661763527054108,
+      "Inception_forward_two_way": 0.8235350701402806,
+      "PixCorr": 0.09551850343469005,
+      "SSIM": 0.29257372925422015
+    },
+    "Mean-selected": {
+      "CLIP_cosine": 0.6646985076420999,
+      "CLIP_forward_two_way": 0.8241923847695392,
+      "CLIP_top1": 0.068,
+      "CLIP_top5": 0.224,
+      "AlexNet5_forward_two_way": 0.8465931863727454,
+      "Inception_forward_two_way": 0.8016513026052106,
+      "PixCorr": 0.09348474059786639,
+      "SSIM": 0.29323197618231583
+    },
+    "Mismatched-C-1": {
+      "CLIP_cosine": 0.6599932476060087,
+      "CLIP_forward_two_way": 0.8256392785571143,
+      "CLIP_top1": 0.058,
+      "CLIP_top5": 0.218,
+      "AlexNet5_forward_two_way": 0.8537955911823647,
+      "Inception_forward_two_way": 0.7957995991983968,
+      "PixCorr": 0.09505360609774184,
+      "SSIM": 0.2935480020477704
+    },
+    "Mismatched-C-2": {
+      "CLIP_cosine": 0.6614711221762465,
+      "CLIP_forward_two_way": 0.8250901803607215,
+      "CLIP_top1": 0.072,
+      "CLIP_top5": 0.222,
+      "AlexNet5_forward_two_way": 0.8498637274549099,
+      "Inception_forward_two_way": 0.7988416833667333,
+      "PixCorr": 0.0850397162432995,
+      "SSIM": 0.29100085177055485
+    },
+    "Mismatched-C-3": {
+      "CLIP_cosine": 0.6567227906306164,
+      "CLIP_forward_two_way": 0.820436873747495,
+      "CLIP_top1": 0.062,
+      "CLIP_top5": 0.21,
+      "AlexNet5_forward_two_way": 0.8496993987975953,
+      "Inception_forward_two_way": 0.7963366733466934,
+      "PixCorr": 0.09424759681482918,
+      "SSIM": 0.2934569901223681
+    },
+    "Mismatched-C-4": {
+      "CLIP_cosine": 0.6572215386519001,
+      "CLIP_forward_two_way": 0.8223847695390782,
+      "CLIP_top1": 0.072,
+      "CLIP_top5": 0.222,
+      "AlexNet5_forward_two_way": 0.8442084168336673,
+      "Inception_forward_two_way": 0.7892865731462926,
+      "PixCorr": 0.09392988225507662,
+      "SSIM": 0.2920463073679499
+    },
+    "Mismatched-C-5": {
+      "CLIP_cosine": 0.6608873622571357,
+      "CLIP_forward_two_way": 0.8246412825651303,
+      "CLIP_top1": 0.074,
+      "CLIP_top5": 0.22,
+      "AlexNet5_forward_two_way": 0.8469739478957915,
+      "Inception_forward_two_way": 0.8038597194388777,
+      "PixCorr": 0.08519196624448074,
+      "SSIM": 0.29144034186635986
+    },
+    "Oracle-cosine": {
+      "CLIP_cosine": 0.7013919206510596,
+      "CLIP_forward_two_way": 0.9279238476953908,
+      "CLIP_top1": 0.188,
+      "CLIP_top5": 0.448,
+      "AlexNet5_forward_two_way": 0.884312625250501,
+      "Inception_forward_two_way": 0.8584969939879759,
+      "PixCorr": 0.09314513358429158,
+      "SSIM": 0.29095770120477066
+    },
+    "Oracle-identification": {
+      "CLIP_cosine": 0.6791966331227234,
+      "CLIP_forward_two_way": 0.9551943887775551,
+      "CLIP_top1": 0.268,
+      "CLIP_top5": 0.532,
+      "AlexNet5_forward_two_way": 0.8912144288577154,
+      "Inception_forward_two_way": 0.854060120240481,
+      "PixCorr": 0.09486919047616811,
+      "SSIM": 0.2874160544994736
+    }
+  },
+  "C_minus": {
+    "Uniform": {
+      "CLIP_cosine": {
+        "mean": 0.04719154933200953,
+        "ci97_5": [
+          0.043071698659073225,
+          0.05128345546037176
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.005734969939879758,
+        "ci97_5": [
+          -0.005586792334669338,
+          0.01675606838677355
+        ],
+        "primary": true
+      },
+      "CLIP_top1": {
+        "mean": 0.02225,
+        "ci97_5": [
+          -0.00025,
+          0.04575
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.0305,
+        "ci97_5": [
+          0.0,
+          0.06100312500000018
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.003505010020040081,
+        "ci97_5": [
+          -0.00995448396793587,
+          0.01598653557114229
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.027682865731462926,
+        "ci97_5": [
+          0.014522582665330661,
+          0.04079041833667337
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.006216278378288657,
+        "ci97_5": [
+          -0.008123897669283427,
+          0.02029509734059398
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": 0.0020553617309276477,
+        "ci97_5": [
+          -0.0015867620168018156,
+          0.005719118976954777
+        ],
+        "primary": false
+      }
+    },
+    "Mean-selected": {
+      "CLIP_cosine": {
+        "mean": 0.01185723440455141,
+        "ci97_5": [
+          0.007914436452626574,
+          0.016062711013814804
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.03326653306613226,
+        "ci97_5": [
+          0.022087975951903812,
+          0.04604418837675352
+        ],
+        "primary": true
+      },
+      "CLIP_top1": {
+        "mean": 0.026,
+        "ci97_5": [
+          0.008,
+          0.046
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.038,
+        "ci97_5": [
+          0.012,
+          0.066
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.019583166332665332,
+        "ci97_5": [
+          0.008172144288577156,
+          0.030958166332665342
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.02188376753507014,
+        "ci97_5": [
+          0.009658817635270543,
+          0.034452955911823645
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.0020337628368236596,
+        "ci97_5": [
+          -0.010809423842450797,
+          0.014533120306486715
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": -0.0006582469280957048,
+        "ci97_5": [
+          -0.003819204857361436,
+          0.002430096914805244
+        ],
+        "primary": false
+      }
+    },
+    "Mismatched-C-1": {
+      "CLIP_cosine": {
+        "mean": 0.01656249444064263,
+        "ci97_5": [
+          0.012252154417248303,
+          0.021203691628149682
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.03181963927855712,
+        "ci97_5": [
+          0.020464729458917835,
+          0.04432900801603208
+        ],
+        "primary": false
+      },
+      "CLIP_top1": {
+        "mean": 0.036,
+        "ci97_5": [
+          0.014,
+          0.06
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.044,
+        "ci97_5": [
+          0.014,
+          0.074
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.012380761523046093,
+        "ci97_5": [
+          -0.0006292585170340648,
+          0.02468196392785575
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.02773547094188376,
+        "ci97_5": [
+          0.013146192384769538,
+          0.04258131262525051
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.0004648973369482121,
+        "ci97_5": [
+          -0.012436400511707113,
+          0.013600845467850458
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": -0.0009742727935501829,
+        "ci97_5": [
+          -0.00467972453100506,
+          0.002749217104419762
+        ],
+        "primary": false
+      }
+    },
+    "Mismatched-C-2": {
+      "CLIP_cosine": {
+        "mean": 0.015084619870404874,
+        "ci97_5": [
+          0.01091563121910809,
+          0.01956436829193319
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.0323687374749499,
+        "ci97_5": [
+          0.019927655310621243,
+          0.045911973947895805
+        ],
+        "primary": false
+      },
+      "CLIP_top1": {
+        "mean": 0.022,
+        "ci97_5": [
+          -0.002,
+          0.048
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.04,
+        "ci97_5": [
+          0.01,
+          0.07
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.016312625250501,
+        "ci97_5": [
+          0.001202054108216433,
+          0.03132690380761524
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.02469338677354709,
+        "ci97_5": [
+          0.009535020040080158,
+          0.03985986973947897
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.010478787191390527,
+        "ci97_5": [
+          -0.003738137883067312,
+          0.02468632267644577
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": 0.001572877483665334,
+        "ci97_5": [
+          -0.0020047321417243184,
+          0.005247979853768831
+        ],
+        "primary": false
+      }
+    },
+    "Mismatched-C-3": {
+      "CLIP_cosine": {
+        "mean": 0.019832951416034902,
+        "ci97_5": [
+          0.01528271288641828,
+          0.024691686688390616
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.03702204408817635,
+        "ci97_5": [
+          0.024356462925851703,
+          0.050308767535070145
+        ],
+        "primary": false
+      },
+      "CLIP_top1": {
+        "mean": 0.032,
+        "ci97_5": [
+          0.01,
+          0.056
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.052,
+        "ci97_5": [
+          0.022,
+          0.082
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.016476953907815627,
+        "ci97_5": [
+          0.0011863226452905815,
+          0.0311547595190381
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.027198396793587175,
+        "ci97_5": [
+          0.013506763527054107,
+          0.04197620240480963
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.001270906619860856,
+        "ci97_5": [
+          -0.013166504715661461,
+          0.014975250315473726
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": -0.0008832608681479478,
+        "ci97_5": [
+          -0.004215807657365595,
+          0.0023468457445713314
+        ],
+        "primary": false
+      }
+    },
+    "Mismatched-C-4": {
+      "CLIP_cosine": {
+        "mean": 0.01933420339475132,
+        "ci97_5": [
+          0.014462405256620991,
+          0.024476388250429644
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.03507414829659319,
+        "ci97_5": [
+          0.021679308617234473,
+          0.04919453907815631
+        ],
+        "primary": false
+      },
+      "CLIP_top1": {
+        "mean": 0.022,
+        "ci97_5": [
+          0.0,
+          0.044
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.04,
+        "ci97_5": [
+          0.008,
+          0.072
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.021967935871743484,
+        "ci97_5": [
+          0.00607610220440882,
+          0.03771543086172345
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.03424849699398797,
+        "ci97_5": [
+          0.019274448897795587,
+          0.05024468937875752
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.0015886211796134135,
+        "ci97_5": [
+          -0.013861138746323033,
+          0.017224770238327282
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": 0.0005274218862703255,
+        "ci97_5": [
+          -0.0034354652252242203,
+          0.004447489605615625
+        ],
+        "primary": false
+      }
+    },
+    "Mismatched-C-5": {
+      "CLIP_cosine": {
+        "mean": 0.015668379789515706,
+        "ci97_5": [
+          0.011250892442463096,
+          0.020460432530031453
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.03281763527054108,
+        "ci97_5": [
+          0.021294539078156313,
+          0.04540711422845693
+        ],
+        "primary": false
+      },
+      "CLIP_top1": {
+        "mean": 0.02,
+        "ci97_5": [
+          -0.002,
+          0.042
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.042,
+        "ci97_5": [
+          0.01,
+          0.074
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.01920240480961924,
+        "ci97_5": [
+          0.005426352705410826,
+          0.03306618236472946
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.019675350701402805,
+        "ci97_5": [
+          0.006051653306613225,
+          0.033831763527054116
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.010326537190209305,
+        "ci97_5": [
+          -0.0035973483418841896,
+          0.02460570345030363
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": 0.0011333873878603348,
+        "ci97_5": [
+          -0.0022241126979605274,
+          0.004559148162482594
+        ],
+        "primary": false
+      }
+    }
+  },
+  "scope": "exploratory reused internal validation, conditional on fixed pool, current probe and generator",
+  "mismatches_descriptive_only": true,
+  "permutation_p_value": null,
+  "visual_review_complete": false
+}

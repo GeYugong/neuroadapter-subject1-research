@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "methods_verified": 10,
+  "selector_score_max_error": 1.2212453270876722e-15,
+  "primary_bootstrap_max_error": 0.0,
+  "candidate_count": 4000,
+  "visual_review_count": 32,
+  "target_free_function_signature": [
+    "predictions",
+    "candidates"
+  ],
+  "all_frozen_sources_sha_verified": true,
+  "new_probe_fits": 0,
+  "new_neuroadapter_updates": 0,
+  "new_diffusion_images": 0,
+  "report_sha256": "ddd71882cd44aab809486b299f22fbebf09aed235f30aecccf425e5fa9e97df2",
+  "source_sha256": "b51d3e1af245959ff403e5ebcdc6c8160f484d71aafbf127338d1d3cb6b80065"
+}

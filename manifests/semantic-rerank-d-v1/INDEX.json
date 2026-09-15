@@ -1,0 +1,61 @@
+{
+  "source": "runs/diagnostics/semantic-rerank-d-v1",
+  "files": [
+    {
+      "path": "candidate_manifest.json",
+      "bytes": 755754,
+      "sha256": "cae06d08a265ed4bc924219a208b13864b892b10393e4226bf3f6ec183cb9ef6"
+    },
+    {
+      "path": "completion_audit.json",
+      "bytes": 576,
+      "sha256": "72b4181d1824d659989b0b1ec4a8dac7cd71ef9ee1bc1378ebef7a888f358adc"
+    },
+    {
+      "path": "features_manifest.json",
+      "bytes": 3951,
+      "sha256": "ae8191cc27bbddd3e08fa49e38034753e9b04c15e98121c57284e0a426072997"
+    },
+    {
+      "path": "oracle_bounds.json",
+      "bytes": 962,
+      "sha256": "4963eee36479ab2a6aca410744eff72b53ed94b59317c106100466f395213af3"
+    },
+    {
+      "path": "paired_comparisons.json",
+      "bytes": 14095,
+      "sha256": "85319dfca4ea9a0176a54d672235ce50c22c5ea0db9e4dc1043281f607ae8bc5"
+    },
+    {
+      "path": "per_candidate_scores.csv",
+      "bytes": 517800,
+      "sha256": "04c0a22fed5d71078f85ed032e096f0c3756404935fbc341d100196ab2a5e96d"
+    },
+    {
+      "path": "per_image_scores.csv",
+      "bytes": 707150,
+      "sha256": "3cd876bcac438a6fed1e14d13af69368d5eb7b3fd4d7ed56e099d33e93377bba"
+    },
+    {
+      "path": "plan.json",
+      "bytes": 36493,
+      "sha256": "eefded8af89ec9c6ff995f21b1b517eda55642560ef589931bea598d60ca53a4"
+    },
+    {
+      "path": "selector_indices.csv",
+      "bytes": 751952,
+      "sha256": "26637346f8aaad2d2c37ed4e45a81ff75c54cb4f1861d4dd68e4309afe426282"
+    },
+    {
+      "path": "visual_review_summary.json",
+      "bytes": 3328,
+      "sha256": "c3ce542d785c9be455fe68e701284dc3cb16b28d787db38846d15b2707ef7b3e"
+    },
+    {
+      "path": "visual_review.csv",
+      "bytes": 6520,
+      "sha256": "86604bf6d386f8ecb2953784f499d06b3e32ae3631a2789c9ae8ae83d09f703d"
+    }
+  ],
+  "full_report_sha256": "ddd71882cd44aab809486b299f22fbebf09aed235f30aecccf425e5fa9e97df2"
+}

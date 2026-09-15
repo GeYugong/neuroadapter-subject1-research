@@ -2881,3 +2881,13 @@ C 选中 PCA1024、alpha0.1，tune 前向识别率89.8692%；8500 refit 后500�
 后续新任务授权semantic-rerank-d-v1，仅使用R原239063的既有500×8候选、冻结C和均值预测，不拟合C、不更新NeuroAdapter、不扩散生成、不访问标准test。计划提交8776f2e。`prepare_semantic_rerank.py --root <ROOT>`已在4090服务器项目内完成：4000份PNG逐文件SHA和图片完整性检查通过，500图ID与C预测一致，沿用32验证图ID；冻结5组无固定点置换。选择函数只有预测与候选两个参数，精确平局选最小索引；3项针对性测试通过（0.06秒）。
 
 新增 `run_semantic_rerank.py` 提取同口径CLIP、AlexNet5、Inception特征和PixCorr/SSIM，八候选分别评分，不平均embedding。两个主比较为C−Uniform、C−Mean的前向二选一，固定10000次图级bootstrap和97.5%区间；2百分点仅作投入筛查，不作正式合格线。oracle明确仅诊断，不作为可部署结果。32图册先隐藏选择器标记，待逐图视觉记录后再揭示索引。当前仅候选完整性检查完成，特征、评价和视觉报告尚待执行，不提前宣布结果。
+
+## 2026-09-15：D 完成评分、全样本视觉审查与报告
+
+评分源码fe07b3e；`run_semantic_rerank.py --root <ROOT> --phase features`及`--phase score`均退出0。features内部计时62.99秒，不含前置读取校验；GPU0仅CLIP/AlexNet5/Inception特征提取，CPU8线程用于指标。GT CLIP与C逐元素一致。八候选Uniform前向识别85.1724%，C85.7459%，Mean82.4192%。C−Uniform为+0.5735百分点，97.5%区间[-0.5587,1.6756]；C−Mean为+3.3267，[2.2088,4.6044]。辅助Inception增加2.7683百分点，其他辅助指标区间多跨零，不宣称整体修复。识别oracle95.5194%，仅使用GT的离线上限，不可部署。
+
+32张固定图册全部逐张看过，先隐藏选择标签，将盲看记录提交a11bd10后才读取选择结果；报告加入全部32张标注图。AI粗粒度类别/场景审阅记录12个池有匹配，C选中10、Mean8、Uniform期望5.625；13223和43211有匹配但C错过。数量、布局普遍仍不忠实，不能外推为500图成功率。图册原图不是新增生成，不上传Git中的刺激图片。
+
+`report_semantic_rerank.py --root <ROOT>`及`audit_semantic_rerank.py --root <ROOT>`退出0，核验全部选择索引、GT隔离函数接口、oracle标记、逐图分数拼接、主比较bootstrap和固定32图对应关系。全套pytest92 passed、14条依赖警告、5.61秒。新增NeuroAdapter更新0、C拟合0、扩散图0，未访问标准test，未扩大候选池。保留原权重，不提升正式R+C管线，不恢复ROI/IBBI。后续排序适配只是研究方向，本轮不自动执行。
+
+完整含图报告在本地 `artifacts/semantic-rerank-d-v1/REPORT.md` 与服务器 `runs/diagnostics/semantic-rerank-d-v1/REPORT.md`；公开摘要 `docs/SEMANTIC_RERANK_D_V1.md`，完整小型证据 `manifests/semantic-rerank-d-v1/`。原始评分时的visual_review_complete=false保留历史，完成审计与visual_review_summary为后续审查完成证据。

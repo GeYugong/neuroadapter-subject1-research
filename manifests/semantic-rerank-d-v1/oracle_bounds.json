@@ -1,0 +1,32 @@
+{
+  "uses_ground_truth": true,
+  "diagnostic_only": true,
+  "deployable": false,
+  "Oracle-cosine": {
+    "upper_bound_for": "CLIP_cosine only",
+    "scores": {
+      "CLIP_cosine": 0.7013919206510596,
+      "CLIP_forward_two_way": 0.9279238476953908,
+      "CLIP_top1": 0.188,
+      "CLIP_top5": 0.448,
+      "AlexNet5_forward_two_way": 0.884312625250501,
+      "Inception_forward_two_way": 0.8584969939879759,
+      "PixCorr": 0.09314513358429158,
+      "SSIM": 0.29095770120477066
+    }
+  },
+  "Oracle-identification": {
+    "upper_bound_for": "CLIP_forward_two_way only",
+    "scores": {
+      "CLIP_cosine": 0.6791966331227234,
+      "CLIP_forward_two_way": 0.9551943887775551,
+      "CLIP_top1": 0.268,
+      "CLIP_top5": 0.532,
+      "AlexNet5_forward_two_way": 0.8912144288577154,
+      "Inception_forward_two_way": 0.854060120240481,
+      "PixCorr": 0.09486919047616811,
+      "SSIM": 0.2874160544994736
+    }
+  },
+  "different_selection_count": 262
+}
