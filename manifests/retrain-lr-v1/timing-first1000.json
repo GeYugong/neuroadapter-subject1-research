@@ -1,0 +1,43 @@
+{
+  "recorded_at_utc": "2026-09-15T10:45:31.201686+00:00",
+  "source_first1000": {
+    "completed_updates": 1000,
+    "elapsed_seconds": 573.5071962200018,
+    "gradient_norm_before_clip": 0.01887879341840744,
+    "images_seen": 16000,
+    "lr": 3e-05,
+    "mean_loss": 0.11339808203279972,
+    "peak_reserved_bytes_by_rank": [
+      15745417216,
+      15745417216
+    ],
+    "reference_epoch": 1.8823529411764706,
+    "updates_per_second": 1.7596211104877635,
+    "window_updates": 100
+  },
+  "latest_observation": {
+    "completed_updates": 3800,
+    "elapsed_seconds": 2166.294138525991,
+    "gradient_norm_before_clip": 0.014401585934683681,
+    "images_seen": 60800,
+    "lr": 3e-05,
+    "mean_loss": 0.11121418308466673,
+    "peak_reserved_bytes_by_rank": [
+      15745417216,
+      15745417216
+    ],
+    "reference_epoch": 7.152941176470589,
+    "updates_per_second": 1.7609595823297832,
+    "window_updates": 100
+  },
+  "seconds_per_update_first1000": 0.5735071962200018,
+  "each_arm_training_hours": 25.389641499322995,
+  "remaining_T1_training_hours": 24.784272792201882,
+  "remaining_T2_training_hours": 25.389641499322995,
+  "remaining_combined_training_hours": 50.17391429152487,
+  "checkpoint_IO_hours": null,
+  "evaluation_hours": null,
+  "limitations": "Estimate assumes unchanged throughput, no interruptions. First1000 timing includes update/logging overhead but excludes future checkpoint saves and evaluation. T2 speed assumed equal to T1; not yet measured.",
+  "stage": "train-T1",
+  "automatic_queue_unchanged": true
+}
