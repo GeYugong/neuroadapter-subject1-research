@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "inference_snapshot",
+  "optimizer_update": 5000,
+  "model_state_sha256": "04638cf9618748b3ce8352e7a820401e0e0ddbbaccb33eee4eef2808008c88a7",
+  "files": {
+    "model.pt": {
+      "size": 464285745,
+      "sha256": "5a2ee73a5ab51674e36dffb8d4cd15aa5900236477a66d12bacbc1f16fdae65f"
+    },
+    "metadata.json": {
+      "size": 335,
+      "sha256": "126412ca858d700eea26c092bfafde3d5787365f201e40cda14d5176b75e5c61"
+    }
+  }
+}

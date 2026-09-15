@@ -27,6 +27,7 @@ __pycache__/
 # Local logs and temporary files
 /logs/
 *.log
+!/manifests/paired-lr-probe-v1/*.log
 *.tmp
 *.part
 

@@ -1,0 +1,117 @@
+{
+  "passed": true,
+  "folder": "arms",
+  "configuration_only_lr_differs": true,
+  "initialization": {
+    "model_tensor_sha256": "0d99b42d85d60b23b45f83a46d30af66ab14c009efa26bbad56ee94ff177456e",
+    "groups": {
+      "image_proj": "c068b1b2d5729689d5b95f6ff71be7755bae793d0970358f9b0a7634ca35b0c4",
+      "ip_adapter": "8f54f6e344ec2459a624219487e3173ed82c92a81adf19871560f7581b0a6a5e",
+      "guidance_generator": "d4d69e089aef47ea7d1467822e9b347c8fc87d2732e52e45ef81d1dfb52bd629"
+    },
+    "optimizer_state_entries": 0,
+    "parameter_audit": {
+      "trainable_tensors": 38,
+      "trainable_parameters": 116068608,
+      "frozen_parameters": 859520964
+    }
+  },
+  "ranks": [
+    {
+      "rank": 0,
+      "first_update": {
+        "initial_model_sha256": "0d99b42d85d60b23b45f83a46d30af66ab14c009efa26bbad56ee94ff177456e",
+        "losses": [
+          0.0897054523229599,
+          0.07115893810987473
+        ],
+        "gradient_sha256": "adf40f7dd178769f83c307f5d9c9f447a00ca609cdb275338245f70552dd2a1f",
+        "microbatches": [
+          {
+            "micro": 0,
+            "image_ids": [
+              69828,
+              60769,
+              20089,
+              54149
+            ],
+            "vae_rng_before": "e75203cc731a8d1888010bdc0ef1d962f686134e144806954336d43f093c0b8a",
+            "latent_sha256": "f565a15b1d7a90c43e5536035adf171cee4af40be197c40110c2b4c66ddbde43",
+            "noise_sha256": "e718f5592d9ed2965e0a8e356030ab87935cef275383d0aa967895cc39f1367d",
+            "timestep_sha256": "89d101d6112b8223d1b7f8a88081a76c02b81b698fbae87cf2230ddad9b991fb",
+            "dropout_sha256": "0045675ac18fe6c5b4b3da0c2290b1892267b1a30449a27bbae23f732371ec11"
+          },
+          {
+            "micro": 1,
+            "image_ids": [
+              70572,
+              26322,
+              7815,
+              27099
+            ],
+            "vae_rng_before": "4c7d1a2bb67375b22a62bfb174b3cbb679b3f5aac14d0f1be89c8583fb03dd5f",
+            "latent_sha256": "56f400bde64d7e577e5a94facf53d2f2178984a4ea5c7bd7992f732a6ef1c501",
+            "noise_sha256": "3686fb1fc998f9ece4dde972afc932d47c1f33d82d69881c62776980f431c60f",
+            "timestep_sha256": "0becae0e374f96309337444c720b43067df57ac48f78649286bb5a7215cbf4f6",
+            "dropout_sha256": "a4a25cb0f448ef3d8c54cd2f539b17b5cfceaa0821159dd0f69a837566ab6fde"
+          }
+        ],
+        "optimizer_entries_before": 0,
+        "updated_groups": {
+          "image_proj": true,
+          "ip_adapter": true,
+          "guidance_generator": true
+        }
+      },
+      "random_trace_sha256": "31c37a2be39729d5d72aae32758dc0075fdbaa78880eb679f4467aa0de05c9ef"
+    },
+    {
+      "rank": 1,
+      "first_update": {
+        "initial_model_sha256": "0d99b42d85d60b23b45f83a46d30af66ab14c009efa26bbad56ee94ff177456e",
+        "losses": [
+          0.11140850931406021,
+          0.02167517878115177
+        ],
+        "gradient_sha256": "adf40f7dd178769f83c307f5d9c9f447a00ca609cdb275338245f70552dd2a1f",
+        "microbatches": [
+          {
+            "micro": 0,
+            "image_ids": [
+              59626,
+              35458,
+              25544,
+              15061
+            ],
+            "vae_rng_before": "655b88909d36a18424330ac25ce5bc844381e573ab4fc356b0876c18d267cc9c",
+            "latent_sha256": "24e5be9759e47dbd7c0b46ab6600d87828e5baf382d4e73f0678ad45427072c8",
+            "noise_sha256": "4f052eb619c46ec8d150e357d38a79ab813978f2fa4e337ab0293f98d1e97d9f",
+            "timestep_sha256": "6dccd795255d26f1538dd686c7dee1832ada939910835a477100bf83bcfa6f74",
+            "dropout_sha256": "23980642899b0e0a1a77439c394b259cb6b6337e057943c73905142fe1f0a825"
+          },
+          {
+            "micro": 1,
+            "image_ids": [
+              38366,
+              12498,
+              54131,
+              31646
+            ],
+            "vae_rng_before": "1453adeb4d0c4efce59bfb751717a46578792a05df8fe2b9c774f8613c608736",
+            "latent_sha256": "8067234829a4d2610630c1cf097ad128e8385503d64fa939232702cc6b391e0e",
+            "noise_sha256": "4aecff72178b39d1e32e9f619542bd4ccc1c1601c5395d77543cc134cf375537",
+            "timestep_sha256": "d3fff53efe00fdac57eb13ac949979f5d043168295fd05a33c5e13df6b7b0703",
+            "dropout_sha256": "47df835f52d54f31c5d7bf3720e8eac6b4d61fc68f16a59bed186baf0fe46cfd"
+          }
+        ],
+        "optimizer_entries_before": 0,
+        "updated_groups": {
+          "image_proj": true,
+          "ip_adapter": true,
+          "guidance_generator": true
+        }
+      },
+      "random_trace_sha256": "b9346af34a17ab18d206cbf4084100a7ea90917d8066af23b75f4bdae48ba933"
+    }
+  ]
+}

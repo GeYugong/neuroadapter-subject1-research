@@ -1,0 +1,14 @@
+{
+  "model_tensor_sha256": "0d99b42d85d60b23b45f83a46d30af66ab14c009efa26bbad56ee94ff177456e",
+  "groups": {
+    "image_proj": "c068b1b2d5729689d5b95f6ff71be7755bae793d0970358f9b0a7634ca35b0c4",
+    "ip_adapter": "8f54f6e344ec2459a624219487e3173ed82c92a81adf19871560f7581b0a6a5e",
+    "guidance_generator": "d4d69e089aef47ea7d1467822e9b347c8fc87d2732e52e45ef81d1dfb52bd629"
+  },
+  "optimizer_state_entries": 0,
+  "parameter_audit": {
+    "trainable_tensors": 38,
+    "trainable_parameters": 116068608,
+    "frozen_parameters": 859520964
+  }
+}

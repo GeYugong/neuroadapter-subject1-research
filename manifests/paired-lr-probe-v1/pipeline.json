@@ -1,0 +1,144 @@
+{
+  "status": "endpoint_statistics_complete",
+  "source_commit": "7cd3d250d0471e2d12dce8e2df2a105bdfba7355",
+  "files": {
+    "/data1/matengyu/geyugong/neuroadapter-subject1-research/repo/scripts/train_lr_probe.py": "eb955f1a531b5fffa2c481f54ff0ee7bdca8275264f76de5c2b779caaf7052c3",
+    "/data1/matengyu/geyugong/neuroadapter-subject1-research/repo/scripts/evaluate_lr_probe.py": "276bf98b4d445b498d4dbad097a1848a2439ae7f8516619a9368d73593d73b51",
+    "/data1/matengyu/geyugong/neuroadapter-subject1-research/repo/scripts/run_lr_probe.py": "8459240955f288421c662895073243743a5eccded138e533f7c406f72dc7e02d",
+    "/data1/matengyu/geyugong/neuroadapter-subject1-research/repo/configs/experiments/paired_lr_probe_v1.yaml": "cdce338db04d5509a5ab682470c5f554ec8bacf7a90508fd1cbc5776e02b1d06"
+  },
+  "commands": [
+    {
+      "stage": "train-H",
+      "argv": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc_per_node=2",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/repo/scripts/train_lr_probe.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--arm",
+        "H"
+      ],
+      "gpus": "0,1"
+    },
+    {
+      "stage": "train-L",
+      "argv": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc_per_node=2",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/repo/scripts/train_lr_probe.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--arm",
+        "L"
+      ],
+      "gpus": "0,1"
+    },
+    {
+      "stage": "decode-H",
+      "argv": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/repo/scripts/evaluate_lr_probe.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "decode",
+        "--arm",
+        "H"
+      ],
+      "gpus": "0"
+    },
+    {
+      "stage": "decode-L",
+      "argv": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/repo/scripts/evaluate_lr_probe.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "decode",
+        "--arm",
+        "L"
+      ],
+      "gpus": "1"
+    },
+    {
+      "stage": "score-B0",
+      "argv": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/repo/scripts/evaluate_lr_probe.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "score",
+        "--label",
+        "B0"
+      ],
+      "gpus": "0"
+    },
+    {
+      "stage": "score-H5000",
+      "argv": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/repo/scripts/evaluate_lr_probe.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "score",
+        "--label",
+        "H5000"
+      ],
+      "gpus": "0"
+    },
+    {
+      "stage": "score-L5000",
+      "argv": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/repo/scripts/evaluate_lr_probe.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "score",
+        "--label",
+        "L5000"
+      ],
+      "gpus": "0"
+    },
+    {
+      "stage": "score-R",
+      "argv": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/repo/scripts/evaluate_lr_probe.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "score",
+        "--label",
+        "R"
+      ],
+      "gpus": "0"
+    },
+    {
+      "stage": "decision",
+      "argv": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/repo/scripts/evaluate_lr_probe.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "decision"
+      ],
+      "gpus": ""
+    }
+  ],
+  "automatic_weight_replacement": false,
+  "automatic_extension": false,
+  "stage": "awaiting_visual_and_trajectory_review",
+  "updated_at": "2026-09-14T20:47:21.578769+00:00"
+}

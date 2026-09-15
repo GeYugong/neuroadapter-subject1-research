@@ -2755,3 +2755,99 @@ H/L各一次隔离预检更新完成，没有把预检模型用于正式微调�
 开始 `train-H`，GPU `0,1`；运行提交 `7cd3d250d0471e2d12dce8e2df2a105bdfba7355`。完整命令及源码 SHA 记录在 `runs/experiments/paired-lr-probe-v1/pipeline.json`，终端日志为 `train-H.log`。
 
 启动核验：完整CPU回归84 passed、16条既有警告，5.47秒。首次测试从SSH默认目录运行，PYTHONPATH缺repo根导致7个`No module named scripts`收集错误；补充项目根后全通过，未改变测试逻辑。两组预检持久审计 `preflight-paired-audit.json` 通过。H已到local_update70，loss0.099571，44.48秒；两卡显存约15.2GiB、利用率99%。当前粗估0.62秒/更新，两组纯训练约1小时45分钟，不包含保存、生成和评价。尚无终点效果结论。代码已推送public main，运行使用冻结的7cd3d25，不随日志提交改变。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T18:42:54.111133+00:00
+
+`train-H` 退出码 0。保存原始输出；尚未据此选优或替换权重。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T18:42:54.173009+00:00
+
+开始 `train-L`，GPU `0,1`；运行提交 `7cd3d250d0471e2d12dce8e2df2a105bdfba7355`。完整命令及源码 SHA 记录在 `runs/experiments/paired-lr-probe-v1/pipeline.json`，终端日志为 `train-L.log`。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T19:34:27.247013+00:00
+
+`train-L` 退出码 0。保存原始输出；尚未据此选优或替换权重。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T19:34:27.374475+00:00
+
+开始 `decode-H`，GPU `0`；运行提交 `7cd3d250d0471e2d12dce8e2df2a105bdfba7355`。完整命令及源码 SHA 记录在 `runs/experiments/paired-lr-probe-v1/pipeline.json`，终端日志为 `decode-H.log`。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:09:24.430380+00:00
+
+`decode-H` 退出码 0。保存原始输出；尚未据此选优或替换权重。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:09:24.485992+00:00
+
+开始 `decode-L`，GPU `1`；运行提交 `7cd3d250d0471e2d12dce8e2df2a105bdfba7355`。完整命令及源码 SHA 记录在 `runs/experiments/paired-lr-probe-v1/pipeline.json`，终端日志为 `decode-L.log`。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:44:45.620845+00:00
+
+`decode-L` 退出码 0。保存原始输出；尚未据此选优或替换权重。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:44:45.674918+00:00
+
+开始 `score-B0`，GPU `0`；运行提交 `7cd3d250d0471e2d12dce8e2df2a105bdfba7355`。完整命令及源码 SHA 记录在 `runs/experiments/paired-lr-probe-v1/pipeline.json`，终端日志为 `score-B0.log`。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:45:27.141450+00:00
+
+`score-B0` 退出码 0。保存原始输出；尚未据此选优或替换权重。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:45:27.194007+00:00
+
+开始 `score-H5000`，GPU `0`；运行提交 `7cd3d250d0471e2d12dce8e2df2a105bdfba7355`。完整命令及源码 SHA 记录在 `runs/experiments/paired-lr-probe-v1/pipeline.json`，终端日志为 `score-H5000.log`。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:46:05.666805+00:00
+
+`score-H5000` 退出码 0。保存原始输出；尚未据此选优或替换权重。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:46:05.723958+00:00
+
+开始 `score-L5000`，GPU `0`；运行提交 `7cd3d250d0471e2d12dce8e2df2a105bdfba7355`。完整命令及源码 SHA 记录在 `runs/experiments/paired-lr-probe-v1/pipeline.json`，终端日志为 `score-L5000.log`。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:46:43.395882+00:00
+
+`score-L5000` 退出码 0。保存原始输出；尚未据此选优或替换权重。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:46:43.453909+00:00
+
+开始 `score-R`，GPU `0`；运行提交 `7cd3d250d0471e2d12dce8e2df2a105bdfba7355`。完整命令及源码 SHA 记录在 `runs/experiments/paired-lr-probe-v1/pipeline.json`，终端日志为 `score-R.log`。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:47:21.578605+00:00
+
+`score-R` 退出码 0。保存原始输出；尚未据此选优或替换权重。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:47:21.640855+00:00
+
+开始 `decision`，GPU ``；运行提交 `7cd3d250d0471e2d12dce8e2df2a105bdfba7355`。完整命令及源码 SHA 记录在 `runs/experiments/paired-lr-probe-v1/pipeline.json`，终端日志为 `decision.log`。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:47:23.911019+00:00
+
+`decision` 退出码 0。保存原始输出；尚未据此选优或替换权重。
+
+
+### paired-lr-probe-v1 自动阶段记录 2026-09-14T20:47:23.911110+00:00
+
+两组训练、完整500图终点评分与预定统计计算结束。小样本轨迹汇总、完整图册视觉审查和最终中文报告仍待完成，不宣称全部实验已验收；不启动任何后续训练。
+
+## 2026-09-15：同步配对学习率实验终点证据
+
+按要求从服务器同步完成日志和结果，归档入口 `scripts/archive_lr_probe.py --root /data1/matengyu/geyugong/neuroadapter-subject1-research`（使用项目Python及冻结runtime的PYTHONPATH）。输出 `manifests/paired-lr-probe-v1`，71份文件、2183068字节；INDEX逐份绑定来源SHA。保留原始终端日志，包括启动失败记录；不上传权重、图片、脑数据、实际噪声或凭据。中文数值摘要为 `docs/PAIRED_LR_PROBE_V1.md`。
+
+H/L均5000更新完成，耗时3095.57/3083.09秒，完整配对审计通过。500图CLIP cosine：B0=0.627465，H=0.626694，L=0.633071，R=0.628143。L−B0=+0.005605，97.5%区间[0.001563,0.009795]；L−H=+0.006377，区间[0.001582,0.011492]。虽有小幅正向收益，但未达到0.01预设实际阈值；相对R区间跨零。辅助指标非全面改善，不宣称修复或替换权重。归档不改变实际训练提交7cd3d25；仍待小样本轨迹汇总、完整视觉审查与最终报告。

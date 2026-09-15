@@ -1,0 +1,30 @@
+{
+  "comparisons": {
+    "L5000_minus_B0": {
+      "mean": 0.005605314254760742,
+      "individual_ci97_5": [
+        0.0015629875682294369,
+        0.00979533830210567
+      ]
+    },
+    "L5000_minus_H5000": {
+      "mean": 0.0063771925568580625,
+      "individual_ci97_5": [
+        0.0015818453222513202,
+        0.011491723581403499
+      ]
+    },
+    "L5000_minus_R": {
+      "mean": 0.004927570939064026,
+      "individual_ci97_5": [
+        -0.0011498538829386234,
+        0.010841392314434066
+      ]
+    }
+  },
+  "useful_primary_signal": false,
+  "next_recommendation": "semantic probe C",
+  "next_action_executed": false,
+  "automatic_weight_replacement": false,
+  "qualification": "exploratory internal validation; inspect auxiliary metrics and visual tradeoffs; one paired training seed only"
+}

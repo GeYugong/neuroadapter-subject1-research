@@ -1,0 +1,10 @@
+{
+  "experiment_type": "paired_lr_probe",
+  "arm": "H",
+  "source_update": 159375,
+  "local_update": 2500,
+  "optimizer_update": 2500,
+  "optimizer_reset": true,
+  "config_hash": "e48f4408b42ab173bdcd2f22b50a11905f03593dd937df44fd5b82ee1ee29d18",
+  "source_sha256": "909357e478b171347630f1d709268225661bcad904637edaa1379a8871d32180"
+}
