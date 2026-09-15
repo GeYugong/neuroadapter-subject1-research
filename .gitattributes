@@ -4,3 +4,4 @@ manifests/paired-lr-probe-v1/** -text
 manifests/semantic-probe-c-v1/** -text
 manifests/semantic-rerank-d-v1/** -text
 manifests/semantic-rerank-e-residual-v1/** -text
+manifests/content-review-f-ai-v1/** -text

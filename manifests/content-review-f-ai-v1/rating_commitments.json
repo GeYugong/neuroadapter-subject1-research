@@ -1,0 +1,20 @@
+{
+  "reviewer_type": "AI",
+  "context_inherited": false,
+  "same_parent_model": true,
+  "cases_per_rater": 160,
+  "outputs_per_rater": 406,
+  "labels_locked_before_reveal": true,
+  "raters": [
+    {
+      "ratings_file": "rater-1.csv",
+      "sha256": "ab13eda6c43dff41fd226af5a9102aed6616e51a8ca9b1ad4d6bde616cf4c474",
+      "record_sha256": "7df2c0cb4de192eda91a785e891a4aeb2b65d37f9b6fd6506a213a3d3ffaa5c0"
+    },
+    {
+      "ratings_file": "rater-2.csv",
+      "sha256": "dc57f9a97a59f8ec03d5d79b5eccf48eb1be7cc6dd52e175e435227e03e6c744",
+      "record_sha256": "653b283e645047b24ad8a01cc504e12b37ac4fb98fffc498edeeeb0d29bff387"
+    }
+  ]
+}
