@@ -1,0 +1,69 @@
+{
+  "namespace": "semantic-probe-c-v1",
+  "train_count": 8500,
+  "probe_fit_count": 7500,
+  "probe_tune_count": 1000,
+  "validation_count": 500,
+  "split_rule": "ascending sha256(namespace + ':' + decimal image_id), tie by image_id; first7500 fit",
+  "pca_dimensions": [
+    256,
+    1024
+  ],
+  "pca_solver": "randomized",
+  "pca_whiten": false,
+  "pca_seed": 20260915,
+  "pca_iterated_power": 4,
+  "pca_n_oversamples": 10,
+  "alphas": [
+    0.1,
+    1.0,
+    10.0,
+    100.0,
+    1000.0
+  ],
+  "ridge_fit_intercept": true,
+  "ridge_solver": "cholesky",
+  "ridge_loss": "sum squared error + alpha times squared coefficient norm",
+  "target": "unit L2 normalized CLIP ViT-L/14 image embeddings; raw endpoint GT preprocessing",
+  "standardization": "StandardScaler fit only on fitting rows; drop exactly zero variance columns from those rows",
+  "pca_reuse": "unsupervised scaler/PCA shared across label permutations only within identical fit scope and dimension",
+  "selection_metric": "mean forward cosine two-way identification on fixed1000 tune pool",
+  "selection_ties": "exact ties choose256 then larger alpha",
+  "shuffle_seeds": [
+    20260921,
+    20260922,
+    20260923,
+    20260924,
+    20260925
+  ],
+  "shuffle_rule": "default_rng(seed).permutation on fit labels for tuning; seed+1000000 on full8500 refit labels; never shuffle held-out targets",
+  "controls": "each permutation repeats all10 candidate fits and tune selection, then refits selected on8500; mean uses fit mean for tuning and8500 mean for validation",
+  "retrieval": "prediction rows vs GT columns, float64 cosine, exact ties half in two-way; top-k expected uniform tie rank",
+  "candidate_aggregation": "score each candidate then average per image; never average embeddings",
+  "comparators": [
+    "R",
+    "L5000"
+  ],
+  "bootstrap_draws": 10000,
+  "bootstrap_seed": 20260915,
+  "main_comparison_ci": 0.975,
+  "scope": "exploratory reused internal validation, conditional on this sample and models; five shuffles descriptive, no permutation p-value",
+  "no_neuroadapter_updates": true,
+  "no_diffusion_generation": true,
+  "no_standard_test_access": true,
+  "no_post_validation_search": true,
+  "created_unix": 1789440688.8198318,
+  "source_commit": "de6bd4c353f542fc2dfcd56123e146ea65a4831c",
+  "source_sha256": {
+    "repo/configs/experiments/semantic_probe_c_v1.json": "b765f7e313a0e85bd7c16a76ba157daf477cddbf19c7fc8b031167c0909fd62c",
+    "runs/diagnostics/generalization-diagnosis-v2/signal/pool_ids.npy": "62c1ad66c20dde9d4b72332d87a190ce934203066c9425e4a6bd92a00d135556",
+    "runs/diagnostics/generalization-diagnosis-v2/signal/valid_mean_responses.npy": "ab51bfb60de593308dd12a26c99b9284c7b71845ecd5972e6311352597d94d33",
+    "runs/diagnostics/generalization-diagnosis-v2/signal/vertex_order.json": "5ec4e28936fa8dba3646fd3d3108447f08d24eae41ecd45e60d815cb13b7c3dc",
+    "data/derived/splits/selection_train_ids.txt": "a13ad80a744e19c22e8309bc9ffe3cd49bd5ad1a4058921adec37fdd686614ea",
+    "data/derived/splits/validation_ids.txt": "73137068416d3400708e1a3d5bda09600be4ea7b2164f11322a26f4de1b37c55",
+    "repo/scripts/run_semantic_probe.py": "9d574658d211df382c9ef294fe907d7d7eae1f4f22512cb88366fc3d98a9aaac",
+    "repo/scripts/semantic_probe_core.py": "3ce4d23e666436eaf96721ba08982d3f66379d929c1267a11c3035cfd27f4cd5",
+    "repo/scripts/evaluate_validation.py": "878aa8c7acb247f3b0785e6499a525830d4d3a754d8071931d3c032735e4039c",
+    "data/fingerprints/evaluation_downloads.json": "ddbc8da4e11c766e4e6ac8362d9d22d3e8d246f4072db91fda16c053af2a9e33"
+  }
+}

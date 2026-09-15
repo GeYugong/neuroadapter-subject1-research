@@ -28,6 +28,7 @@ __pycache__/
 /logs/
 *.log
 !/manifests/paired-lr-probe-v1/*.log
+!/manifests/semantic-probe-c-v1/*.log
 *.tmp
 *.part
 

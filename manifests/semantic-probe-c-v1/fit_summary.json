@@ -1,0 +1,51 @@
+{
+  "preprocessing": [
+    {
+      "stage": "tuning",
+      "dimension": 256,
+      "fit_count": 7500,
+      "zero_variance_removed": 0,
+      "explained_variance_ratio_sum": 0.7386206984519958
+    },
+    {
+      "stage": "tuning",
+      "dimension": 1024,
+      "fit_count": 7500,
+      "zero_variance_removed": 0,
+      "explained_variance_ratio_sum": 0.8524946570396423
+    },
+    {
+      "stage": "refit",
+      "dimension": 256,
+      "fit_count": 8500,
+      "zero_variance_removed": 0,
+      "explained_variance_ratio_sum": 0.7372881174087524
+    },
+    {
+      "stage": "refit",
+      "dimension": 1024,
+      "fit_count": 8500,
+      "zero_variance_removed": 0,
+      "explained_variance_ratio_sum": 0.848842978477478
+    }
+  ],
+  "seconds": 96.0736870765686,
+  "mean_tune": {
+    "cosine": 0.7098565553934512,
+    "forward_two_way": 0.5,
+    "top1": 0.001,
+    "top5": 0.005
+  },
+  "neuroadapter_updates": 0,
+  "prediction_sha256": {
+    "mean-predictions.npz": "3d56b678fcaaf8feb51cd6bc5dd04df3b2c52bb6433a2f41dcf4c755272f2581",
+    "shuffle5-predictions.npz": "64570a00767d031fe8665b25074cfade162c47624936c2265a04ef00d08df745",
+    "C-predictions.npz": "750f432e9b0ff1218cc4a53d7b167f00d9309efa5995ef11dab0004b8194b503",
+    "shuffle3-predictions.npz": "1816c60b7e61540afb0c389ea79ea220e54cbc621d42c5b95a412266585c15b2",
+    "shuffle2-predictions.npz": "bb8297c3379393f7346bedcd014f2f698698b8cd9abdbf87820af7d24efea456",
+    "shuffle4-predictions.npz": "df7f5128ed3008cd64812fe0fac11447d6e20409e829cb07568a37b3577f1056",
+    "shuffle1-predictions.npz": "c6ad524cddf7106972a92a0d7fea0b56659c7be59f165879780a231f2178f626"
+  },
+  "standard_test_accessed": false,
+  "validation_used_for_selection": false
+}

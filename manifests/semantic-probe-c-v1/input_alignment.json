@@ -1,0 +1,59 @@
+{
+  "shape": [
+    9000,
+    52807
+  ],
+  "sample_checks": [
+    {
+      "image_id": 40325,
+      "cache_valid_vertices_exact": true
+    },
+    {
+      "image_id": 17666,
+      "cache_valid_vertices_exact": true
+    },
+    {
+      "image_id": 54282,
+      "cache_valid_vertices_exact": true
+    },
+    {
+      "image_id": 37954,
+      "cache_valid_vertices_exact": true
+    },
+    {
+      "image_id": 53939,
+      "cache_valid_vertices_exact": true
+    },
+    {
+      "image_id": 37750,
+      "cache_valid_vertices_exact": true
+    },
+    {
+      "image_id": 5283,
+      "cache_valid_vertices_exact": true
+    },
+    {
+      "image_id": 53238,
+      "cache_valid_vertices_exact": true
+    },
+    {
+      "image_id": 95,
+      "cache_valid_vertices_exact": true
+    },
+    {
+      "image_id": 204,
+      "cache_valid_vertices_exact": true
+    },
+    {
+      "image_id": 318,
+      "cache_valid_vertices_exact": true
+    },
+    {
+      "image_id": 356,
+      "cache_valid_vertices_exact": true
+    }
+  ],
+  "parcels": 200,
+  "padding_removed": true,
+  "standard_test_accessed": false
+}

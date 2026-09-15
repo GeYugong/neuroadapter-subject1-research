@@ -1,0 +1,71 @@
+{
+  "selected_using": "probe_tune1000 only",
+  "configurations": {
+    "C": {
+      "label": "C",
+      "dimension": 1024,
+      "alpha": 0.1,
+      "cosine": 0.7584336807444174,
+      "forward_two_way": 0.8986916916916916,
+      "top1": 0.088,
+      "top5": 0.225,
+      "alpha_on_boundary": true,
+      "dimension_on_upper_boundary": true
+    },
+    "shuffle1": {
+      "label": "shuffle1",
+      "dimension": 1024,
+      "alpha": 0.1,
+      "cosine": 0.6807389684997843,
+      "forward_two_way": 0.5104694694694695,
+      "top1": 0.001,
+      "top5": 0.005,
+      "alpha_on_boundary": true,
+      "dimension_on_upper_boundary": true
+    },
+    "shuffle2": {
+      "label": "shuffle2",
+      "dimension": 1024,
+      "alpha": 1.0,
+      "cosine": 0.6790733273575404,
+      "forward_two_way": 0.501037037037037,
+      "top1": 0.001,
+      "top5": 0.006,
+      "alpha_on_boundary": false,
+      "dimension_on_upper_boundary": true
+    },
+    "shuffle3": {
+      "label": "shuffle3",
+      "dimension": 1024,
+      "alpha": 1.0,
+      "cosine": 0.678969880406054,
+      "forward_two_way": 0.5043623623623623,
+      "top1": 0.002,
+      "top5": 0.007,
+      "alpha_on_boundary": false,
+      "dimension_on_upper_boundary": true
+    },
+    "shuffle4": {
+      "label": "shuffle4",
+      "dimension": 256,
+      "alpha": 1000.0,
+      "cosine": 0.6991711069501757,
+      "forward_two_way": 0.49749449449449445,
+      "top1": 0.001,
+      "top5": 0.005,
+      "alpha_on_boundary": true,
+      "dimension_on_upper_boundary": false
+    },
+    "shuffle5": {
+      "label": "shuffle5",
+      "dimension": 1024,
+      "alpha": 1000.0,
+      "cosine": 0.679413696331882,
+      "forward_two_way": 0.5036996996996997,
+      "top1": 0.002,
+      "top5": 0.009,
+      "alpha_on_boundary": true,
+      "dimension_on_upper_boundary": true
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "source": "runs/diagnostics/semantic-probe-c-v1; logs from its parent",
+  "files": [
+    {
+      "path": "completion_audit.json",
+      "bytes": 2160,
+      "sha256": "8bd9066337446963f11dec1cf44d5ef44fe7de9fabe733be2124458116d7a5ca"
+    },
+    {
+      "path": "control_results.json",
+      "bytes": 6201,
+      "sha256": "57a34005cd4fe572b49d6a4ce329cef6a5fb9352bf179497f36ec551db1b96cb"
+    },
+    {
+      "path": "feature_manifest.json",
+      "bytes": 1150,
+      "sha256": "320a8394a806e4a408ad0cbf88c1d2339e1c8189d5d8f8e7c8eb3371d4c70cdc"
+    },
+    {
+      "path": "fit_summary.json",
+      "bytes": 1715,
+      "sha256": "05ff9604ae1cd39115f6aa34e18e31aace776c966042a4665fbae583b171c148"
+    },
+    {
+      "path": "input_alignment.json",
+      "bytes": 1084,
+      "sha256": "678dd4f2c358d9cc68f3bd11e5db912d1ce44a7090144ce4769657646b256432"
+    },
+    {
+      "path": "per_candidate_scores.csv",
+      "bytes": 327182,
+      "sha256": "fc54f91d872e8d18e1c93e4b620900b3def7b0840dade219852874301d38856f"
+    },
+    {
+      "path": "per_image_scores.csv",
+      "bytes": 262196,
+      "sha256": "296e44519aff8dd0da2c5f81311c68d7b5078f19b1b84430ea087d0188aea663"
+    },
+    {
+      "path": "plan.json",
+      "bytes": 3546,
+      "sha256": "467aa57daa29be5a9d2f0b0129f6e149ce8598e231eda5b73483c0b0588dc129"
+    },
+    {
+      "path": "selected_configs.json",
+      "bytes": 1834,
+      "sha256": "276affadbb1173ced889ff5beb36799b62924e366870d88c17a5143229e29976"
+    },
+    {
+      "path": "semantic-probe-audit.log",
+      "bytes": 45,
+      "sha256": "fc863ff4fbc32f29a7c232418ad4d719c2082f918757329f9c3c07c3bd409d49"
+    },
+    {
+      "path": "semantic-probe-evaluate.log",
+      "bytes": 1191,
+      "sha256": "f267313f2a156fb6867d34613e85b1339fe757ae981e8a47aaf8571e6c619c80"
+    },
+    {
+      "path": "semantic-probe-fit.log",
+      "bytes": 9309,
+      "sha256": "74d175c368bbc2f00ddafe91f01edd0e3dd9cc5b15221ed445a05dfcd07787f6"
+    },
+    {
+      "path": "semantic-probe-prepare.log",
+      "bytes": 452,
+      "sha256": "c977811a11d4b3793634b3bffe7d2376d343f04a9fc01728fb33b6b903b323eb"
+    },
+    {
+      "path": "tuning_results.csv",
+      "bytes": 4094,
+      "sha256": "fb1db531fe0c6271236f3d176b45c738533929dc619da5eb0bfb604d0e32b6b7"
+    },
+    {
+      "path": "split_ids/probe_fit.txt",
+      "bytes": 43894,
+      "sha256": "0b81a444f63c59944334df1f404c700f664d1e5cab130d74982b2b5bbbd81489"
+    },
+    {
+      "path": "split_ids/probe_tune.txt",
+      "bytes": 5851,
+      "sha256": "29a7f269b489cb2af288726cd7a4286af9c20a6c248380348b079c7a2286891d"
+    },
+    {
+      "path": "split_ids/train8500.txt",
+      "bytes": 49745,
+      "sha256": "a13ad80a744e19c22e8309bc9ffe3cd49bd5ad1a4058921adec37fdd686614ea"
+    },
+    {
+      "path": "split_ids/validation.txt",
+      "bytes": 2928,
+      "sha256": "73137068416d3400708e1a3d5bda09600be4ea7b2164f11322a26f4de1b37c55"
+    }
+  ]
+}

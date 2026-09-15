@@ -1,0 +1,34 @@
+{
+  "files": {
+    "gt_features.npz": {
+      "sha256": "ecd5965bb728072e7016cab3685aa3d990d7e7e01461f8fffdee95afc6c978b8",
+      "bytes": 27720520
+    },
+    "R_features.npz": {
+      "sha256": "8b26a6b5bf5ecbbe588b27d5f7449a85bd1a3bfa031bb8c3dd09d8729237ad7f",
+      "bytes": 3076520
+    },
+    "L5000_features.npz": {
+      "sha256": "14629b01335d9dfc0290779e8fdbfe5d3de5d9fee1afdbddb572eed2724f2d69",
+      "bytes": 3076520
+    }
+  },
+  "clip_weights_sha256": "b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836",
+  "preprocessing": "evaluate_validation.preprocess_transform(224,CLIP_MEAN,CLIP_STD); raw imgBrick uint8",
+  "batch_size": 16,
+  "endpoint_checks": [
+    {
+      "label": "R",
+      "gt_features_exact": true,
+      "max_cosine_error": 1.5520710694438833e-07,
+      "decode_manifest_sha256": "60e23885260112e08134ed630af500aa02bae74347f10610341c9d4ed3e7c0f2"
+    },
+    {
+      "label": "L5000",
+      "gt_features_exact": true,
+      "max_cosine_error": 1.4568331296871406e-07,
+      "decode_manifest_sha256": "62282639f8e71c786c81d835c03c6d412c267ae765c51a983d11b6e61239bb78"
+    }
+  ],
+  "new_diffusion_images": 0
+}

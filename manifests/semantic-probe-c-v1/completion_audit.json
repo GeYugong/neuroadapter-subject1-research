@@ -1,0 +1,85 @@
+{
+  "passed": true,
+  "models": [
+    {
+      "method": "C",
+      "prediction_replay_max_error": 0.0,
+      "fitting_scope8500_verified": true
+    },
+    {
+      "method": "shuffle1",
+      "prediction_replay_max_error": 0.0,
+      "fitting_scope8500_verified": true
+    },
+    {
+      "method": "shuffle2",
+      "prediction_replay_max_error": 0.0,
+      "fitting_scope8500_verified": true
+    },
+    {
+      "method": "shuffle3",
+      "prediction_replay_max_error": 0.0,
+      "fitting_scope8500_verified": true
+    },
+    {
+      "method": "shuffle4",
+      "prediction_replay_max_error": 0.0,
+      "fitting_scope8500_verified": true
+    },
+    {
+      "method": "shuffle5",
+      "prediction_replay_max_error": 0.0,
+      "fitting_scope8500_verified": true
+    }
+  ],
+  "scorechecks": [
+    {
+      "method": "C",
+      "independent_rank_score_max_error": 0.0
+    },
+    {
+      "method": "mean",
+      "independent_rank_score_max_error": 0.0
+    },
+    {
+      "method": "shuffle1",
+      "independent_rank_score_max_error": 0.0
+    },
+    {
+      "method": "shuffle2",
+      "independent_rank_score_max_error": 0.0
+    },
+    {
+      "method": "shuffle3",
+      "independent_rank_score_max_error": 0.0
+    },
+    {
+      "method": "shuffle4",
+      "independent_rank_score_max_error": 0.0
+    },
+    {
+      "method": "shuffle5",
+      "independent_rank_score_max_error": 0.0
+    },
+    {
+      "method": "R",
+      "independent_rank_score_max_error": 0.0
+    },
+    {
+      "method": "L5000",
+      "independent_rank_score_max_error": 0.0
+    }
+  ],
+  "preserved_weight_sha256": {
+    "B0": "909357e478b171347630f1d709268225661bcad904637edaa1379a8871d32180",
+    "R": "bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217",
+    "H5000": "5a2ee73a5ab51674e36dffb8d4cd15aa5900236477a66d12bacbc1f16fdae65f",
+    "L5000": "ec820f658fec9e9a5e5c0ffd81f7930cf08e6fe44b1798fb93af342173cdd275"
+  },
+  "tuning_configs_per_method": 10,
+  "n_shuffle_controls": 5,
+  "new_neuroadapter_updates": 0,
+  "new_diffusion_images": 0,
+  "no_standard_test_file_read": true,
+  "code_sha256": "2b3b8c8214a84a5d3c163ce4f883fe7ab093d43c9a1f42357bfec2c848f84fc5"
+}
