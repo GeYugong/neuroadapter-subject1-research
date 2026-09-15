@@ -1,0 +1,9 @@
+experiment_type: retrain_lr_v1
+max_updates: 159375
+snapshot_updates: [53125, 106250, 159375]
+canonical_sha256: dc363931727f5f5e445d267f9b31e1a366b134b2e62a34dc72ae12693d875fca
+arms:
+  T1: {kind: constant, start: 0.00003, end: 0.00003}
+  T2: {kind: cosine, start: 0.0001, end: 0.00001}
+bootstrap_seed: 20260901
+bootstrap_draws: 10000
