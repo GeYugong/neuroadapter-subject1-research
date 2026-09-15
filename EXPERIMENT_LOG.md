@@ -2875,3 +2875,9 @@ C 选中 PCA1024、alpha0.1，tune 前向识别率89.8692%；8500 refit 后500�
 在结果提交9e94270基础上执行 `scripts/finalize_semantic_probe.py --root /data1/matengyu/geyugong/neuroadapter-subject1-research`，使用该项目 `envs/neuroadapter/bin/python`，退出码0。验证18份原始归档与服务器来源SHA一致、3份特征文件SHA一致；独立由8500训练标签重算均值预测误差0；逐次重算32组图级bootstrap区间误差0。新增 `finalization_audit.json` 保存证据，原completion_audit保持不变。服务器约定目录的REPORT.md已补齐，本地含可用相对证据链接的副本在 `artifacts/semantic-probe-c-v1/REPORT.md`。32页已审阅LR图册再次核验SHA，内容没有变化。
 
 首次从服务器home启动pytest时，仅设置runtime/src，因缺repo模块搜索路径出现7个收集错误，未执行测试。补齐PYTHONPATH为 `repo:runtime/subject01-4090-1a1fcfa/src`（均为项目绝对路径）后，使用 `python -m pytest <ROOT>/repo/tests -q --basetemp=<ROOT>/runs/diagnostics/semantic-probe-final-tests`，89 passed、14条依赖弃用警告、5.65秒。未修改环境或测试代码。nvidia-smi计算进程查询为空，无本项目GPU训练或推理任务。至此学习率收尾、独立探针、对照、评分、报告和结果归档全部完成，不追加实验。
+
+## 2026-09-15：D 固定八候选选图实验启动
+
+后续新任务授权semantic-rerank-d-v1，仅使用R原239063的既有500×8候选、冻结C和均值预测，不拟合C、不更新NeuroAdapter、不扩散生成、不访问标准test。计划提交8776f2e。`prepare_semantic_rerank.py --root <ROOT>`已在4090服务器项目内完成：4000份PNG逐文件SHA和图片完整性检查通过，500图ID与C预测一致，沿用32验证图ID；冻结5组无固定点置换。选择函数只有预测与候选两个参数，精确平局选最小索引；3项针对性测试通过（0.06秒）。
+
+新增 `run_semantic_rerank.py` 提取同口径CLIP、AlexNet5、Inception特征和PixCorr/SSIM，八候选分别评分，不平均embedding。两个主比较为C−Uniform、C−Mean的前向二选一，固定10000次图级bootstrap和97.5%区间；2百分点仅作投入筛查，不作正式合格线。oracle明确仅诊断，不作为可部署结果。32图册先隐藏选择器标记，待逐图视觉记录后再揭示索引。当前仅候选完整性检查完成，特征、评价和视觉报告尚待执行，不提前宣布结果。
