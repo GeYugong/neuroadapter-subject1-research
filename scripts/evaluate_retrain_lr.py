@@ -106,6 +106,7 @@ def decode(root,label,smoke=False):
     protocol=json.loads((out/'protocol.json').read_text())
     if not smoke and label.startswith('OLD') and protocol['references'][label]['reuse_existing']: return
     source=output(root)/'tests/T2-full/snapshots/snapshot-update-00000020' if smoke else snapshot(root,label)
+    source_hash=sha256_file(source/'model.pt')
     target=out/('smoke' if smoke else label);target.mkdir(exist_ok=True)
     if (target/'decode_manifest.json').exists(): return
     configure_torch_backend(base.training)
@@ -117,7 +118,7 @@ def decode(root,label,smoke=False):
             record=target/f'{i}.json'
             if record.exists():
                 r=json.loads(record.read_text());assert r['image_id']==i
-                assert r['source_sha256']==sha256_file(source/'model.pt')
+                assert r['source_sha256']==source_hash
                 for f in r['files']: assert sha256_file(target/f['path'])==f['sha256']
                 records.append(r);continue
             noise=root/protocol['noise_paths'][str(i)];assert sha256_file(noise)==protocol['noise_sha256'][str(i)]
@@ -127,11 +128,12 @@ def decode(root,label,smoke=False):
             for c,value in enumerate(values):
                 rel=f'candidate-{c:02d}/{i:05d}.png';diag.png(target/rel,value)
                 files.append({'candidate_index':c,'path':rel,'sha256':sha256_file(target/rel)})
-            r={'image_id':i,'files':files,'source_sha256':sha256_file(source/'model.pt')}
+            r={'image_id':i,'files':files,'source_sha256':source_hash}
             write_json_atomic(record,r);records.append(r)
             if (j+1)%25==0: print(f'{label}: {j+1}/500',flush=True)
+    assert sha256_file(source/'model.pt')==source_hash
     write_json_atomic(target/'decode_manifest.json',{'status':'complete','split':'validation','candidate_count':2,
-        'records':records,'experiment_type':'retrain_lr_v1','snapshot_sha256':sha256_file(source/'model.pt'),
+        'records':records,'experiment_type':'retrain_lr_v1','snapshot_sha256':source_hash,
         'protocol_sha256':sha256_file(out/'protocol.json'),'smoke_only':smoke})
     ds.close()
 
@@ -143,6 +145,8 @@ def score(root,label,smoke=False):
     if result.exists(): return
     protocol=json.loads((out/'protocol.json').read_text())
     folder=Path(protocol['references'][label]['folder']) if label.startswith('OLD') else out/label
+    if label.startswith('OLD') and protocol['references'][label]['reuse_existing']:
+        assert sha256_file(folder/'decode_manifest.json')==protocol['references'][label]['manifest_sha256']
     configure_torch_backend(base.training)
     if smoke:
         import h5py

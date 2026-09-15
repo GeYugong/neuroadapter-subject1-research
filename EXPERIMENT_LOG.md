@@ -2931,3 +2931,5 @@ E主体correct为60/160与53/160，C为57与54，固定随机49与46；E场景40
 读取用户附件CODEX_NeuroAdapter_T1_T2_training_task.md及实际4090配置/effective_run/preferred_config，建立feat/retrain-lr-v1。目标两条各159375更新，T1固定3e-5，T2无重启余弦1e-4至1e-5，均从原canonical且全新AdamW开始。双4090初始计算进程为空，可用显存基本完整，磁盘余量约926GB。新独立入口复用旧primitives，不修改旧runtime/模型/审批锁，不扩展C/D/E/F。
 
 数据资产已按旧SHA核验：canonical、8500训练/500验证划分、缓存、刺激及SD模型树一致。新的配置、LR纯函数、恢复测试、顺序控制器、同口径双候选八指标评价与最佳新候选导出已实现，接下来执行必要短测并冻结运行源码。此记录不表示正式新训练已启动。
+
+首版3d24bca完成T1一更新隔离测试，loss0.1590818763，峰值每卡约13.56GB reserved，退出0、冻结参数不变。随后在正式训练前将新effective_config的checkpoint_reference_epochs明确改为100（原继承字段为25但执行日程已是100），并避免评价循环反复哈希同一模型文件，补旧manifest重评分前身份检查。训练前向、LR和科学设置没有改变；首版测试归档，新源码重新跑必要短测，不将首版一更新权重用于初始化。

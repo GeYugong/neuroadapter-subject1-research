@@ -46,7 +46,7 @@ def settings(root, arm):
         adamw_fused=False, adamw_foreach=False)
     assert all(base.training[k] == v for k, v in expected.items())
     training = copy.deepcopy(base.training)
-    training.update(max_updates=U, learning_rate=lr_at(arm, 0), log_every_updates=100)
+    training.update(max_updates=U, learning_rate=lr_at(arm, 0), log_every_updates=100, checkpoint_reference_epochs=100)
     return base, spec, training
 
 
