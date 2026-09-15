@@ -1,0 +1,48 @@
+{
+  "review_complete": true,
+  "reviewer": "AI visual inspection",
+  "fixed_images": 32,
+  "changed_images_reviewed": 22,
+  "gallery_pages_reviewed": 6,
+  "C_hits": 10,
+  "E_hits": 8,
+  "recovered_ids": [
+    13223
+  ],
+  "lost_ids": [
+    17865,
+    5683,
+    59101
+  ],
+  "original_D_labels_sha256": "86604bf6d386f8ecb2953784f499d06b3e32ae3631a2789c9ae8ae83d09f703d",
+  "numeric_gate_pass": true,
+  "full_retention_gate_pass": false,
+  "limitations": "Fixed small sample; broad category labels; not human independent evaluation",
+  "report_sha256": "d98ed318ebd3880f07eee07ffeb9b0ddc95ea34c5a8b2eac5dcb28a6d7096b22",
+  "gallery": [
+    {
+      "file": "page-01.jpg",
+      "sha256": "8d2ae50a60dfb33e0afbd288e2c50e008453acc3bd07ad5084a042bd2498a840"
+    },
+    {
+      "file": "page-02.jpg",
+      "sha256": "bbba4955c27c4b00fa73d21e69bafccb5576e044d8c20006bf4574f290c19f01"
+    },
+    {
+      "file": "page-03.jpg",
+      "sha256": "b81a6cba8ddac666e97ce81d8993d5ffe62285f90bcff9fcdb2a6d6c23280101"
+    },
+    {
+      "file": "page-04.jpg",
+      "sha256": "fc6765c103e4396e5bd0d4c203586415d435c17e0d6de6debbf6621134d78946"
+    },
+    {
+      "file": "page-05.jpg",
+      "sha256": "fbce549f0d50ce985f995cb3e479e156f983a971f8c181d592de6c0d9e38fd11"
+    },
+    {
+      "file": "page-06.jpg",
+      "sha256": "e4c7fc57adf2fe363d34258e6d9f2fcd0eff5cffcfea750d959d886eaf3f69c2"
+    }
+  ]
+}

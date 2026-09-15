@@ -1,0 +1,581 @@
+{
+  "summary": {
+    "Uniform": {
+      "CLIP_cosine": 0.6293641927146418,
+      "CLIP_forward_two_way": 0.8517239478957915,
+      "CLIP_top1": 0.07175,
+      "CLIP_top5": 0.2315,
+      "AlexNet5_forward_two_way": 0.8626713426853707,
+      "Inception_forward_two_way": 0.7958522044088177,
+      "PixCorr": 0.08930222505640138,
+      "SSIM": 0.2905183675232925
+    },
+    "C-selected": {
+      "CLIP_cosine": 0.6765557420466514,
+      "CLIP_forward_two_way": 0.8574589178356714,
+      "CLIP_top1": 0.094,
+      "CLIP_top5": 0.262,
+      "AlexNet5_forward_two_way": 0.8661763527054108,
+      "Inception_forward_two_way": 0.8235350701402806,
+      "PixCorr": 0.09551850343469005,
+      "SSIM": 0.29257372925422015
+    },
+    "Mean-selected": {
+      "CLIP_cosine": 0.6646985076420999,
+      "CLIP_forward_two_way": 0.8241923847695392,
+      "CLIP_top1": 0.068,
+      "CLIP_top5": 0.224,
+      "AlexNet5_forward_two_way": 0.8465931863727454,
+      "Inception_forward_two_way": 0.8016513026052106,
+      "PixCorr": 0.09348474059786639,
+      "SSIM": 0.29323197618231583
+    },
+    "Oracle-cosine": {
+      "CLIP_cosine": 0.7013919206510596,
+      "CLIP_forward_two_way": 0.9279238476953908,
+      "CLIP_top1": 0.188,
+      "CLIP_top5": 0.448,
+      "AlexNet5_forward_two_way": 0.884312625250501,
+      "Inception_forward_two_way": 0.8584969939879759,
+      "PixCorr": 0.09314513358429158,
+      "SSIM": 0.29095770120477066
+    },
+    "Oracle-identification": {
+      "CLIP_cosine": 0.6791966331227234,
+      "CLIP_forward_two_way": 0.9551943887775551,
+      "CLIP_top1": 0.268,
+      "CLIP_top5": 0.532,
+      "AlexNet5_forward_two_way": 0.8912144288577154,
+      "Inception_forward_two_way": 0.854060120240481,
+      "PixCorr": 0.09486919047616811,
+      "SSIM": 0.2874160544994736
+    },
+    "E-selected": {
+      "CLIP_cosine": 0.6528193392309415,
+      "CLIP_forward_two_way": 0.9005971943887775,
+      "CLIP_top1": 0.106,
+      "CLIP_top5": 0.31,
+      "AlexNet5_forward_two_way": 0.886997995991984,
+      "Inception_forward_two_way": 0.832997995991984,
+      "PixCorr": 0.09802013073501203,
+      "SSIM": 0.2909595234083452
+    },
+    "Mismatched-E-1": {
+      "CLIP_cosine": 0.6248594048247298,
+      "CLIP_forward_two_way": 0.8513507014028058,
+      "CLIP_top1": 0.056,
+      "CLIP_top5": 0.228,
+      "AlexNet5_forward_two_way": 0.8638396793587174,
+      "Inception_forward_two_way": 0.7875190380761522,
+      "PixCorr": 0.0921602230983016,
+      "SSIM": 0.28865670558524875
+    },
+    "Mismatched-E-2": {
+      "CLIP_cosine": 0.6230605999689159,
+      "CLIP_forward_two_way": 0.8417074148296594,
+      "CLIP_top1": 0.082,
+      "CLIP_top5": 0.246,
+      "AlexNet5_forward_two_way": 0.848937875751503,
+      "Inception_forward_two_way": 0.788184368737475,
+      "PixCorr": 0.08438585516477179,
+      "SSIM": 0.2882139001343379
+    },
+    "Mismatched-E-3": {
+      "CLIP_cosine": 0.6179638182039203,
+      "CLIP_forward_two_way": 0.8431382765531061,
+      "CLIP_top1": 0.054,
+      "CLIP_top5": 0.196,
+      "AlexNet5_forward_two_way": 0.8662204408817634,
+      "Inception_forward_two_way": 0.787498997995992,
+      "PixCorr": 0.09371395262103314,
+      "SSIM": 0.2925634162608725
+    },
+    "Mismatched-E-4": {
+      "CLIP_cosine": 0.6223619364634746,
+      "CLIP_forward_two_way": 0.8418156312625251,
+      "CLIP_top1": 0.072,
+      "CLIP_top5": 0.212,
+      "AlexNet5_forward_two_way": 0.8588777555110221,
+      "Inception_forward_two_way": 0.7857074148296593,
+      "PixCorr": 0.07535913892702686,
+      "SSIM": 0.2903136109506029
+    },
+    "Mismatched-E-5": {
+      "CLIP_cosine": 0.6222963859343069,
+      "CLIP_forward_two_way": 0.8418156312625251,
+      "CLIP_top1": 0.064,
+      "CLIP_top5": 0.214,
+      "AlexNet5_forward_two_way": 0.8528617234468938,
+      "Inception_forward_two_way": 0.7911462925851704,
+      "PixCorr": 0.08655094243880669,
+      "SSIM": 0.29148353326283427
+    }
+  },
+  "E_minus": {
+    "Uniform": {
+      "CLIP_cosine": {
+        "mean": 0.023455146516299683,
+        "ci97_5": [
+          0.018194117417778672,
+          0.02875152892300563
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.048873246492985974,
+        "ci97_5": [
+          0.03878029809619238,
+          0.0599825338176353
+        ],
+        "primary": true
+      },
+      "CLIP_top1": {
+        "mean": 0.03425,
+        "ci97_5": [
+          0.01,
+          0.0605
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.0785,
+        "ci97_5": [
+          0.0455,
+          0.1115
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.024326653306613225,
+        "ci97_5": [
+          0.013532909569138272,
+          0.03510240480961925
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.037145791583166325,
+        "ci97_5": [
+          0.023923553356713423,
+          0.051135928106212425
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.008717905678610641,
+        "ci97_5": [
+          -0.00589795110816079,
+          0.022646759022484288
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": 0.0004411558850527066,
+        "ci97_5": [
+          -0.003106589158177574,
+          0.00393122607791738
+        ],
+        "primary": false
+      }
+    },
+    "C-selected": {
+      "CLIP_cosine": {
+        "mean": -0.023736402815709837,
+        "ci97_5": [
+          -0.029495097549088474,
+          -0.018204990536349934
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.04313827655310621,
+        "ci97_5": [
+          0.02917800601202404,
+          0.058276753507014036
+        ],
+        "primary": true
+      },
+      "CLIP_top1": {
+        "mean": 0.012,
+        "ci97_5": [
+          -0.016,
+          0.042
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.048,
+        "ci97_5": [
+          0.01,
+          0.086
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.020821643286573144,
+        "ci97_5": [
+          0.0049576152304609145,
+          0.037331012024048114
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.009462925851703403,
+        "ci97_5": [
+          -0.007604458917835672,
+          0.02740696392785572
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.0025016273003219823,
+        "ci97_5": [
+          -0.015688776064158683,
+          0.021164008175762854
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": -0.00161420584587494,
+        "ci97_5": [
+          -0.006247034937569385,
+          0.003027754480530825
+        ],
+        "primary": false
+      }
+    },
+    "Mismatched-E-1": {
+      "CLIP_cosine": {
+        "mean": 0.027959934406211653,
+        "ci97_5": [
+          0.019755953111624903,
+          0.03636309435845328
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.04924649298597194,
+        "ci97_5": [
+          0.032937825651302606,
+          0.06587600200400803
+        ],
+        "primary": false
+      },
+      "CLIP_top1": {
+        "mean": 0.05,
+        "ci97_5": [
+          0.02,
+          0.082
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.082,
+        "ci97_5": [
+          0.036,
+          0.12802500000000147
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.023158316633266535,
+        "ci97_5": [
+          0.0067894288577154335,
+          0.04000405811623247
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.045478957915831654,
+        "ci97_5": [
+          0.026977655310621244,
+          0.06513832665330661
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.005859907636710429,
+        "ci97_5": [
+          -0.014055600542705446,
+          0.025413279982693614
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": 0.0023028178230964976,
+        "ci97_5": [
+          -0.0028422708180228756,
+          0.007308848032771648
+        ],
+        "primary": false
+      }
+    },
+    "Mismatched-E-2": {
+      "CLIP_cosine": {
+        "mean": 0.02975873926202547,
+        "ci97_5": [
+          0.021491669244926567,
+          0.03811900882314155
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.05888977955911824,
+        "ci97_5": [
+          0.04304589178356713,
+          0.07536763527054113
+        ],
+        "primary": false
+      },
+      "CLIP_top1": {
+        "mean": 0.024,
+        "ci97_5": [
+          -0.01,
+          0.058
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.064,
+        "ci97_5": [
+          0.022,
+          0.108
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.03806012024048096,
+        "ci97_5": [
+          0.020204108216432856,
+          0.056132314629258516
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.04481362725450901,
+        "ci97_5": [
+          0.025142134268537068,
+          0.06578031062124252
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.01363427557024025,
+        "ci97_5": [
+          -0.005797546390808531,
+          0.032487472305676605
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": 0.002745623274007287,
+        "ci97_5": [
+          -0.0023628022417305984,
+          0.007943643591425008
+        ],
+        "primary": false
+      }
+    },
+    "Mismatched-E-3": {
+      "CLIP_cosine": {
+        "mean": 0.034855521027021115,
+        "ci97_5": [
+          0.026978881752182514,
+          0.0430420513322862
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.05745891783567134,
+        "ci97_5": [
+          0.04279318637274549,
+          0.0725691382765531
+        ],
+        "primary": false
+      },
+      "CLIP_top1": {
+        "mean": 0.052,
+        "ci97_5": [
+          0.022,
+          0.084
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.114,
+        "ci97_5": [
+          0.07,
+          0.158
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.020777555110220437,
+        "ci97_5": [
+          0.004821543086172341,
+          0.036697444889779565
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.04549899799599198,
+        "ci97_5": [
+          0.025967935871743484,
+          0.06636888777555112
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.004306178113978881,
+        "ci97_5": [
+          -0.01572252634716265,
+          0.024246943138545057
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": -0.001603892852527259,
+        "ci97_5": [
+          -0.006797817026876401,
+          0.003602577736204265
+        ],
+        "primary": false
+      }
+    },
+    "Mismatched-E-4": {
+      "CLIP_cosine": {
+        "mean": 0.030457402767466942,
+        "ci97_5": [
+          0.02300605272516671,
+          0.038270351727388636
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.0587815631262525,
+        "ci97_5": [
+          0.043410821643286565,
+          0.07510220440881764
+        ],
+        "primary": false
+      },
+      "CLIP_top1": {
+        "mean": 0.034,
+        "ci97_5": [
+          0.004,
+          0.066
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.098,
+        "ci97_5": [
+          0.054,
+          0.144
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.028120240480961924,
+        "ci97_5": [
+          0.010541082164328652,
+          0.04627264529058117
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.047290581162324645,
+        "ci97_5": [
+          0.028913527054108212,
+          0.06688982965931864
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.022660991807985163,
+        "ci97_5": [
+          0.002068097540118838,
+          0.04311212715341234
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": 0.0006459124577423817,
+        "ci97_5": [
+          -0.004301694629950448,
+          0.005661148915257186
+        ],
+        "primary": false
+      }
+    },
+    "Mismatched-E-5": {
+      "CLIP_cosine": {
+        "mean": 0.030522953296634618,
+        "ci97_5": [
+          0.022600977001557953,
+          0.03859925082013445
+        ],
+        "primary": false
+      },
+      "CLIP_forward_two_way": {
+        "mean": 0.05878156312625251,
+        "ci97_5": [
+          0.04174714428857715,
+          0.07685786573146294
+        ],
+        "primary": false
+      },
+      "CLIP_top1": {
+        "mean": 0.042,
+        "ci97_5": [
+          0.008,
+          0.076
+        ],
+        "primary": false
+      },
+      "CLIP_top5": {
+        "mean": 0.096,
+        "ci97_5": [
+          0.05,
+          0.142
+        ],
+        "primary": false
+      },
+      "AlexNet5_forward_two_way": {
+        "mean": 0.03413627254509018,
+        "ci97_5": [
+          0.016244488977955916,
+          0.052669388777555115
+        ],
+        "primary": false
+      },
+      "Inception_forward_two_way": {
+        "mean": 0.04185170340681363,
+        "ci97_5": [
+          0.022332565130260523,
+          0.06248907815631264
+        ],
+        "primary": false
+      },
+      "PixCorr": {
+        "mean": 0.011469188296205355,
+        "ci97_5": [
+          -0.008425527552274575,
+          0.030769275105454633
+        ],
+        "primary": false
+      },
+      "SSIM": {
+        "mean": -0.0005240098544891046,
+        "ci97_5": [
+          -0.005764103727269332,
+          0.004743800584583016
+        ],
+        "primary": false
+      }
+    }
+  },
+  "scope": "exploratory reused internal validation; fixed pool and models; auxiliary comparisons descriptive",
+  "oracle_background_only": true,
+  "permutation_p_value": null
+}

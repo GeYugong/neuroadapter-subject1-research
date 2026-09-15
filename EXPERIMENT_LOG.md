@@ -2895,3 +2895,11 @@ C 选中 PCA1024、alpha0.1，tune 前向识别率89.8692%；8500 refit 后500�
 ## 2026-09-15：E 固定去均值排序启动
 
 按新请求仅执行 `(原始C预测−8500训练单位CLIP均值)·单位候选`，无可调系数。新增独立入口run_residual_rerank.py，不修改D冻结函数。使用C/D现有矩阵与五组冻结无固定点错配；均值先验证全行相同，再按8500训练ID重算交叉检查。不读取脑数组、不调用评价网络、不训练、不生成。两主比较E−Uniform与E−原C，指标CLIP前向二选一，bootstrap seed20261001、10000次、97.5%区间。保留2百分点资源筛查规则；失败后不自动搜索lambda、白化或候选数。沿用D原32图标签，完整展示该固定样本中所有C/E不同选择，结果保存在新目录semantic-rerank-e-residual-v1。
+
+## 2026-09-15：E 完成，保留指标与视觉冲突
+
+运行源码c1143eb。4090服务器项目Python执行 `env OPENBLAS_NUM_THREADS=8 /data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python /data1/matengyu/geyugong/neuroadapter-subject1-research/repo/scripts/run_residual_rerank.py --root /data1/matengyu/geyugong/neuroadapter-subject1-research`，退出0，仅CPU既有矩阵计算，不使用GPU，不训练、不生成、不访问标准test；未单独记录精确运行时长。8500训练均值重算误差0，共同项加特异项恢复全部原C选择。
+
+E前向CLIP识别90.0597%，相对Uniform增加4.8873百分点（97.5%区间[3.8780,5.9983]），相对C增加4.3138（[2.9178,5.8277]）。非CLIP的AlexNet5和Inception也有改善，但不能替代视觉内容检查。500图中380图选择改变；固定32图中的22个变化全部制作GT/C/E对照并逐页查看6页。沿用D标签，原12个可匹配池中C命中10、E命中8：找回13223，损失17865、5683、59101。审阅为AI粗类别检查，不外推总体成功率。
+
+数值筛查通过，但视觉出现反向证据，完整保留条件未满足，不提升为已验收R+E管线，不替换原权重、不恢复ROI结论。本轮停止，不自动追加排序或训练。新增3项针对测试通过；全套95 passed、14条依赖警告、5.54秒。公开报告 `docs/SEMANTIC_RERANK_E_RESIDUAL_V1.md`，小型证据在manifests同名目录；本地含图报告 `artifacts/semantic-rerank-e-residual-v1/REPORT.md`，服务器 `runs/diagnostics/semantic-rerank-e-residual-v1/REPORT.md`。原始待审阅标记不覆盖，以review_completion.json补充完成状态。

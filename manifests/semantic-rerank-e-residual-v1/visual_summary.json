@@ -1,0 +1,12 @@
+{
+  "counts": {
+    "E_hits_category_scene_match": 8,
+    "E_recovers_C_miss": 1,
+    "E_loses_C_hit": 3,
+    "E_differs_C": 22
+  },
+  "frozen_D_labels_unchanged": true,
+  "all500_E_differs_C": 380,
+  "all500_E_same_Mean": 44,
+  "review_pending": true
+}

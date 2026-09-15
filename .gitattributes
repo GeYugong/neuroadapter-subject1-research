@@ -3,3 +3,4 @@ manifests/diagnosis-20260914/**/*.csv -text whitespace=cr-at-eol
 manifests/paired-lr-probe-v1/** -text
 manifests/semantic-probe-c-v1/** -text
 manifests/semantic-rerank-d-v1/** -text
+manifests/semantic-rerank-e-residual-v1/** -text
