@@ -1,0 +1,42 @@
+{
+  "namespace": "content-review-f-fixed160-v1",
+  "status": "awaiting_human_ratings",
+  "sample_rule": "SHA256(namespace|sample|decimal_image_id), ascending first160 after excluding D32",
+  "random_rule": "int(SHA256(namespace|random-candidate|decimal_image_id),16) modulo8",
+  "sample_count": 160,
+  "excluded_count": 32,
+  "population_remaining": 468,
+  "sample_commitment": "45b8f54175a41f8320f084d36aadf80bb3685a581fbe0991d83d1d76a18ec4ff",
+  "mapping_sha256": "4ec5054b9bda6cd85cd4f3850ed3f312c9b72bdbc373e0c4e9690b6c7203e30b",
+  "source_sha256": {
+    "runs/diagnostics/semantic-rerank-d-v1/plan.json": "eefded8af89ec9c6ff995f21b1b517eda55642560ef589931bea598d60ca53a4",
+    "runs/diagnostics/semantic-rerank-d-v1/candidate_manifest.json": "cae06d08a265ed4bc924219a208b13864b892b10393e4226bf3f6ec183cb9ef6",
+    "runs/diagnostics/semantic-rerank-d-v1/selector_indices.csv": "26637346f8aaad2d2c37ed4e45a81ff75c54cb4f1861d4dd68e4309afe426282",
+    "runs/diagnostics/semantic-rerank-e-residual-v1/plan.json": "e63c7bd36c10804ab84c9d305a7a02cf689f984f5e59ba1c05a3a352db141a84",
+    "runs/diagnostics/semantic-rerank-e-residual-v1/selector_indices.csv": "336d30d641f5cf05f37411b0407e5f7631f51f2b5cce9cf169d6551ca800fec7"
+  },
+  "code_sha256": "807496658d3532d3fd2c26ad037dee739a3218e054d9e1143b6bf1b9fc67ac37",
+  "guide_sha256": "dcd2f594e20947224959bdb83a94b75578a0dec659988938d8a6bc5f43ece4e6",
+  "dimensions": [
+    "object",
+    "action_relation",
+    "scene",
+    "count_layout"
+  ],
+  "values": [
+    "correct",
+    "partial",
+    "wrong",
+    "uncertain"
+  ],
+  "bootstrap_seed": 20261002,
+  "draws": 10000,
+  "interval": 0.975,
+  "scope": "developmental human content review; not independent test",
+  "decision": "report absolute rates and paired differences; no automatic pass; no resampling or method changes",
+  "unique_outputs": 406,
+  "new_training": 0,
+  "new_generation": 0,
+  "new_feature_extraction": 0,
+  "standard_test_access": false
+}
