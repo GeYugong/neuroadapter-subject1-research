@@ -1,0 +1,117 @@
+{
+  "records": [
+    {
+      "stage": "T1-first",
+      "command": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc_per_node=2",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/retrain-lr-v1-final/scripts/train_retrain_lr.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--arm",
+        "T1",
+        "--test-case",
+        "T1-first"
+      ],
+      "exit_code": 0
+    },
+    {
+      "stage": "T2-full",
+      "command": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc_per_node=2",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/retrain-lr-v1-final/scripts/train_retrain_lr.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--arm",
+        "T2",
+        "--test-case",
+        "T2-full"
+      ],
+      "exit_code": 0
+    },
+    {
+      "stage": "T2-resume",
+      "command": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc_per_node=2",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/retrain-lr-v1-final/scripts/train_retrain_lr.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--arm",
+        "T2",
+        "--test-case",
+        "T2-resume",
+        "--test-stop",
+        "10"
+      ],
+      "exit_code": 0
+    },
+    {
+      "stage": "T2-resumed",
+      "command": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "-m",
+        "torch.distributed.run",
+        "--standalone",
+        "--nproc_per_node=2",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/retrain-lr-v1-final/scripts/train_retrain_lr.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--arm",
+        "T2",
+        "--test-case",
+        "T2-resume",
+        "--resume",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runs/experiments/retrain-lr-v1/tests/T2-resume/checkpoints/checkpoint-update-00000010"
+      ],
+      "exit_code": 0
+    },
+    {
+      "stage": "audit",
+      "command": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/retrain-lr-v1-final/scripts/prepare_retrain_lr.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "audit"
+      ],
+      "exit_code": 0
+    },
+    {
+      "stage": "evaluation-prepare",
+      "command": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/retrain-lr-v1-final/scripts/evaluate_retrain_lr.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "prepare"
+      ],
+      "exit_code": 0
+    },
+    {
+      "stage": "evaluation-smoke",
+      "command": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/retrain-lr-v1-final/scripts/evaluate_retrain_lr.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "smoke"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "complete": true
+}

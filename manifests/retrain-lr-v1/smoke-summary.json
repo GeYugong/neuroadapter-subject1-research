@@ -1,0 +1,24 @@
+{
+  "mean": {
+    "PixCorr": 0.0026380418829123784,
+    "SSIM": 0.35137004172532854,
+    "AlexNet2": 25.0,
+    "AlexNet5": 25.0,
+    "Inception": 25.0,
+    "CLIP_identification": 50.0,
+    "EfficientNet": 1.0021779479140567,
+    "SwAV": 0.7159015568807512
+  },
+  "candidate0": {
+    "PixCorr": 0.08174178416236283,
+    "SSIM": 0.3774111382135752,
+    "AlexNet2": 50.0,
+    "AlexNet5": 50.0,
+    "Inception": 50.0,
+    "CLIP_identification": 50.0,
+    "EfficientNet": 1.0006719427216857,
+    "SwAV": 0.7047906591544923
+  },
+  "image_count": 2,
+  "smoke_only": true
+}

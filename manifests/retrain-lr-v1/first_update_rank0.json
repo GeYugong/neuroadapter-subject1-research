@@ -1,0 +1,43 @@
+{
+  "initial": "e7408ac904f0ef4ea876252bb2c63087dbd2022f55b468340633b7352ab9855f",
+  "losses": [
+    0.1268640160560608,
+    0.13540783524513245
+  ],
+  "gradients": "0e933f6f4300e3b404f42d4fd0a518280a374ee5b88d82f460ef67489a18aef6",
+  "trace": [
+    {
+      "micro": 0,
+      "ids": [
+        3082,
+        24711,
+        64282,
+        28442
+      ],
+      "latents": "344ad08fe70f1fde00ab37928c7fef748490daaf70055c39f6216fbc51af5141",
+      "noise": "e4610f879606479f6faed051b72f6c27f1ac03b47b898cb526f221ab096f3062",
+      "timesteps": "d2801f56470c845534f5eafb9367141f4c1ff450e1cef7e38551c493a04d3ec1",
+      "dropout": "21ae75c20eaad4048dcd21d520622cf8464e5109509123b6fbe9d63b78bb05f1"
+    },
+    {
+      "micro": 1,
+      "ids": [
+        1786,
+        52220,
+        18740,
+        14163
+      ],
+      "latents": "a6dd3a0e29dd179a3e7ada40c61f4bf85085cc699dc8bbe397d5453ca172c371",
+      "noise": "36b592ed2a9e514b9edfe6548fa4e8ce2501e0110823856b630675d8f3470d16",
+      "timesteps": "306ad8d05cd9850e5f9706969804aa8c2213b2d1b22a490d783512e98fca818e",
+      "dropout": "06bd672eefa67dd1fa042dc24ef02a439b4437a949558a32ae16c28a1f68ff8f"
+    }
+  ],
+  "optimizer_entries_before": 0,
+  "updated_groups": {
+    "image_proj": true,
+    "ip_adapter": true,
+    "guidance_generator": true
+  },
+  "frozen_unchanged": true
+}

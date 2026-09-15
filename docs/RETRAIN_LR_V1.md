@@ -30,4 +30,12 @@ run_retrain_lr_suite.py顺序执行T1双卡→完整终点校验→T2双卡→�
 
 ## 当前状态
 
-实现与必要启动测试准备中。首次GPU查询两卡空闲，磁盘余量约926GB。不得将这一状态描述为训练已启动或权重已完成。实际运行身份、首次有效更新及队列将在启动证据中追加。
+已实际启动T1双卡训练，启动检查时已完成200更新；T2排队，未声称已经训练。源码commit `4a6766e9a1628bfc8c98261c5d9ff59506e44c3f`，冻结入口 `$ROOT/runtime/retrain-lr-v1-final/`。首次有效update=1，global loss0.1590818763；记录时update200，LR3e-5，最近100步平均loss0.1129493840。
+
+tmux会话 `neuroadapter-retrain-lr-v1`；启动时控制器PID303877，torchrun PID303901，两个worker PID303909/303910。PID仅是启动证据，恢复或系统重启后应以pipeline.json与实际进程核验。
+
+T1/T2配置、初始化SHA、完整恢复命令见 `manifests/retrain-lr-v1/plan.json`；T1实际配置另存T1-effective-config.json。当前控制器日志为 `$ROOT/runs/experiments/retrain-lr-v1/controller.log`，训练终端train-T1.log，逐更新汇总T1/training.jsonl，阶段/退出码pipeline.json。当前阶段退出码null表示仍运行，不是成功完成。
+
+必要短测通过：LR纯函数3 tests；T1/T2初始参数、loss、梯度一致且只LR配置不同；所有冻结参数未变；T2真实周期连续20与10+10的模型、AdamW、rank随机流、进程RNG、sampler和LR逐项完全一致。旧四个基线8/8候选逐像素回放通过，新snapshot小批读取八指标成功（smoke_only，不作性能结果）。启动证据、小型manifest均已归档。
+
+当前自动队列为T1→T2→六新四旧同口径评价→最佳新候选导出。另有Codex每30分钟任务跟进，首次达到1000更新后依据实测估时，并在控制器完成后实际查看固定32图册、补中文内容结论和最终交付。没有准确1000步实测前不承诺完成时刻。新权重不公开上传HF，不扩展第三条实验。

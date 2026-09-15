@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "label": "OLD-53125",
+      "image_id": 95,
+      "candidate": 0,
+      "pixels_exact": true
+    },
+    {
+      "label": "OLD-53125",
+      "image_id": 95,
+      "candidate": 1,
+      "pixels_exact": true
+    },
+    {
+      "label": "OLD-106250",
+      "image_id": 95,
+      "candidate": 0,
+      "pixels_exact": true
+    },
+    {
+      "label": "OLD-106250",
+      "image_id": 95,
+      "candidate": 1,
+      "pixels_exact": true
+    },
+    {
+      "label": "OLD-159375",
+      "image_id": 95,
+      "candidate": 0,
+      "pixels_exact": true
+    },
+    {
+      "label": "OLD-159375",
+      "image_id": 95,
+      "candidate": 1,
+      "pixels_exact": true
+    },
+    {
+      "label": "OLD-239063",
+      "image_id": 95,
+      "candidate": 0,
+      "pixels_exact": true
+    },
+    {
+      "label": "OLD-239063",
+      "image_id": 95,
+      "candidate": 1,
+      "pixels_exact": true
+    }
+  ]
+}

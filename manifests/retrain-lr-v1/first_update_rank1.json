@@ -1,0 +1,43 @@
+{
+  "initial": "e7408ac904f0ef4ea876252bb2c63087dbd2022f55b468340633b7352ab9855f",
+  "losses": [
+    0.25037121772766113,
+    0.12368445098400116
+  ],
+  "gradients": "0e933f6f4300e3b404f42d4fd0a518280a374ee5b88d82f460ef67489a18aef6",
+  "trace": [
+    {
+      "micro": 0,
+      "ids": [
+        17386,
+        46510,
+        54609,
+        13857
+      ],
+      "latents": "8ded918dbd9a1327ed40da82c1e58b1ea2698c5f5d0fba6f43180306f9f1ebe9",
+      "noise": "cedb64bdc3c9ad36624f18caf2cb68ef77262176993b20cea272e2d36e1e7781",
+      "timesteps": "ba5a806586ffc6786b76deec770054ba7d76d7aa788b599a9a6f94311ba342e3",
+      "dropout": "9e5af1d50f680cf2b8ce6f99856fab6c81cf59832fd02e2c042814ec6b10e0ad"
+    },
+    {
+      "micro": 1,
+      "ids": [
+        51362,
+        54562,
+        47540,
+        12379
+      ],
+      "latents": "9031ad29c22bfed3fbf04e364f6f35f68a692276573aba22903e92a908129c23",
+      "noise": "e2688c864968618678c8c44605abc8598476399712e759375259b0ee66b6d11a",
+      "timesteps": "881309c6791e142e50b8d78fb62e96654513c3c398894a6dab0e2ed71793a90b",
+      "dropout": "a118c8f08b1a1ae5039eaa212b964c4feaf9e8986eb95f55b4b24f5d6a6822aa"
+    }
+  ],
+  "optimizer_entries_before": 0,
+  "updated_groups": {
+    "image_proj": true,
+    "ip_adapter": true,
+    "guidance_generator": true
+  },
+  "frozen_unchanged": true
+}

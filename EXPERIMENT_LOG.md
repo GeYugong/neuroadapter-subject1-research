@@ -2933,3 +2933,16 @@ E主体correct为60/160与53/160，C为57与54，固定随机49与46；E场景40
 数据资产已按旧SHA核验：canonical、8500训练/500验证划分、缓存、刺激及SD模型树一致。新的配置、LR纯函数、恢复测试、顺序控制器、同口径双候选八指标评价与最佳新候选导出已实现，接下来执行必要短测并冻结运行源码。此记录不表示正式新训练已启动。
 
 首版3d24bca完成T1一更新隔离测试，loss0.1590818763，峰值每卡约13.56GB reserved，退出0、冻结参数不变。随后在正式训练前将新effective_config的checkpoint_reference_epochs明确改为100（原继承字段为25但执行日程已是100），并避免评价循环反复哈希同一模型文件，补旧manifest重评分前身份检查。训练前向、LR和科学设置没有改变；首版测试归档，新源码重新跑必要短测，不将首版一更新权重用于初始化。
+
+### T1/T2启动检查完成与实际运行证据
+
+源码4a6766e9a1628bfc8c98261c5d9ff59506e44c3f，冻结于runtime/retrain-lr-v1-final，显式导入旧primitives，不修改旧runtime。最终短测T1首步、T2连续20、T2分段10+10均退出0，首次loss/梯度/随机输入一致、可训练组件更新、冻结参数未变，模型/优化器/RNG/sampler/LR精确恢复通过。LR单测3 passed。旧53125/106250/159375/239063共8/8双候选回放逐像素一致，新测试snapshot八指标读取通过。完整校验见preflight.json、preflight-launch.json、replay.json与smoke-summary.json；小批指标不当成正式性能。
+
+tmux neuroadapter-retrain-lr-v1已启动真实控制器PID303877，torchrun303901，双GPU训练worker303909/303910。T1从canonical和空AdamW开始，首次有效update1 loss0.1590818763；记录时已200次更新，LR3e-5，最近100步平均loss0.1129493840。后续T1完成→T2从canonical重新训练→六新四旧统一500图双候选八指标评价→本轮最佳新候选导出，禁止额外训练。日志/命令/PID/阶段退出码在runs/experiments/retrain-lr-v1，完整恢复命令保存plan.json。正在运行的退出码为null，不虚构完成。
+
+创建每30分钟跟进的本任务heartbeat（t1-t2），用于首次1000步实测估时、实际故障/阶段变化和最终固定32图册视觉检查与交付；日常状态无变化保持安静。旧已暂停选权重/HF备份任务保持暂停，本轮不上传新权重HF。此时已启动而非已完成，最终权重SHA和六份结果需在控制器实际结束后交付。
+
+
+### retrain-lr-v1 自动记录 2026-09-15T10:08:17.603436+00:00
+
+开始 `train-T1`，源码 `4a6766e9a1628bfc8c98261c5d9ff59506e44c3f`，可见GPU `0,1`；完整命令记录pipeline.json。
