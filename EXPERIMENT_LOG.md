@@ -2989,3 +2989,5 @@ tmux neuroadapter-retrain-lr-v1已启动真实控制器PID303877，torchrun30390
 首次调度源码f2c173d在CPU等待阶段发现tmux立即SIGCONT原控制器，SIGSTOP不能阻止后续排队。因此主动终止的仅是优先调度器PID421283，未向T2的torchrun417841或worker417849/417850发送信号；T2持续训练，无新增GPU进程。该failed记录是调度尝试撤销，不是T2失败，证据归档priority-T1/attempt-initial/。
 
 替代方式在T2训练期间不触碰原控制器。仅在pipeline明确记录T2退出0、训练completed/159375且torchrun被回收后，才停止旧控制器以及可能抢先启动的本实验评价进程，保留其部分输出；执行三个优先评价后从同一冻结入口恢复剩余队列。训练不会重跑、训练源码及选优规则不变。语法检查和Linux proc父PID/退出码解析的CPU测试通过；尚无T1重建评价结果，须等实际执行。
+
+修正后的优先调度源码287464be4d3818dfdc5bcbc2a995ddaec31b2ba5，独立冻结于runtime/priority-t1-287464b，tmux会话neuroadapter-priority-t1，实际PID421641，状态waiting_T2。验证原控制器303877和T2 torchrun417841仍运行；T2已从20100推进至20500更新，吞吐恢复至约1.76更新/秒，config hash未变。该等待器不使用GPU；本次仅两个原训练worker占用GPU。优先评价尚未启动，首次调度尝试已归档，不覆盖历史。任务自动跟进已加入优先结果的图册查看、中文报告与独立发布要求。
