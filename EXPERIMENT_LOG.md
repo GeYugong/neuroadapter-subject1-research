@@ -2991,3 +2991,18 @@ tmux neuroadapter-retrain-lr-v1已启动真实控制器PID303877，torchrun30390
 替代方式在T2训练期间不触碰原控制器。仅在pipeline明确记录T2退出0、训练completed/159375且torchrun被回收后，才停止旧控制器以及可能抢先启动的本实验评价进程，保留其部分输出；执行三个优先评价后从同一冻结入口恢复剩余队列。训练不会重跑、训练源码及选优规则不变。语法检查和Linux proc父PID/退出码解析的CPU测试通过；尚无T1重建评价结果，须等实际执行。
 
 修正后的优先调度源码287464be4d3818dfdc5bcbc2a995ddaec31b2ba5，独立冻结于runtime/priority-t1-287464b，tmux会话neuroadapter-priority-t1，实际PID421641，状态waiting_T2。验证原控制器303877和T2 torchrun417841仍运行；T2已从20100推进至20500更新，吞吐恢复至约1.76更新/秒，config hash未变。该等待器不使用GPU；本次仅两个原训练worker占用GPU。优先评价尚未启动，首次调度尝试已归档，不覆盖历史。任务自动跟进已加入优先结果的图册查看、中文报告与独立发布要求。
+
+
+### T1优先评价 2026-09-16T14:55:55.305858+00:00
+
+状态：failed。原控制器已恢复：False。完整命令、PID、退出码和错误（如有）见runs/experiments/retrain-lr-v1/priority-T1/status.json。图册生成不等于实际视觉检查，不改变最终选优规则。
+
+
+### retrain-lr-v1 自动记录 2026-09-16T14:56:10.352243+00:00
+
+`train-T2` 退出码 `0`。
+
+
+### retrain-lr-v1 自动记录 2026-09-16T14:56:10.352585+00:00
+
+控制器停止于 `train-T2`：`AssertionError('T2 did not complete; not starting next arm')`。不启动后续阶段、不改超参数；使用同一冻结入口恢复。
