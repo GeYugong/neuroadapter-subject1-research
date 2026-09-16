@@ -2,6 +2,8 @@
 
 ## T1优先交付（2026-09-16追加授权）
 
+**最新安排覆盖下述等待方案：用户随后明确授权先暂停T2，评价T1再恢复。** T2已在21976次完整更新后保存checkpoint-update-00021976并正常退出，原控制器因T2未到上限而停止是预期行为。当前入口为runtime/priority-t1-paused-135d5b6/scripts/run_t1_while_t2_paused.py，会话neuroadapter-priority-t1；在完整checkpoint校验后执行三个优先评价和图册生成，再自动从原冻结控制器恢复T2，保持AdamW、RNG、sampler和LR进度。旧等待器已撤销并归档，不再使用。恢复会话neuroadapter-retrain-lr-resumed；仍需核验实际恢复日志和更新推进。以下保留调度变更背景。
+
 T2训练进程不暂停、不重启、不改配置。独立CPU调度器`priority_t1_delivery.py`等待原控制器记录T2退出码0、completed/159375且torchrun已回收，之后才替换评价调度。不会向torchrun、worker或进程组发信号。若原控制器已抢先启动本实验的评价子进程，仅停止该评价并保留可恢复输出；确认GPU空闲后，调用原冻结入口依次评价新T1-159375、OLD-159375、OLD-239063。原随机输入、500图、双候选、八指标和最终六选一规则不变。
 
 优先输出位于`runs/experiments/retrain-lr-v1/priority-T1/`：status.json保存实际命令、PID和退出码，results.json为八指标/语义综合分/新减旧差值，REPORT_ZH.md与gallery/为固定32图双候选对照。必须实际查看图册并补中文内容结论后单独发布，不等最终选优。接管后的调度器完成或异常时，从同一冻结入口恢复原控制器，跳过两条已完成训练，复用已有完整评价，继续100/200 epochs、T2和最终导出。

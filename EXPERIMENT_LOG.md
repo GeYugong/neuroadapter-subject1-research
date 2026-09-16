@@ -3006,3 +3006,11 @@ tmux neuroadapter-retrain-lr-v1已启动真实控制器PID303877，torchrun30390
 ### retrain-lr-v1 自动记录 2026-09-16T14:56:10.352585+00:00
 
 控制器停止于 `train-T2`：`AssertionError('T2 did not complete; not starting next arm')`。不启动后续阶段、不改超参数；使用同一冻结入口恢复。
+
+### 2026-09-16：用户授权暂停T2，T1评价实际启动
+
+用户确认先暂停T2评价T1再恢复。终止的旧CPU等待器421641归档attempt-wait-T2；向核验身份的T2 rank0 worker417849发送一次SIGTERM，由已有TerminationFlag和all_reduce在完整更新边界协同保存。没有向torchrun发强杀信号。T2在21976更新保存完整模型、AdamW、双rank RNG、sampler、LR及config/source后正常退出，torchrun退出码0；原控制器因不足159375更新停止是预期结果，不是数值或训练崩溃。
+
+恢复点：runs/experiments/retrain-lr-v1/T2/checkpoints/checkpoint-update-00021976，已通过原verify_checkpoint完整校验及arm/config/next_update检查。新评价协调器源码135d5b682205f2566ee430ef4a243fd368fda3cf，冻结入口runtime/priority-t1-paused-135d5b6/scripts/run_t1_while_t2_paused.py；tmux neuroadapter-priority-t1，协调器PID422337。北京时间22:57已实际启动新T1-159375解码PID422344，原冻结evaluate_retrain_lr.py不变，命令及退出码在priority-T1/status.json。三个优先评价与CPU图册完成后自动恢复原冻结控制器，不重置T2优化器或LR，不改变上限和选优规则；后续仍须核验恢复确实推进。
+
+此时仅表示评价已启动，不表示500图评分完成。报告和固定32图实际查看后单独发布，旧权重不覆盖。首次调度失败、等待方案及本次主动暂停均保留历史。语法检查通过，本次不另做GPU训练短测。
