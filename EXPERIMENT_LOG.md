@@ -3014,3 +3014,21 @@ tmux neuroadapter-retrain-lr-v1已启动真实控制器PID303877，torchrun30390
 恢复点：runs/experiments/retrain-lr-v1/T2/checkpoints/checkpoint-update-00021976，已通过原verify_checkpoint完整校验及arm/config/next_update检查。新评价协调器源码135d5b682205f2566ee430ef4a243fd368fda3cf，冻结入口runtime/priority-t1-paused-135d5b6/scripts/run_t1_while_t2_paused.py；tmux neuroadapter-priority-t1，协调器PID422337。北京时间22:57已实际启动新T1-159375解码PID422344，原冻结evaluate_retrain_lr.py不变，命令及退出码在priority-T1/status.json。三个优先评价与CPU图册完成后自动恢复原冻结控制器，不重置T2优化器或LR，不改变上限和选优规则；后续仍须核验恢复确实推进。
 
 此时仅表示评价已启动，不表示500图评分完成。报告和固定32图实际查看后单独发布，旧权重不覆盖。首次调度失败、等待方案及本次主动暂停均保留历史。语法检查通过，本次不另做GPU训练短测。
+
+
+### 暂停T2期间优先评价 2026-09-16T15:23:39.291948+00:00
+
+状态T1_results_ready_visual_review_pending；已启动原冻结控制器，从完整恢复点/data1/matengyu/geyugong/neuroadapter-subject1-research/runs/experiments/retrain-lr-v1/T2/checkpoints/checkpoint-update-00021976恢复T2。实际恢复成功须核验T2新日志和进程；完整退出码见priority-T1/status.json。
+
+
+### retrain-lr-v1 自动记录 2026-09-16T15:23:45.002939+00:00
+
+开始 `train-T2`，源码 `4a6766e9a1628bfc8c98261c5d9ff59506e44c3f`，可见GPU `0,1`；完整命令记录pipeline.json。
+
+### 2026-09-17：T1优先效果报告完成与T2恢复核验
+
+新T1-159375及两个旧基线的六个decode/score阶段均退出0，500图双候选八指标机器评价约26分23秒；旧图复用经校验同协议PNG，未用C/E。语义综合分T1为81.085371，旧159375为84.796927，旧239063为85.891450；T1分别下降3.711556、4.806079个百分点。仅SSIM上升，其他七项均变差，不能称为重建修复。
+
+已将固定32张对照图同步本地并全部实际打开，查看GT及新旧各两个候选；单一AI非盲定性检查，不冒充人工盲评。逐图记录32条：59219候选0找回飞机、30888候选1保留笔记本属于局部改善；48376由冲浪变陆地运动、36287丢失冲浪板、38833林地动物变雪景属于明确退步。报告不以案例重新选图或调参。完整含图报告artifacts/retrain-lr-v1/priority-T1/REPORT_ZH.md；Git中文指标及逐图报告docs/T1_PRIORITY_VISUAL_REVIEW_ZH.md，小型数值、阶段退出码和独立视觉完成标记在manifests/retrain-lr-v1。保留原results.json的生成时待审阅标记，以visual-completion新增记录补充，而非抹去历史。
+
+T1模型SHA为ccaefc678cbe96f47e4fd487b8d990883f20249e3c7b5b55ced49718d27d7333。恢复控制器实际命令含--resume checkpoint-update-00021976；新torchrun PID423010，config hash不变，检查时T2已推进32800步，证明不是仅启动了恢复命令。冻结加载入口会验证source/config/LR/sampler并加载AdamW及RNG；本轮未再次执行长程数值等价试验，不扩大已通过短恢复测试的结论。继续既定T2和最终六选一，当前报告不是最终候选结论。

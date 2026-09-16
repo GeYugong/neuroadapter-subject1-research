@@ -1,0 +1,118 @@
+{
+  "pid": 422337,
+  "status": "T1_results_ready_visual_review_pending",
+  "stages": [
+    {
+      "label": "T1-159375",
+      "phase": "decode",
+      "command": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/retrain-lr-v1-final/scripts/evaluate_retrain_lr.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "decode",
+        "--label",
+        "T1-159375"
+      ],
+      "exit_code": 0,
+      "start": "2026-09-16T14:57:15.531643+00:00",
+      "pid": 422344,
+      "end": "2026-09-16T15:21:03.667633+00:00"
+    },
+    {
+      "label": "T1-159375",
+      "phase": "score",
+      "command": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/retrain-lr-v1-final/scripts/evaluate_retrain_lr.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "score",
+        "--label",
+        "T1-159375"
+      ],
+      "exit_code": 0,
+      "start": "2026-09-16T15:21:03.690556+00:00",
+      "pid": 422863,
+      "end": "2026-09-16T15:21:44.516049+00:00"
+    },
+    {
+      "label": "OLD-159375",
+      "phase": "decode",
+      "command": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/retrain-lr-v1-final/scripts/evaluate_retrain_lr.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "decode",
+        "--label",
+        "OLD-159375"
+      ],
+      "exit_code": 0,
+      "start": "2026-09-16T15:21:44.543523+00:00",
+      "pid": 422894,
+      "end": "2026-09-16T15:21:46.758051+00:00"
+    },
+    {
+      "label": "OLD-159375",
+      "phase": "score",
+      "command": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/retrain-lr-v1-final/scripts/evaluate_retrain_lr.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "score",
+        "--label",
+        "OLD-159375"
+      ],
+      "exit_code": 0,
+      "start": "2026-09-16T15:21:46.780903+00:00",
+      "pid": 422908,
+      "end": "2026-09-16T15:22:41.983808+00:00"
+    },
+    {
+      "label": "OLD-239063",
+      "phase": "decode",
+      "command": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/retrain-lr-v1-final/scripts/evaluate_retrain_lr.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "decode",
+        "--label",
+        "OLD-239063"
+      ],
+      "exit_code": 0,
+      "start": "2026-09-16T15:22:42.004974+00:00",
+      "pid": 422942,
+      "end": "2026-09-16T15:22:44.205151+00:00"
+    },
+    {
+      "label": "OLD-239063",
+      "phase": "score",
+      "command": [
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/envs/neuroadapter/bin/python",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research/runtime/retrain-lr-v1-final/scripts/evaluate_retrain_lr.py",
+        "--root",
+        "/data1/matengyu/geyugong/neuroadapter-subject1-research",
+        "--phase",
+        "score",
+        "--label",
+        "OLD-239063"
+      ],
+      "exit_code": 0,
+      "start": "2026-09-16T15:22:44.228270+00:00",
+      "pid": 422958,
+      "end": "2026-09-16T15:23:38.098832+00:00"
+    }
+  ],
+  "T2_resume_checkpoint": "/data1/matengyu/geyugong/neuroadapter-subject1-research/runs/experiments/retrain-lr-v1/T2/checkpoints/checkpoint-update-00021976",
+  "T2_completed_updates": 21976,
+  "source_commit": "135d5b682205f2566ee430ef4a243fd368fda3cf",
+  "resume_controller_launched": true
+}

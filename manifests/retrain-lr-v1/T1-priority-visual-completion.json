@@ -1,0 +1,11 @@
+{
+  "review_date_local": "2026-09-17",
+  "reviewer_type": "single AI qualitative review, not human or blinded",
+  "visual_review_complete": true,
+  "image_count": 32,
+  "generated_outputs_viewed": 128,
+  "image_ids": [95,2327,5582,8061,10361,13223,15068,16525,18888,21414,23642,26535,29018,30888,32680,34565,36287,38833,40990,43065,45952,48376,50739,52729,55741,57244,59219,61868,64851,66875,68553,72527],
+  "report": "docs/T1_PRIORITY_VISUAL_REVIEW_ZH.md",
+  "scope": "T1-159375 versus OLD-239063 fixed32, both candidates; no candidate selection; not final six-snapshot selection",
+  "conclusion": "Localized improvements coexist with clear failures and regressions; no overall T1 improvement established. Seven of eight mean metrics are worse than both old baselines."
+}

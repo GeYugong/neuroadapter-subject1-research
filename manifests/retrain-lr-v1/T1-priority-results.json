@@ -1,0 +1,65 @@
+{
+  "models": {
+    "T1-159375": {
+      "PixCorr": 0.056010437611247806,
+      "SSIM": 0.3009312071185582,
+      "AlexNet2": 69.68517034068137,
+      "AlexNet5": 81.77394789579157,
+      "Inception": 80.2811623246493,
+      "CLIP_identification": 81.20100200400802,
+      "EfficientNet": 0.8253718014491198,
+      "SwAV": 0.5015647758034993,
+      "semantic_score": 81.08537074148296
+    },
+    "OLD-159375": {
+      "PixCorr": 0.0718226942818946,
+      "SSIM": 0.295840761184803,
+      "AlexNet2": 74.57054108216433,
+      "AlexNet5": 85.66112224448896,
+      "Inception": 84.03607214428857,
+      "CLIP_identification": 84.6935871743487,
+      "EfficientNet": 0.796504764965601,
+      "SwAV": 0.4764960168609438,
+      "semantic_score": 84.79692718770873
+    },
+    "OLD-239063": {
+      "PixCorr": 0.08874200019579194,
+      "SSIM": 0.2908393045078394,
+      "AlexNet2": 76.6374749498998,
+      "AlexNet5": 87.0440881763527,
+      "Inception": 85.35531062124248,
+      "CLIP_identification": 85.2749498997996,
+      "EfficientNet": 0.7884504645949721,
+      "SwAV": 0.460789626703764,
+      "semantic_score": 85.89144956579825
+    }
+  },
+  "T1_minus_baseline": {
+    "OLD-159375": {
+      "PixCorr": -0.015812256670646792,
+      "SSIM": 0.005090445933755183,
+      "AlexNet2": -4.885370741482959,
+      "AlexNet5": -3.8871743486973998,
+      "Inception": -3.7549098196392663,
+      "CLIP_identification": -3.492585170340689,
+      "EfficientNet": 0.02886703648351885,
+      "SwAV": 0.025068758942555558,
+      "semantic_score": -3.711556446225771
+    },
+    "OLD-239063": {
+      "PixCorr": -0.032731562584544134,
+      "SSIM": 0.010091902610718795,
+      "AlexNet2": -6.95230460921843,
+      "AlexNet5": -5.270140280561137,
+      "Inception": -5.0741482965931795,
+      "CLIP_identification": -4.0739478957915765,
+      "EfficientNet": 0.03692133685414767,
+      "SwAV": 0.04077514909973534,
+      "semantic_score": -4.806078824315293
+    }
+  },
+  "snapshot": "/data1/matengyu/geyugong/neuroadapter-subject1-research/runs/experiments/retrain-lr-v1/T1/snapshots/snapshot-update-00159375",
+  "model_sha256": "ccaefc678cbe96f47e4fd487b8d990883f20249e3c7b5b55ced49718d27d7333",
+  "protocol_sha256": "742900c1a723c1a0c8fefb444183f61f10e622b70575a65cce8218e57388a10b",
+  "visual_review_complete": false
+}
