@@ -1,5 +1,13 @@
 # T1/T2 从canonical重新训练
 
+## T1优先交付（2026-09-16追加授权）
+
+T2训练进程不暂停、不重启、不改配置。单独的CPU优先调度器`priority_t1_delivery.py`只向原控制器PID发送SIGSTOP，阻止它在T2结束后直接进入旧评价顺序；不向torchrun、worker或进程组发信号。调度器等T2进程正常退出并核验completed/159375及GPU空闲后，调用原冻结评价入口，依次评价新T1-159375、OLD-159375、OLD-239063。原随机输入、500图、双候选、八指标和最终六选一规则不变。
+
+优先输出位于`runs/experiments/retrain-lr-v1/priority-T1/`：status.json保存实际命令、PID和退出码，results.json为八指标/语义综合分/新减旧差值，REPORT_ZH.md与gallery/为固定32图双候选对照。必须实际查看图册并补中文内容结论后单独发布，不等最终选优。调度器完成或异常时恢复原控制器，原评价入口自动复用已有完整输出，继续100/200 epochs、T2和最终导出。
+
+SIGSTOP对象仅为等待子进程的原控制器，T2会继续运行。priority状态waiting_T2时，原pipeline.json仍显示train-T2属于预期现象。若优先调度器意外死亡，先确认其GPU评价子进程已退出，再核验记录的控制器身份并SIGCONT恢复；不要重启T2或另起训练。禁止直接改冻结runtime。
+
 本次新授权覆盖旧“不再训练”的限制，仅允许这两条训练及固定评价。独立分支feat/retrain-lr-v1；不修改旧runtime、旧权重或RESEARCH_WEIGHT_LOCK，不上传新权重至HF。
 
 T1固定3e-5；T2按 `1e-5+0.5*(1e-4-1e-5)*(1+cos(pi*completed_updates/159374))` 在每次optimizer update前设置一次。各159375更新，53,125/106,250/159,375保存推理snapshot和完整恢复状态。无warmup、重启、EMA或其他调参。
