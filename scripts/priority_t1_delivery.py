@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import signal
+import shlex
 import subprocess
 import sys
 import time
@@ -110,24 +111,54 @@ def run(root):
              'status': 'waiting_T2', 'stages': [], 'training_source_unchanged': p['source']['commit']}
     state['priority_source_commit'] = os.environ['PRIORITY_SOURCE_COMMIT']
     write(dest/'status.json', state)
-    paused = False
+    replaced = False
     child_eval = None
     def terminate(signum, frame):
         raise KeyboardInterrupt(f'priority coordinator received signal {signum}')
     signal.signal(signal.SIGTERM, terminate)
     try:
-        os.kill(parent, signal.SIGSTOP)
-        paused = True
         deadline = time.monotonic()+48*3600
-        while proc(child)[0] != 'Z':
+        while True:
+            pipeline = read(out/'pipeline.json')
+            stage = next(s for s in pipeline['stages'] if s['stage'] == 'train-T2')
+            if stage['exit_code'] is not None:
+                assert stage['exit_code'] == 0, 'T2 failed; no evaluation takeover'
+                break
             if time.monotonic() > deadline:
                 raise TimeoutError('T2 wait exceeded 48 hours')
-            time.sleep(30)
-        rc = os.waitstatus_to_exitcode(int(proc(child)[49]))
-        state['T2_exit_code'] = rc
-        assert rc == 0, f'T2 exited {rc}; no priority evaluation'
+            time.sleep(2)
+        state['T2_exit_code'] = 0
         s = read(out/'T2/status.json')
         assert s['status'] == 'completed' and s['completed_updates'] == 159375
+        assert not Path(f'/proc/{child}').exists(), 'T2 torchrun must already be reaped'
+        assert str(frozen/'scripts/run_retrain_lr_suite.py') in Path(f'/proc/{parent}/cmdline').read_text()
+        # Only replace the supervisor AFTER it has recorded a successful T2 exit.
+        os.kill(parent, signal.SIGTERM)
+        replaced = True
+        for _ in range(120):
+            if not Path(f'/proc/{parent}').exists():
+                break
+            time.sleep(.5)
+        assert not Path(f'/proc/{parent}').exists(), 'old supervisor still alive'
+        interrupted = []
+        for path in Path('/proc').glob('[0-9]*/cmdline'):
+            try:
+                args = path.read_bytes().decode().split('\0')
+                if str(frozen/'scripts/evaluate_retrain_lr.py') not in args:
+                    continue
+                assert args[args.index('--root')+1] == str(root)
+                pid = int(path.parent.name)
+                os.kill(pid, signal.SIGTERM)
+                interrupted.append(pid)
+            except (FileNotFoundError, ProcessLookupError, PermissionError):
+                continue
+        state['interrupted_evaluation_pids'] = interrupted
+        for pid in interrupted:
+            for _ in range(120):
+                if not Path(f'/proc/{pid}').exists() or proc(pid)[0] == 'Z':
+                    break
+                time.sleep(.5)
+            assert not Path(f'/proc/{pid}').exists() or proc(pid)[0] == 'Z'
         env = dict(os.environ, CUDA_VISIBLE_DEVICES='0', PYTHONUNBUFFERED='1',
             PYTHONPATH=str(root/'runtime/subject01-4090-1a1fcfa/src'),
             CUBLAS_WORKSPACE_CONFIG=':4096:8', OMP_NUM_THREADS='4', OPENBLAS_NUM_THREADS='4')
@@ -155,8 +186,14 @@ def run(root):
     finally:
         if child_eval is not None and child_eval.poll() is None:
             child_eval.wait()
-        if paused:
-            os.kill(parent, signal.SIGCONT)
+        if replaced:
+            # Same frozen controller skips both completed training arms.
+            command = ['env', 'PYTHONPATH='+str(root/'runtime/subject01-4090-1a1fcfa/src'),
+                'CUDA_VISIBLE_DEVICES=0,1', 'CUBLAS_WORKSPACE_CONFIG=:4096:8',
+                'OMP_NUM_THREADS=4', 'OPENBLAS_NUM_THREADS=4', 'PYTHONUNBUFFERED=1',
+                sys.executable, str(frozen/'scripts/run_retrain_lr_suite.py'), '--root', str(root)]
+            shell = shlex.join(command)+' >> '+shlex.quote(str(dest/'resumed-controller.log'))+' 2>&1'
+            subprocess.run(['tmux', 'new-session', '-d', '-s', 'neuroadapter-retrain-lr-resumed', shell], check=True)
             state['original_controller_resumed'] = True
         write(dest/'status.json', state)
         from datetime import datetime, timezone

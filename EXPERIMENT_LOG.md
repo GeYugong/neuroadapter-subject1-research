@@ -2978,3 +2978,14 @@ tmux neuroadapter-retrain-lr-v1已启动真实控制器PID303877，torchrun30390
 用户要求在T2训练结束后的评价阶段优先发布新T1-159375的实际重建效果，不等T2全部评价。新增独立CPU调度入口priority_t1_delivery.py，仅暂停原调度控制器的后续排队，不向T2的torchrun或worker发送信号、不改冻结源码。T2完成后按原协议依次解码/评分T1-159375、OLD-159375、OLD-239063，CPU汇总九列数值（八指标及语义综合分）、两组逐项差值及固定32图GT/旧239063/T1双候选。新T1路径和arm metadata单独核验，避免误用旧同名checkpoint。
 
 评价直接复用runtime/retrain-lr-v1-final/scripts/evaluate_retrain_lr.py；报告生成后恢复原控制器，已完成的解码与评分复用，继续既定100/200 epochs、T2及六选一导出。图册实际视觉检查与优先发布另由本任务完成，不能把自动生成图册标记为已评阅。本记录为调度实现；实际启动证据随后追加，不声称已获得T1指标。
+
+
+### T1优先评价 2026-09-16T14:39:50.896697+00:00
+
+状态：failed。原控制器已恢复：True。完整命令、PID、退出码和错误（如有）见runs/experiments/retrain-lr-v1/priority-T1/status.json。图册生成不等于实际视觉检查，不改变最终选优规则。
+
+### 2026-09-16：修正优先调度的tmux行为
+
+首次调度源码f2c173d在CPU等待阶段发现tmux立即SIGCONT原控制器，SIGSTOP不能阻止后续排队。因此主动终止的仅是优先调度器PID421283，未向T2的torchrun417841或worker417849/417850发送信号；T2持续训练，无新增GPU进程。该failed记录是调度尝试撤销，不是T2失败，证据归档priority-T1/attempt-initial/。
+
+替代方式在T2训练期间不触碰原控制器。仅在pipeline明确记录T2退出0、训练completed/159375且torchrun被回收后，才停止旧控制器以及可能抢先启动的本实验评价进程，保留其部分输出；执行三个优先评价后从同一冻结入口恢复剩余队列。训练不会重跑、训练源码及选优规则不变。语法检查和Linux proc父PID/退出码解析的CPU测试通过；尚无T1重建评价结果，须等实际执行。
