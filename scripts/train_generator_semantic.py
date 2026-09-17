@@ -238,6 +238,27 @@ def run(root: Path, arm: str, maximum: int, resume: Path | None = None,
                 total.backward()
             if not torch.isfinite(diffusion): raise FloatingPointError(f"nonfinite loss at {update}")
             per_update.append(float(diffusion.detach()))
+        if update == 0:
+            grouped = {"guidance_generator": 0.0, "image_proj": 0.0, "ip_adapter": 0.0}
+            for name, parameter in module.named_parameters():
+                if not parameter.requires_grad: continue
+                if parameter.grad is None or not torch.isfinite(parameter.grad).all():
+                    raise RuntimeError(f"missing/nonfinite first-update gradient: {name}")
+                key = ("guidance_generator" if "guidance_generator" in name else
+                       "image_proj" if "image_proj_model" in name else "ip_adapter")
+                grouped[key] += float(parameter.grad.detach().float().square().sum())
+            grouped = {key: value ** 0.5 for key, value in grouped.items()}
+            if any(value <= 0 for value in grouped.values()):
+                raise RuntimeError(f"a trainable component has zero gradient: {grouped}")
+            frozen = list(backbone.vae.parameters()) + list(backbone.text_encoder.parameters())
+            if clip_model is not None: frozen += list(clip_model.parameters())
+            if any(parameter.grad is not None for parameter in frozen):
+                raise RuntimeError("VAE, text encoder or CLIP received parameter gradients")
+            write_json_atomic(run_dir/f"first_update_rank{context.rank}.json", {
+                "arm":arm,"component_gradient_norms":grouped,
+                "frozen_parameter_gradients_absent":True,
+                "optimizer_parameter_count":sum(parameter.numel() for parameter in parameters),
+                "source_initial_tensor_sha256":initial_hash})
         norm = torch.nn.utils.clip_grad_norm_(parameters, 1.0)
         if not torch.isfinite(norm): raise FloatingPointError(f"nonfinite gradient at {update}")
         optimizer.step(); completed = update + 1; losses.append(sum(per_update) / 2)
