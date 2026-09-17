@@ -1,0 +1,248 @@
+{
+  "models": {
+    "T1-53125": {
+      "mean": {
+        "PixCorr": 0.02408532795759532,
+        "SSIM": 0.3153956194885004,
+        "AlexNet2": 64.54569138276553,
+        "AlexNet5": 75.35931863727455,
+        "Inception": 73.70921843687375,
+        "CLIP_identification": 74.91402805611223,
+        "EfficientNet": 0.8702853650454533,
+        "SwAV": 0.5503075785270026
+      },
+      "candidate0": {
+        "PixCorr": 0.02589595457574162,
+        "SSIM": 0.3125211474388318,
+        "AlexNet2": 65.54629258517033,
+        "AlexNet5": 74.98797595190382,
+        "Inception": 72.79759519038076,
+        "CLIP_identification": 75.25050100200399,
+        "EfficientNet": 0.8713880820253908,
+        "SwAV": 0.5531869241318557
+      },
+      "image_count": 500,
+      "smoke_only": false
+    },
+    "T1-106250": {
+      "mean": {
+        "PixCorr": 0.04733560178660339,
+        "SSIM": 0.282872259581078,
+        "AlexNet2": 69.8935871743487,
+        "AlexNet5": 80.73466933867734,
+        "Inception": 79.14448897795592,
+        "CLIP_identification": 82.29198396793586,
+        "EfficientNet": 0.8332689144964658,
+        "SwAV": 0.5042461952451703
+      },
+      "candidate0": {
+        "PixCorr": 0.045535333426696994,
+        "SSIM": 0.28087977200207237,
+        "AlexNet2": 70.72665330661323,
+        "AlexNet5": 80.52064128256512,
+        "Inception": 79.1246492985972,
+        "CLIP_identification": 82.62044088176353,
+        "EfficientNet": 0.8293239182475526,
+        "SwAV": 0.5035009865070256
+      },
+      "image_count": 500,
+      "smoke_only": false
+    },
+    "T1-159375": {
+      "mean": {
+        "PixCorr": 0.056010437611247806,
+        "SSIM": 0.3009312071185582,
+        "AlexNet2": 69.68517034068137,
+        "AlexNet5": 81.77394789579157,
+        "Inception": 80.2811623246493,
+        "CLIP_identification": 81.20100200400802,
+        "EfficientNet": 0.8253718014491198,
+        "SwAV": 0.5015647758034993
+      },
+      "candidate0": {
+        "PixCorr": 0.051995740915131206,
+        "SSIM": 0.30023428279933434,
+        "AlexNet2": 69.974749498998,
+        "AlexNet5": 81.14669338677355,
+        "Inception": 79.7503006012024,
+        "CLIP_identification": 81.56072144288575,
+        "EfficientNet": 0.826044402300495,
+        "SwAV": 0.503777774403154
+      },
+      "image_count": 500,
+      "smoke_only": false
+    },
+    "T2-53125": {
+      "mean": {
+        "PixCorr": 0.04583227008382283,
+        "SSIM": 0.30016491631754477,
+        "AlexNet2": 67.59819639278558,
+        "AlexNet5": 80.07114228456913,
+        "Inception": 81.03627254509018,
+        "CLIP_identification": 81.72725450901804,
+        "EfficientNet": 0.8274411936295615,
+        "SwAV": 0.5070637849585299
+      },
+      "candidate0": {
+        "PixCorr": 0.0471941370503094,
+        "SSIM": 0.2995308383180359,
+        "AlexNet2": 67.56593186372746,
+        "AlexNet5": 78.81803607214428,
+        "Inception": 80.31422845691382,
+        "CLIP_identification": 81.23767535070141,
+        "EfficientNet": 0.8257238576108102,
+        "SwAV": 0.5094916388622822
+      },
+      "image_count": 500,
+      "smoke_only": false
+    },
+    "T2-106250": {
+      "mean": {
+        "PixCorr": 0.07078954594149453,
+        "SSIM": 0.29137983460944056,
+        "AlexNet2": 73.60120240480963,
+        "AlexNet5": 84.2683366733467,
+        "Inception": 84.5374749498998,
+        "CLIP_identification": 85.12805611222444,
+        "EfficientNet": 0.7912907196582694,
+        "SwAV": 0.47381492377921314
+      },
+      "candidate0": {
+        "PixCorr": 0.07009177059360079,
+        "SSIM": 0.28979972552716793,
+        "AlexNet2": 74.31863727454909,
+        "AlexNet5": 84.9563126252505,
+        "Inception": 84.81523046092185,
+        "CLIP_identification": 84.97595190380761,
+        "EfficientNet": 0.7890467163952892,
+        "SwAV": 0.4723175373322732
+      },
+      "image_count": 500,
+      "smoke_only": false
+    },
+    "T2-159375": {
+      "mean": {
+        "PixCorr": 0.07118879915873357,
+        "SSIM": 0.2936585344051865,
+        "AlexNet2": 74.1563126252505,
+        "AlexNet5": 85.36292585170342,
+        "Inception": 84.22364729458917,
+        "CLIP_identification": 85.9174348697395,
+        "EfficientNet": 0.7931084562732131,
+        "SwAV": 0.47769839380099666
+      },
+      "candidate0": {
+        "PixCorr": 0.07052815970227204,
+        "SSIM": 0.29200111057380523,
+        "AlexNet2": 75.09819639278558,
+        "AlexNet5": 85.89979959919839,
+        "Inception": 84.3130260521042,
+        "CLIP_identification": 86.07174348697396,
+        "EfficientNet": 0.7887534984839011,
+        "SwAV": 0.476136268171977
+      },
+      "image_count": 500,
+      "smoke_only": false
+    },
+    "OLD-53125": {
+      "mean": {
+        "PixCorr": 0.0479139874081599,
+        "SSIM": 0.3071645017001844,
+        "AlexNet2": 68.35330661322645,
+        "AlexNet5": 79.73446893787575,
+        "Inception": 79.25591182364728,
+        "CLIP_identification": 81.82825651302605,
+        "EfficientNet": 0.8341628793171146,
+        "SwAV": 0.5064102429721236
+      },
+      "candidate0": {
+        "PixCorr": 0.04735852165830217,
+        "SSIM": 0.3057429053595421,
+        "AlexNet2": 69.1062124248497,
+        "AlexNet5": 79.33186372745492,
+        "Inception": 78.87535070140281,
+        "CLIP_identification": 81.81803607214428,
+        "EfficientNet": 0.8334734291503956,
+        "SwAV": 0.5069043543445997
+      },
+      "image_count": 500,
+      "smoke_only": false
+    },
+    "OLD-106250": {
+      "mean": {
+        "PixCorr": 0.07202255764418229,
+        "SSIM": 0.29247096869618117,
+        "AlexNet2": 72.71523046092186,
+        "AlexNet5": 84.5382765531062,
+        "Inception": 82.97054108216433,
+        "CLIP_identification": 85.32565130260521,
+        "EfficientNet": 0.8021727650761252,
+        "SwAV": 0.480887942438672
+      },
+      "candidate0": {
+        "PixCorr": 0.0698318106088709,
+        "SSIM": 0.29222786018281,
+        "AlexNet2": 72.70460921843687,
+        "AlexNet5": 84.63126252505009,
+        "Inception": 83.47294589178357,
+        "CLIP_identification": 85.20480961923849,
+        "EfficientNet": 0.796886706926279,
+        "SwAV": 0.48021087639510984
+      },
+      "image_count": 500,
+      "smoke_only": false
+    },
+    "OLD-159375": {
+      "mean": {
+        "PixCorr": 0.0718226942818946,
+        "SSIM": 0.295840761184803,
+        "AlexNet2": 74.57054108216433,
+        "AlexNet5": 85.66112224448896,
+        "Inception": 84.03607214428857,
+        "CLIP_identification": 84.6935871743487,
+        "EfficientNet": 0.796504764965601,
+        "SwAV": 0.4764960168609438
+      },
+      "candidate0": {
+        "PixCorr": 0.06615578562617694,
+        "SSIM": 0.29360423323028906,
+        "AlexNet2": 75.53547094188377,
+        "AlexNet5": 85.86533066132264,
+        "Inception": 83.44088176352706,
+        "CLIP_identification": 84.83446893787576,
+        "EfficientNet": 0.7967777592912276,
+        "SwAV": 0.4771456038482414
+      },
+      "image_count": 500,
+      "smoke_only": false
+    },
+    "OLD-239063": {
+      "mean": {
+        "PixCorr": 0.08874200019579194,
+        "SSIM": 0.2908393045078394,
+        "AlexNet2": 76.6374749498998,
+        "AlexNet5": 87.0440881763527,
+        "Inception": 85.35531062124248,
+        "CLIP_identification": 85.2749498997996,
+        "EfficientNet": 0.7884504645949721,
+        "SwAV": 0.460789626703764
+      },
+      "candidate0": {
+        "PixCorr": 0.08975091254179443,
+        "SSIM": 0.2906475222260376,
+        "AlexNet2": 76.35110220440882,
+        "AlexNet5": 86.74068136272544,
+        "Inception": 84.71222444889779,
+        "CLIP_identification": 84.8749498997996,
+        "EfficientNet": 0.7889828124062651,
+        "SwAV": 0.46357692196209505
+      },
+      "image_count": 500,
+      "smoke_only": false
+    }
+  },
+  "best_new_candidate": "T2-159375",
+  "semantic_score": 85.1680026720107,
+  "improved_over_previous_semantic_point_estimate": false,
+  "qualified_for_next_experiment": false
+}

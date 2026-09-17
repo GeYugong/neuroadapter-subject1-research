@@ -1,0 +1,120 @@
+{
+  "checked_at": "2026-09-17T23:21:24.014547+08:00",
+  "passed": true,
+  "pipeline_status": "trained_evaluated_exported",
+  "all_recorded_stage_exit_codes_zero": true,
+  "training_source_commit": "4a6766e9a1628bfc8c98261c5d9ff59506e44c3f",
+  "canonical_initialization_equal": true,
+  "fresh_optimizers": true,
+  "counts": {
+    "T1-53125": {
+      "images": 500,
+      "candidates": 1000,
+      "ids_match": true,
+      "finite": true,
+      "mean_recomputed": true
+    },
+    "T1-106250": {
+      "images": 500,
+      "candidates": 1000,
+      "ids_match": true,
+      "finite": true,
+      "mean_recomputed": true
+    },
+    "T1-159375": {
+      "images": 500,
+      "candidates": 1000,
+      "ids_match": true,
+      "finite": true,
+      "mean_recomputed": true
+    },
+    "T2-53125": {
+      "images": 500,
+      "candidates": 1000,
+      "ids_match": true,
+      "finite": true,
+      "mean_recomputed": true
+    },
+    "T2-106250": {
+      "images": 500,
+      "candidates": 1000,
+      "ids_match": true,
+      "finite": true,
+      "mean_recomputed": true
+    },
+    "T2-159375": {
+      "images": 500,
+      "candidates": 1000,
+      "ids_match": true,
+      "finite": true,
+      "mean_recomputed": true
+    },
+    "OLD-53125": {
+      "images": 500,
+      "candidates": 1000,
+      "ids_match": true,
+      "finite": true,
+      "mean_recomputed": true
+    },
+    "OLD-106250": {
+      "images": 500,
+      "candidates": 1000,
+      "ids_match": true,
+      "finite": true,
+      "mean_recomputed": true
+    },
+    "OLD-159375": {
+      "images": 500,
+      "candidates": 1000,
+      "ids_match": true,
+      "finite": true,
+      "mean_recomputed": true
+    },
+    "OLD-239063": {
+      "images": 500,
+      "candidates": 1000,
+      "ids_match": true,
+      "finite": true,
+      "mean_recomputed": true
+    }
+  },
+  "best_new_candidate": "T2-159375",
+  "model_sha256": "bc09013f3d75098d1b0e945e141e15f76b75d7aa6fcc0f68ace6b28815e0d259",
+  "export_equals_source_snapshot": true,
+  "reload_two_candidates_pixels_exact": true,
+  "gallery_sha256": {
+    "95": "9ecc8d47543d20e366b8c5a26fcc9ef35d9f96b236f1ba749cde0ff7ab645dde",
+    "2327": "ce854cde38e234ff5a0c812b3fd3111eec405080c26856df977ccfefe982f78e",
+    "5582": "b8f0ade6a12a9b717e05def2f10c3fec640483d1bbe199241703da7eb971305e",
+    "8061": "608eb88358068fce79d3e15b7f409eb20a93295686e94ad409e09e4e4ca85442",
+    "10361": "806a727fbe1833aaea796c80ff4bdfd5a74a0b45ed6c473320b904705cab90de",
+    "13223": "a931590b9028c5edbcee508b7fba1103360da292f64bc4ba0c82401d87e72d6e",
+    "15068": "170c9e9520f0524fc5fe50b25135a7561536615f4e8188df4a6f68e553dc5325",
+    "16525": "16368949a7c0febb95e9b9a611ace84c8ba21c086e3b98f56b220a3c62578b2b",
+    "18888": "d9efbda77e64b9e95c415c7dede4c36c70668fd52049260a0f0a3895ffe094ff",
+    "21414": "5c7901108c970e42c9a5ad925a190d5de0c8f87099fa5ba37ead1ee676f0d75f",
+    "23642": "33fb3d4d467e683affb0b4743c08a04ec92b45d2ecb0e82b5f9a3d96f65c9873",
+    "26535": "f70831ea0706475c7e46014d26994ebec33a22005972af53446ea6fdc7654ce5",
+    "29018": "fc6f0b91fc7d3ed80df2d527641f1d5bdc9ab2ba4d75787fbffb44db67cebb12",
+    "30888": "f76857ccfb0e1e47b9003689a110eecc6e4dfed7506a191166b296708fe8c41e",
+    "32680": "262a4600a1b5355f291a08cbe0100317f21324092ef2e857005a9f81811b964f",
+    "34565": "8b4bf18c4f9efe31611fb0293ba49fabf0188b6f59b032ed263bc099ec957d29",
+    "36287": "c2b223755a1f4314e466b918e79f5e1c5d1dd140708937c3b2cd93624300dacd",
+    "38833": "e98c4630b3ac7d79800fd33626e3e0925adc9e2d440737cc5543bba609fb6eb5",
+    "40990": "1f4a39e0cbf4e0c130edd7cf908d2e5ecaf3d1261a7b83510d02133188bebbf4",
+    "43065": "10640128a5fb2402ef47c4170575dbd6bc2fccbdf79d869b41135b48b1c7d12f",
+    "45952": "57e11393122b7a8f90be431038561297d972d6708518995c8c8e52b36d89412a",
+    "48376": "f5e6f5bd6a608a989967420ef3ffbc85e7b504585985d079423f86140b70efed",
+    "50739": "a3a6d9c431822edd49d2582f47a7717f12e4ce27a0394afb03aa9f50649565c2",
+    "52729": "a46ec11225c5bbe22485db897e2f8a49698698463f978290966930b92c05a30b",
+    "55741": "e99b1bd8556ade41f669c55426d649d0cc02263517161e26586313d0dc956f26",
+    "57244": "0188613814f0fd6002ccce391bd126e82f980d324a0fd3e510e4ee0a637516e9",
+    "59219": "3e0d274c2b262b465fd18d76646931468d66f9a7d71fca2c3bdbfd6129ee4713",
+    "61868": "3090edb3065facd4384657aaff0999a68d118dc862cf7402de9ad60bc4505d4c",
+    "64851": "aba27d88a1f9ea486a56ad6126722f9daf90256650d8351bb24e8acad5ccf57a",
+    "66875": "1f2ebc3dea63b7b127fbfc8bb481f0cf58cc581cb4b7c06fac9fcd67db8c21a1",
+    "68553": "be2e12d09780a2f012e72cd8d7462ded074978718bbbc0e518ecb27f9ad0eca6",
+    "72527": "233c895d291f7347819d265c40cac3919c859ffe88637f9e63db1f80d0d2272e"
+  },
+  "gpu_compute_processes": ""
+}
