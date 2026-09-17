@@ -58,7 +58,7 @@ def main(root: Path) -> None:
         "clip": "ViT-L/14", "clip_sha256": sha256_file(clip_asset(root)),
         "cache_sha256": sha256_file(target), "source": source_identity(root),
         "split_ids_sha256": sha256_file(cfg.paths["split_ids"]),
-        "preprocess": "tensor bicubic 224 antialias + frozen CLIP normalization",
+        "preprocess": "deterministic CPU tensor bicubic 224 antialias + frozen CLIP normalization",
         "seconds": time.time() - started,
     })
     ds.close()
@@ -67,4 +67,3 @@ def main(root: Path) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(); parser.add_argument("--root", type=Path, required=True)
     main(parser.parse_args().root)
-

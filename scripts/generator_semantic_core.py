@@ -74,8 +74,13 @@ def clip_preprocess_tensor(images: torch.Tensor) -> torch.Tensor:
     """Differentiable equivalent of the frozen evaluator's CLIP image transform."""
     if images.ndim != 4 or images.shape[1] != 3:
         raise ValueError(f"expected NCHW RGB tensor, got {tuple(images.shape)}")
-    images = F.interpolate(images, size=(224, 224), mode="bicubic", align_corners=False,
-                           antialias=True)
+    # CUDA's antialiased bicubic backward is nondeterministic in the pinned
+    # PyTorch build.  Keep the exact tensor resize, but execute this one-image
+    # operation on CPU so checkpoint replay remains deterministic.  Device
+    # copies are differentiable, so gradients still reach the VAE/adapter.
+    original_device = images.device
+    images = F.interpolate(images.float().to("cpu"), size=(224, 224), mode="bicubic",
+                           align_corners=False, antialias=True).to(original_device)
     mean = images.new_tensor([0.48145466, 0.4578275, 0.40821073])[None, :, None, None]
     std = images.new_tensor([0.26862954, 0.26130258, 0.27577711])[None, :, None, None]
     return (images - mean) / std
@@ -103,4 +108,3 @@ def semantic_loss(
 def state_hash(payload: object) -> str:
     buffer = json.dumps(payload, sort_keys=True, default=str).encode()
     return hashlib.sha256(buffer).hexdigest()
-
