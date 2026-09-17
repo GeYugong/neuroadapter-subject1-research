@@ -165,7 +165,8 @@ def run(root: Path, arm: str, maximum: int, resume: Path | None = None,
         state = trainable_state_dict(bundle) if context.is_main else {}
         metadata = {"experiment": protocol["experiment_type"], "arm": arm,
             "source_update": protocol["source_update"], "source_R_sha256": protocol["source_sha256"],
-            "local_update": completed, "lambda_sem": lambda_sem, "config_hash": digest,
+            "local_update": completed, "optimizer_update": completed,
+            "lambda_sem": lambda_sem, "config_hash": digest,
             "implementation_commit": identity["implementation_commit"], "test_only": test_stop is not None,
             "pilot_stop": pilot_stop}
         if snapshot:
