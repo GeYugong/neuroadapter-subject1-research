@@ -92,6 +92,13 @@ def main(root: Path) -> None:
     for name in [name for name in sys.modules if name == "brain_adapter" or name.startswith("brain_adapter.")]:
         del sys.modules[name]
     sys.path.insert(0,str(root/"repo/vendor/NeuroAdapter"))
+    # The released train file imports an optional dataset class that is absent
+    # from the pinned scientific dataset.py.  It is not used by
+    # process_training_batch; provide an import-only placeholder and record this
+    # public-source compatibility patch in the audit output.
+    import brain_adapter.dataset as author_dataset
+    if not hasattr(author_dataset,"nsd_groupwise_topk_parcel_dataset"):
+        author_dataset.nsd_groupwise_topk_parcel_dataset=author_dataset.nsd_topk_parcel_dataset
     import train_brain_adapter as author
     author_batch={"img_ipadapter":images,"text_input_ids":text_ids.expand(4,-1),"brain_lh_f":brain[:,:100],"brain_rh_f":brain[:,100:]}
     accelerator=SimpleNamespace(device=device)
@@ -122,6 +129,7 @@ def main(root: Path) -> None:
         "gradient_max_abs":gradient_diff[0],"gradient_rms":gradient_diff[1],"updated_state_differences":state_diffs,
         "dtypes":dtype_record,"random_injection":"explicit VAE epsilon-derived sample, diffusion noise, timesteps and token mask",
         "author_function":"vendor/NeuroAdapter/train_brain_adapter.py::process_training_batch",
+        "author_import_patch":"unused nsd_groupwise_topk_parcel_dataset alias required by released top-level import",
         "source":source_identity(root),"scope":"public-code correspondence only; not unreleased author HDF5/config proof"})
     if not passed: raise RuntimeError("public author/current chain audit found a blocking difference")
     dataset.close()
