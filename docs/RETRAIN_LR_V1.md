@@ -1,5 +1,13 @@
 # T1/T2 从canonical重新训练
 
+## 最新状态（2026-09-17 21:24，北京时间）
+
+T1、T2均已完成159375次optimizer update，两条最终训练阶段退出码均为0。T2于21:14完成，从21976完整恢复点恢复后的状态计时为78617.565秒；该计时不是包含暂停前训练的总时长。两条各自的53125、106250、159375 snapshot及三个完整milestone均存在，包含模型、AdamW、双rank状态及COMPLETE标记。
+
+原冻结控制器已自动进入剩余评价，当前阶段decode-T1-53125。会话为`neuroadapter-retrain-lr-resumed`，控制器PID422986，实际训练及评价源码仍为4a6766e9a1628bfc8c98261c5d9ff59506e44c3f。T1-159375和旧159375/239063的优先评价及固定32图实际AI查看已经完成，见[T1优先报告](T1_PRIORITY_VISUAL_REVIEW_ZH.md)，无需重复该项审阅。其余新snapshot评价、最终六选一及完整图册查看尚未完成，不根据T1结果推断T2效果。
+
+完成证据见`manifests/retrain-lr-v1/T2-completed-status.json`及`pipeline-at-T2-completion.json`。后者保留原控制器的历史error字段：它来自先前用户授权的T2暂停；当前status=running、恢复后train-T2退出0且已进入decode阶段，不能将遗留字段误报为本次训练失败。以下调度和启动记录保留历史，状态判断以本节、主日志最新记录及实时服务器证据为准。
+
 ## T1优先交付（2026-09-16追加授权）
 
 **最新安排覆盖下述等待方案：用户随后明确授权先暂停T2，评价T1再恢复。** T2已在21976次完整更新后保存checkpoint-update-00021976并正常退出，原控制器因T2未到上限而停止是预期行为。当前入口为runtime/priority-t1-paused-135d5b6/scripts/run_t1_while_t2_paused.py，会话neuroadapter-priority-t1；在完整checkpoint校验后执行三个优先评价和图册生成，再自动从原冻结控制器恢复T2，保持AdamW、RNG、sampler和LR进度。旧等待器已撤销并归档，不再使用。恢复会话neuroadapter-retrain-lr-resumed；仍需核验实际恢复日志和更新推进。以下保留调度变更背景。
@@ -38,7 +46,7 @@ run_retrain_lr_suite.py顺序执行T1双卡→完整终点校验→T2双卡→�
 
 内容图册预先固定有序验证列表32个等距位置，保留GT、239063及六个新权重的全部双候选。自动生成图册不等于实际视觉检查；训练评价导出完成后还须实际打开32张图册作AI定性说明。不重新发起F类评阅，不延长训练、不启动第三条。
 
-## 当前状态
+## 首次启动状态（历史记录）
 
 已实际启动T1双卡训练，启动检查时已完成200更新；T2排队，未声称已经训练。源码commit `4a6766e9a1628bfc8c98261c5d9ff59506e44c3f`，冻结入口 `$ROOT/runtime/retrain-lr-v1-final/`。首次有效update=1，global loss0.1590818763；记录时update200，LR3e-5，最近100步平均loss0.1129493840。
 

@@ -3032,3 +3032,23 @@ tmux neuroadapter-retrain-lr-v1已启动真实控制器PID303877，torchrun30390
 已将固定32张对照图同步本地并全部实际打开，查看GT及新旧各两个候选；单一AI非盲定性检查，不冒充人工盲评。逐图记录32条：59219候选0找回飞机、30888候选1保留笔记本属于局部改善；48376由冲浪变陆地运动、36287丢失冲浪板、38833林地动物变雪景属于明确退步。报告不以案例重新选图或调参。完整含图报告artifacts/retrain-lr-v1/priority-T1/REPORT_ZH.md；Git中文指标及逐图报告docs/T1_PRIORITY_VISUAL_REVIEW_ZH.md，小型数值、阶段退出码和独立视觉完成标记在manifests/retrain-lr-v1。保留原results.json的生成时待审阅标记，以visual-completion新增记录补充，而非抹去历史。
 
 T1模型SHA为ccaefc678cbe96f47e4fd487b8d990883f20249e3c7b5b55ced49718d27d7333。恢复控制器实际命令含--resume checkpoint-update-00021976；新torchrun PID423010，config hash不变，检查时T2已推进32800步，证明不是仅启动了恢复命令。冻结加载入口会验证source/config/LR/sampler并加载AdamW及RNG；本轮未再次执行长程数值等价试验，不扩大已通过短恢复测试的结论。继续既定T2和最终六选一，当前报告不是最终候选结论。
+
+
+### retrain-lr-v1 自动记录 2026-09-17T13:14:10.680513+00:00
+
+`train-T2` 退出码 `0`。
+
+
+### retrain-lr-v1 自动记录 2026-09-17T13:14:14.263077+00:00
+
+开始 `decode-T1-53125`，源码 `4a6766e9a1628bfc8c98261c5d9ff59506e44c3f`，可见GPU `0`；完整命令记录pipeline.json。
+
+### 2026-09-17：T2完成，进入剩余固定评价
+
+21:24（北京时间）检查：T2于21:14完成159375次optimizer update、300 reference epochs，最终LR为1e-5，恢复后的torchrun退出码0。T1也已完整结束，至此两条授权训练全部完成，未增加第三条或延长训练。T2 status中的78617.565秒为从21976恢复后的运行时间，不应当作两段累计训练时间。源码仍为4a6766e9a1628bfc8c98261c5d9ff59506e44c3f，T2 config hash仍为9877f15d59e677fc291b32056388b9d9740b4b0809c5095a0f59bb764e0c9340。
+
+核验两条各三个预定snapshot和完整milestone目录，均具备模型、AdamW、双rank状态、trainer_state、MANIFEST及COMPLETE等对应文件；这是文件与阶段状态检查，未在解码期间重新读取全部大权重作独立哈希复验。完成状态及pipeline原始证据归档manifests/retrain-lr-v1/T2-completed-status.json、pipeline-at-T2-completion.json。pipeline保留先前主动暂停时的error字符串，但当前状态running、恢复训练退出0且后续解码运行，不能误报为新故障。
+
+原控制器422986、会话neuroadapter-retrain-lr-resumed已自动进入decode-T1-53125，解码PID465037，检查时日志175/500；GPU0用于固定评价，GPU1空闲。T1-159375及旧159375/239063已完成的同口径评价和优先32图报告保留复用，最终六份新结果尚未全部齐备，最佳新候选尚未导出。按此前单权重约24分钟解码及剩余五份新解码估算，后续机器评价约2至3小时，另需图册实际查看和中文报告，不承诺准确完成时刻。
+
+本次只读取运行状态、同步服务器自动追加主日志并更新完成证据与文档，没有修改运行源码、调度、配置或启动额外GPU作业。下一步仍为既定六新四旧固定评价、最佳新候选导出与固定32图AI定性查看；不访问标准test、不用C/E、不上传新权重到HF、不用loss判断重建改善。
