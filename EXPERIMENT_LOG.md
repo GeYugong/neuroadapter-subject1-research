@@ -3274,3 +3274,9 @@ T1模型SHA为ccaefc678cbe96f47e4fd487b8d990883f20249e3c7b5b55ced49718d27d7333�
 本轮导出目录runs/experiments/retrain-lr-v1/best_new_candidate，model.pt SHA256为bc09013f3d75098d1b0e945e141e15f76b75d7aa6fcc0f68ace6b28815e0d259，与T2终点源snapshot的独立SHA一致。原导出阶段重新加载后两个候选与评价PNG逐像素一致；完整配置、元数据、八项结果、加载方式均已交付。保留全部旧权重、完整milestones和旧RESEARCH_WEIGHT_LOCK；新权重未上传HF，不再启动第三条训练或扩大评价。
 
 完整含图报告已同步本地artifacts/retrain-lr-v1/REPORT_ZH.md，所有32张JPG的SHA与服务器一致、报告相对图片链接32/32可解析。Git文本报告docs/RETRAIN_LR_V1_RESULT.md及manifests/retrain-lr-v1/final保存十组逐候选/逐图分数、比较区间、配置、训练日志、阶段退出码、导出元数据和completion-audit；Git不含图片、模型、脑数据或凭据。原机器报告与待审阅标记保存在machine-delivery归档，另以final-completion.json记录实际视觉交付，不改写其历史。后续只停止已完成任务的heartbeat，不改变其他自动任务。
+
+### 2026-09-18：启动最后一轮有上限的生成权重开发
+
+本轮实验命名为 `generator-semantic-last-v1`。用户已明确批准执行附件中的完整受限方案：以旧 `239063` 权重 R（SHA-256 `bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217`）为共同起点，先运行原扩散损失控制组 K5000，再运行原损失加训练期 CLIP 残差语义辅助的 M5000。仅当冻结的数值门槛、非 CLIP 高层指标、PixCorr 下限和图像异常检查全部通过时，才从 M5000 的完整优化器与随机状态连续延长到 M20000。
+
+固定条件为 Subject 1 的 8500/500 划分、2×RTX 4090、global batch 16、固定学习率 `1e-5`、原 Min-SNR 和 token dropout、BF16 主路径及原双候选 50 步 CFG4 评价。总新增训练上限为 K5000 加 M20000；不访问标准 test，不运行第三组，不搜索其他 lambda/seed，不使用 C/E 选图，不覆盖任何旧权重、旧 runtime 或模型锁。新增代码位于独立分支 `feat/generator-semantic-last-v1`，正式运行前将完成公开作者链路检查、训练集 CLIP 特征缓存、16 个训练 update 的一次性梯度比标定、语义梯度边界和短恢复测试。
