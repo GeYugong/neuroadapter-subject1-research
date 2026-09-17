@@ -86,6 +86,11 @@ def main(root: Path) -> None:
         timesteps=torch.tensor([50,200,500,800],device=device);text=backbone.text_encoder(text_ids)[0].expand(4,-1,-1)
         noisy=backbone.noise_scheduler.add_noise(latent,noise,timesteps);keep=(torch.rand((4,200,768),device=device,generator=generator)>0.10).float()
     optimizer=torch.optim.AdamW([p for p in module.parameters() if p.requires_grad],lr=1e-5,betas=(.9,.999),eps=1e-8,weight_decay=1e-6,foreach=False,fused=False)
+    # The frozen construction primitives import their own vendor tree first.  The
+    # author-function audit must instead import train_brain_adapter.py and all of
+    # its brain_adapter dependencies from one matching public source tree.
+    for name in [name for name in sys.modules if name == "brain_adapter" or name.startswith("brain_adapter.")]:
+        del sys.modules[name]
     sys.path.insert(0,str(root/"repo/vendor/NeuroAdapter"))
     import train_brain_adapter as author
     author_batch={"img_ipadapter":images,"text_input_ids":text_ids.expand(4,-1),"brain_lh_f":brain[:,:100],"brain_rh_f":brain[:,100:]}
