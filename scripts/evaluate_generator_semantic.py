@@ -73,8 +73,9 @@ def decode(root: Path, label: str) -> None:
             item={"image_id":image_id,"files":files,"source_sha256":source_hash}
             write_json_atomic(record,item);records.append(item)
             if (index+1)%25==0: print(f"{label}: {index+1}/500",flush=True)
-    write_json_atomic(target/"decode_manifest.json",{"status":"complete","records":records,
-        "candidate_count":2,"snapshot_sha256":source_hash,"protocol_sha256":sha256_file(output(root)/"evaluation/protocol.json")})
+    write_json_atomic(target/"decode_manifest.json",{"status":"complete","split":"validation",
+        "records":records,"candidate_count":2,"snapshot_sha256":source_hash,
+        "protocol_sha256":sha256_file(output(root)/"evaluation/protocol.json")})
     ds.close()
 
 
@@ -137,4 +138,3 @@ if __name__=="__main__":
     else:
         labels=["B0","K-5000","M-5000"]+[label for label in ("M-10000","M-20000") if (output(args.root)/"evaluation"/f"{label}-summary.json").exists()]
         summarize(args.root,labels,False)
-
