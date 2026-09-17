@@ -1,0 +1,11 @@
+{
+  "arm": "M",
+  "component_gradient_norms": {
+    "guidance_generator": 0.0016333794281975682,
+    "image_proj": 0.004069369149025473,
+    "ip_adapter": 0.0032281555935390256
+  },
+  "frozen_parameter_gradients_absent": true,
+  "optimizer_parameter_count": 116068608,
+  "source_initial_tensor_sha256": "541f6dd0f15f429c9a9127a43904ec584cdc4133e597181cf05976aff8b5bfd1"
+}

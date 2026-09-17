@@ -1,0 +1,319 @@
+{
+  "status": "passed",
+  "fixed_image_ids": [
+    12168,
+    42113,
+    7062,
+    25506,
+    54767,
+    37754,
+    15390,
+    13766,
+    63089,
+    9603,
+    43958,
+    62247,
+    7674,
+    59576,
+    322,
+    65025
+  ],
+  "data_checks": [
+    {
+      "image_id": 12168,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 42113,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 7062,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 25506,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 54767,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 37754,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 15390,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 13766,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 63089,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 9603,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 43958,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 62247,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 7674,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 59576,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 322,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    },
+    {
+      "image_id": 65025,
+      "brain_max_abs": 0.0,
+      "brain_exact": true,
+      "image_shape": [
+        3,
+        512,
+        512
+      ],
+      "token_shape": [
+        200,
+        626
+      ]
+    }
+  ],
+  "author_loss": 0.128406822681427,
+  "current_loss": 0.12840688228607178,
+  "gradient_max_abs": 2.1909363567829132e-07,
+  "gradient_rms": 1.0604536804237341e-08,
+  "updated_state_differences": {
+    "image_proj": [
+      1.1675059795379639e-05,
+      9.734887385093316e-08
+    ],
+    "ip_adapter": [
+      1.1449679732322693e-05,
+      5.76432199750343e-08
+    ],
+    "guidance_generator": [
+      6.556510925292969e-06,
+      3.2092163593233636e-08
+    ]
+  },
+  "dtypes": {
+    "vae_mean": "torch.float32",
+    "vae_std": "torch.float32",
+    "vae_epsilon": "torch.float32",
+    "vae_sample": "torch.float32",
+    "scaled_latent": "torch.float32",
+    "diffusion_noise": "torch.float32",
+    "alphas": "torch.float32",
+    "noisy_latent": "torch.float32",
+    "unet_input": "torch.float32",
+    "unet_output": "torch.float32",
+    "scheduler_config": {
+      "num_train_timesteps": 1000,
+      "beta_start": 0.00085,
+      "beta_end": 0.012,
+      "beta_schedule": "scaled_linear",
+      "trained_betas": null,
+      "variance_type": "fixed_small",
+      "clip_sample": false,
+      "prediction_type": "epsilon",
+      "thresholding": false,
+      "dynamic_thresholding_ratio": 0.995,
+      "clip_sample_range": 1.0,
+      "sample_max_value": 1.0,
+      "timestep_spacing": "leading",
+      "steps_offset": 1,
+      "rescale_betas_zero_snr": false,
+      "_use_default_values": [
+        "clip_sample_range",
+        "variance_type",
+        "timestep_spacing",
+        "sample_max_value",
+        "rescale_betas_zero_snr",
+        "thresholding",
+        "dynamic_thresholding_ratio",
+        "prediction_type"
+      ],
+      "_class_name": "DDPMScheduler",
+      "_diffusers_version": "0.6.0",
+      "set_alpha_to_one": false,
+      "skip_prk_steps": true
+    }
+  },
+  "random_injection": "explicit VAE epsilon-derived sample, diffusion noise, timesteps and token mask",
+  "author_function": "vendor/NeuroAdapter/train_brain_adapter.py::process_training_batch",
+  "author_import_patch": "unused nsd_groupwise_topk_parcel_dataset alias required by released top-level import",
+  "source": {
+    "source_update": 239063,
+    "source_model": "/data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00239063/model.pt",
+    "source_sha256": "bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217",
+    "implementation_commit": "de7dffc6620d9d56def1a1db8e6843280a04ef30",
+    "spec_sha256": "137a7ea497af8e3b245f8707ad4d2de9008c55588c9922d98209c889b625b635"
+  },
+  "scope": "public-code correspondence only; not unreleased author HDF5/config proof"
+}

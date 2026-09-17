@@ -1,0 +1,18 @@
+{
+  "status": "complete",
+  "image_count": 8500,
+  "feature_dim": 768,
+  "clip": "ViT-L/14",
+  "clip_sha256": "b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836",
+  "cache_sha256": "2c02296782b00035c88df92393d096009f6b842f2b575770ae77eadac7afa74e",
+  "source": {
+    "source_update": 239063,
+    "source_model": "/data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00239063/model.pt",
+    "source_sha256": "bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217",
+    "implementation_commit": "8be456eefc81598de6b19110d1da149636e206fa",
+    "spec_sha256": "137a7ea497af8e3b245f8707ad4d2de9008c55588c9922d98209c889b625b635"
+  },
+  "split_ids_sha256": "a13ad80a744e19c22e8309bc9ffe3cd49bd5ad1a4058921adec37fdd686614ea",
+  "preprocess": "deterministic CPU tensor bicubic 224 antialias + frozen CLIP normalization",
+  "seconds": 25.35965585708618
+}

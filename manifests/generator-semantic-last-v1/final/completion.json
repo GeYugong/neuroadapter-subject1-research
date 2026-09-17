@@ -1,0 +1,20 @@
+{
+  "status": "complete",
+  "training_extension_performed": false,
+  "reason": "frozen numeric pilot gate failed",
+  "developed_candidate": "K-5000",
+  "recommended_generator": "B0",
+  "generator_state_sha256": "0fda9a9b615982297039b717d032e22ab465fdf4a8a53ed998c21885f86fecfd",
+  "resume_archive": "resume/K5000-complete.tar.zst",
+  "resume_archive_sha256": "61133f259abbf2b6ae373ce4168585a16c02245edfeced540c814619de45b556",
+  "report_sha256": "5715e10f1471f2ad2acb370f75b9159a425a3647538b7008fc70c08eb86bd989",
+  "visual_review_sha256": "b7bdc63298f5ac2ed849443a4cbeaaf4855bf4c9974a876a329170f88a04a48e",
+  "gallery_sha256": {
+    "fixed32-page-1.jpg": "2ab25ac2f547c4375905ef31ebabf7a7bd89576056bd081d7f3b3928be73d2a8",
+    "fixed32-page-2.jpg": "c9204082e2fc53c10c368fa4b5058fd9fa019669065f2f6ac5c7aa07d21936b4",
+    "fixed32-page-3.jpg": "2846661a0d40134079a2ffabc626f969eecd8d120df1d8ea31ac63a5a383aa2d",
+    "fixed32-page-4.jpg": "1f1631cde28df48fc892c36daecb61f257a924d33d8188bd60501a24364630be"
+  },
+  "standard_test_used": false,
+  "hf_uploaded": false
+}

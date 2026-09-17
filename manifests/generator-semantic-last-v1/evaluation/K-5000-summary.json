@@ -1,0 +1,15 @@
+{
+  "mean": {
+    "PixCorr": 0.0869781059294945,
+    "SSIM": 0.28691690116710106,
+    "AlexNet2": 76.15891783567133,
+    "AlexNet5": 87.64428857715431,
+    "Inception": 85.95250501002005,
+    "CLIP_identification": 86.0054108216433,
+    "EfficientNet": 0.7784524728369752,
+    "SwAV": 0.4565779999687254
+  },
+  "image_count": 500,
+  "candidate_count": 2,
+  "selection": "none"
+}

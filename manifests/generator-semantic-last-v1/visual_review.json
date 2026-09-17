@@ -1,0 +1,18 @@
+{
+  "status": "complete",
+  "reviewer": "single_ai_non_blind",
+  "image_count": 32,
+  "generated_output_count": 192,
+  "methods": ["B0", "K-5000", "M-5000"],
+  "candidates_per_method": 2,
+  "severe_texture_artifact": false,
+  "nonfinite_image": false,
+  "obvious_training_image_copying": false,
+  "consistent_content_improvement_for_K": false,
+  "consistent_content_improvement_for_M": false,
+  "summary": "粗类别在部分样本中稳定，但斑马、棒球、单轨列车、雪景、数量、动作、道具和布局仍频繁错误；K/M 与 B0 整体接近，未见一致内容改善。",
+  "notable_stable_ids": [5582, 15068, 26535, 48376, 50739, 57244],
+  "notable_failure_ids": [10361, 13223, 29018, 43065, 52729, 55741, 61868, 66875, 72527],
+  "decision_use": "descriptive artifact check only; numeric pilot gate already failed",
+  "standard_test_used": false
+}

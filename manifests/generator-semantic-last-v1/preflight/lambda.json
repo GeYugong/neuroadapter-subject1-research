@@ -1,0 +1,145 @@
+{
+  "status": "passed",
+  "lambda_sem": 0.00041042703470024083,
+  "gradient_fraction": 0.1,
+  "ratios": [
+    0.004243669141602403,
+    0.006967463271856187,
+    0.007263633469988688,
+    0.004306678925496706,
+    0.004291818662218797,
+    0.007812542569176642,
+    0.0015298418386409495,
+    0.005886551373447907,
+    0.0016036396925869553,
+    0.003964871552402414,
+    0.0034115337923678315,
+    0.001192982535960964,
+    0.005129501892029132,
+    0.0024542905224722365,
+    0.002679235590174042,
+    0.001729271595853799
+  ],
+  "records": [
+    {
+      "update": 0,
+      "diffusion_grad_norm": 0.0054179891012609005,
+      "semantic_grad_norm": 1.27672278881073,
+      "ratio": 0.004243669141602403,
+      "clamp_saturation_fraction": 0.00337982177734375
+    },
+    {
+      "update": 1,
+      "diffusion_grad_norm": 0.003888568142428994,
+      "semantic_grad_norm": 0.5581038594245911,
+      "ratio": 0.006967463271856187,
+      "clamp_saturation_fraction": 0.0
+    },
+    {
+      "update": 2,
+      "diffusion_grad_norm": 0.004945114720612764,
+      "semantic_grad_norm": 0.6808045506477356,
+      "ratio": 0.007263633469988688,
+      "clamp_saturation_fraction": 0.00047429403639398515
+    },
+    {
+      "update": 3,
+      "diffusion_grad_norm": 0.0040195598267018795,
+      "semantic_grad_norm": 0.9333316683769226,
+      "ratio": 0.004306678925496706,
+      "clamp_saturation_fraction": 0.0003611246938817203
+    },
+    {
+      "update": 4,
+      "diffusion_grad_norm": 0.0049294400960206985,
+      "semantic_grad_norm": 1.148566722869873,
+      "ratio": 0.004291818662218797,
+      "clamp_saturation_fraction": 0.0007909139385446906
+    },
+    {
+      "update": 5,
+      "diffusion_grad_norm": 0.0066659459844231606,
+      "semantic_grad_norm": 0.8532364368438721,
+      "ratio": 0.007812542569176642,
+      "clamp_saturation_fraction": 0.029600780457258224
+    },
+    {
+      "update": 6,
+      "diffusion_grad_norm": 0.004731993656605482,
+      "semantic_grad_norm": 3.093126058578491,
+      "ratio": 0.0015298418386409495,
+      "clamp_saturation_fraction": 0.0
+    },
+    {
+      "update": 7,
+      "diffusion_grad_norm": 0.005354936700314283,
+      "semantic_grad_norm": 0.9096899628639221,
+      "ratio": 0.005886551373447907,
+      "clamp_saturation_fraction": 0.0
+    },
+    {
+      "update": 8,
+      "diffusion_grad_norm": 0.0049111079424619675,
+      "semantic_grad_norm": 3.0624759197235107,
+      "ratio": 0.0016036396925869553,
+      "clamp_saturation_fraction": 0.0
+    },
+    {
+      "update": 9,
+      "diffusion_grad_norm": 0.005289022345095873,
+      "semantic_grad_norm": 1.3339706659317017,
+      "ratio": 0.003964871552402414,
+      "clamp_saturation_fraction": 0.0
+    },
+    {
+      "update": 10,
+      "diffusion_grad_norm": 0.00523988576605916,
+      "semantic_grad_norm": 1.5359325408935547,
+      "ratio": 0.0034115337923678315,
+      "clamp_saturation_fraction": 0.011133830063045025
+    },
+    {
+      "update": 11,
+      "diffusion_grad_norm": 0.0045098536647856236,
+      "semantic_grad_norm": 3.780318260192871,
+      "ratio": 0.001192982535960964,
+      "clamp_saturation_fraction": 0.0
+    },
+    {
+      "update": 12,
+      "diffusion_grad_norm": 0.006312203593552113,
+      "semantic_grad_norm": 1.230568528175354,
+      "ratio": 0.005129501892029132,
+      "clamp_saturation_fraction": 0.0
+    },
+    {
+      "update": 13,
+      "diffusion_grad_norm": 0.005171049386262894,
+      "semantic_grad_norm": 2.106942653656006,
+      "ratio": 0.0024542905224722365,
+      "clamp_saturation_fraction": 0.0
+    },
+    {
+      "update": 14,
+      "diffusion_grad_norm": 0.00684057641774416,
+      "semantic_grad_norm": 2.5531821250915527,
+      "ratio": 0.002679235590174042,
+      "clamp_saturation_fraction": 0.001491546630859375
+    },
+    {
+      "update": 15,
+      "diffusion_grad_norm": 0.005872105248272419,
+      "semantic_grad_norm": 3.3957102298736572,
+      "ratio": 0.001729271595853799,
+      "clamp_saturation_fraction": 0.0
+    }
+  ],
+  "source": {
+    "source_update": 239063,
+    "source_model": "/data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00239063/model.pt",
+    "source_sha256": "bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217",
+    "implementation_commit": "de7dffc6620d9d56def1a1db8e6843280a04ef30",
+    "spec_sha256": "137a7ea497af8e3b245f8707ad4d2de9008c55588c9922d98209c889b625b635"
+  },
+  "aggregation": "two main microbatches with DDP average; one semantic sample per rank"
+}

@@ -1,0 +1,55 @@
+{
+  "experiment": "generator_semantic_last_v1",
+  "arm": "K",
+  "source": {
+    "source_update": 239063,
+    "source_model": "/data1/matengyu/geyugong/neuroadapter-subject1-research/runs/selection/subject01-selection-4090-deterministic-v2/snapshots/snapshot-update-00239063/model.pt",
+    "source_sha256": "bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217",
+    "implementation_commit": "12305e0abc95d333aebf3e12c99c9279ab78fe37",
+    "spec_sha256": "137a7ea497af8e3b245f8707ad4d2de9008c55588c9922d98209c889b625b635"
+  },
+  "local_maximum": 5000,
+  "lambda_sem": null,
+  "training": {
+    "max_updates": 5000,
+    "world_size": 2,
+    "global_batch_size": 16,
+    "micro_batch_size": 4,
+    "gradient_accumulation_steps": 2,
+    "dataloader_workers": 4,
+    "learning_rate": 1e-05,
+    "adam_beta1": 0.9,
+    "adam_beta2": 0.999,
+    "adam_epsilon": 1e-08,
+    "weight_decay": 1e-06,
+    "max_grad_norm": 1.0,
+    "min_snr_gamma": 5.0,
+    "precision": "bf16",
+    "allow_tf32": true,
+    "cudnn_benchmark": false,
+    "deterministic_algorithms": true,
+    "adamw_fused": false,
+    "adamw_foreach": false,
+    "base_seed": 20260918,
+    "sampler_seed": 20260918,
+    "log_every_updates": 10,
+    "checkpoint_every_updates": 5000,
+    "checkpoint_reference_epochs": 25
+  },
+  "backend": {
+    "allow_tf32": true,
+    "cudnn_benchmark": false,
+    "deterministic_algorithms": true,
+    "adamw_fused": false,
+    "adamw_foreach": false
+  },
+  "config_hash": "5722186546e36383f69014612c79e8b98398e6baacebb79cce6bb6a41d372828",
+  "parameter_audit": {
+    "trainable_tensors": 38,
+    "trainable_parameters": 116068608,
+    "frozen_parameters": 859520964
+  },
+  "initial_tensor_sha256": "541f6dd0f15f429c9a9127a43904ec584cdc4133e597181cf05976aff8b5bfd1",
+  "test_only": false,
+  "pilot_stop": false
+}

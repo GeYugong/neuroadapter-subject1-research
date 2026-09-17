@@ -1,0 +1,59 @@
+{
+  "rows": [
+    {
+      "label": "B0",
+      "semantic_score": 85.89144956579825,
+      "non_clip_high_level": 86.19969939879759,
+      "PixCorr": 0.08874200019579194,
+      "SSIM": 0.2908393045078394,
+      "AlexNet2": 76.6374749498998,
+      "AlexNet5": 87.0440881763527,
+      "Inception": 85.35531062124248,
+      "CLIP_identification": 85.2749498997996,
+      "EfficientNet": 0.7884504645949721,
+      "SwAV": 0.460789626703764
+    },
+    {
+      "label": "K-5000",
+      "semantic_score": 86.53406813627255,
+      "non_clip_high_level": 86.79839679358719,
+      "PixCorr": 0.0869781059294945,
+      "SSIM": 0.28691690116710106,
+      "AlexNet2": 76.15891783567133,
+      "AlexNet5": 87.64428857715431,
+      "Inception": 85.95250501002005,
+      "CLIP_identification": 86.0054108216433,
+      "EfficientNet": 0.7784524728369752,
+      "SwAV": 0.4565779999687254
+    },
+    {
+      "label": "M-5000",
+      "semantic_score": 86.16713426853708,
+      "non_clip_high_level": 86.52555110220442,
+      "PixCorr": 0.08518874946523888,
+      "SSIM": 0.2818022103077191,
+      "AlexNet2": 76.91002004008016,
+      "AlexNet5": 87.44228456913828,
+      "Inception": 85.60881763527054,
+      "CLIP_identification": 85.45030060120241,
+      "EfficientNet": 0.7806594564720105,
+      "SwAV": 0.4581954448350006
+    }
+  ],
+  "gate": {
+    "passed_numeric": false,
+    "checks": {
+      "semantic_vs_baseline": false,
+      "semantic_vs_control": false,
+      "non_clip_above_both": false,
+      "pixcorr_floor": true
+    },
+    "deltas": {
+      "S_vs_B0": 0.27568470273882895,
+      "S_vs_K": -0.36693386773546877,
+      "N_vs_B0": 0.32585170340682623,
+      "N_vs_K": -0.27284569138276993,
+      "PixCorr_vs_B0": -0.0035532507305530564
+    }
+  }
+}

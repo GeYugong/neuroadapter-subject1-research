@@ -1,0 +1,170 @@
+{
+  "status": "complete_no_extension",
+  "pilot_gate": {
+    "passed_numeric": false,
+    "checks": {
+      "semantic_vs_baseline": false,
+      "semantic_vs_control": false,
+      "non_clip_above_both": false,
+      "pixcorr_floor": true
+    },
+    "deltas": {
+      "S_vs_B0": 0.27568470273882895,
+      "S_vs_K": -0.36693386773546877,
+      "N_vs_B0": 0.32585170340682623,
+      "N_vs_K": -0.27284569138276993,
+      "PixCorr_vs_B0": -0.0035532507305530564
+    }
+  },
+  "developed_candidate": {
+    "experiment": "generator_semantic_last_v1",
+    "role": "developed_candidate_not_recommended_replacement",
+    "label": "K-5000",
+    "local_update": 5000,
+    "source_update": 239063,
+    "source_R_sha256": "bdca167505e0f1e62e025a5856299c56548dc40c2231740b8d2e1f84665b8217",
+    "generator_state_sha256": "0fda9a9b615982297039b717d032e22ab465fdf4a8a53ed998c21885f86fecfd",
+    "training_objective": "original diffusion loss only control",
+    "inference_requires_training_CLIP": false,
+    "semantic_score": 86.53406813627255,
+    "pixcorr": 0.0869781059294945
+  },
+  "recommended_generator": "B0",
+  "completed_snapshots": [
+    "K-5000",
+    "M-5000"
+  ],
+  "standard_test_used": false,
+  "additional_training_authorized": false,
+  "gallery_records": [
+    {
+      "page": 1,
+      "image_id": 95
+    },
+    {
+      "page": 1,
+      "image_id": 2327
+    },
+    {
+      "page": 1,
+      "image_id": 5582
+    },
+    {
+      "page": 1,
+      "image_id": 8061
+    },
+    {
+      "page": 1,
+      "image_id": 10361
+    },
+    {
+      "page": 1,
+      "image_id": 13223
+    },
+    {
+      "page": 1,
+      "image_id": 15068
+    },
+    {
+      "page": 1,
+      "image_id": 16525
+    },
+    {
+      "page": 2,
+      "image_id": 18888
+    },
+    {
+      "page": 2,
+      "image_id": 21414
+    },
+    {
+      "page": 2,
+      "image_id": 23642
+    },
+    {
+      "page": 2,
+      "image_id": 26535
+    },
+    {
+      "page": 2,
+      "image_id": 29018
+    },
+    {
+      "page": 2,
+      "image_id": 30888
+    },
+    {
+      "page": 2,
+      "image_id": 32680
+    },
+    {
+      "page": 2,
+      "image_id": 34565
+    },
+    {
+      "page": 3,
+      "image_id": 36287
+    },
+    {
+      "page": 3,
+      "image_id": 38833
+    },
+    {
+      "page": 3,
+      "image_id": 40990
+    },
+    {
+      "page": 3,
+      "image_id": 43065
+    },
+    {
+      "page": 3,
+      "image_id": 45952
+    },
+    {
+      "page": 3,
+      "image_id": 48376
+    },
+    {
+      "page": 3,
+      "image_id": 50739
+    },
+    {
+      "page": 3,
+      "image_id": 52729
+    },
+    {
+      "page": 4,
+      "image_id": 55741
+    },
+    {
+      "page": 4,
+      "image_id": 57244
+    },
+    {
+      "page": 4,
+      "image_id": 59219
+    },
+    {
+      "page": 4,
+      "image_id": 61868
+    },
+    {
+      "page": 4,
+      "image_id": 64851
+    },
+    {
+      "page": 4,
+      "image_id": 66875
+    },
+    {
+      "page": 4,
+      "image_id": 68553
+    },
+    {
+      "page": 4,
+      "image_id": 72527
+    }
+  ],
+  "active_training_seconds": 7121.721440431953
+}
