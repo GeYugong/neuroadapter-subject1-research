@@ -5,6 +5,7 @@
   "developed_candidate": "K-5000",
   "recommended_generator": "B0",
   "generator_state_sha256": "0fda9a9b615982297039b717d032e22ab465fdf4a8a53ed998c21885f86fecfd",
+  "training_implementation_commit": "12305e0abc95d333aebf3e12c99c9279ab78fe37",
   "resume_archive": "resume/K5000-complete.tar.zst",
   "resume_archive_sha256": "61133f259abbf2b6ae373ce4168585a16c02245edfeced540c814619de45b556",
   "report_sha256": "5715e10f1471f2ad2acb370f75b9159a425a3647538b7008fc70c08eb86bd989",

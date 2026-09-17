@@ -54,9 +54,12 @@ def main(root: Path) -> None:
     final=out/"final";candidate=final/"developed_candidate";candidate.mkdir(parents=True,exist_ok=True)
     source=out/"K/snapshots/snapshot-update-00005000/model.pt";target=candidate/"generator_state.pt"
     shutil.copy2(source,target)
+    snapshot_metadata=json.loads((out/"K/snapshots/snapshot-update-00005000/metadata.json").read_text())
     metadata={"experiment":spec()["experiment_type"],"role":"developed_candidate_not_recommended_replacement",
         "label":"K-5000","local_update":5000,"source_update":spec()["source_update"],
         "source_R_sha256":spec()["source_sha256"],"generator_state_sha256":sha256_file(target),
+        "training_implementation_commit":snapshot_metadata["implementation_commit"],
+        "training_config_hash":snapshot_metadata["config_hash"],
         "training_objective":"original diffusion loss only control","inference_requires_training_CLIP":False,
         "semantic_score":developed["semantic_score"],"pixcorr":developed["PixCorr"]}
     write_json_atomic(candidate/"metadata.json",metadata)
