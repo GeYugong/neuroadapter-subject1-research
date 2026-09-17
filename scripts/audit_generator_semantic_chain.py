@@ -102,6 +102,7 @@ def main(root: Path) -> None:
     import train_brain_adapter as author
     author_batch={"img_ipadapter":images,"text_input_ids":text_ids.expand(4,-1),"brain_lh_f":brain[:,:100],"brain_rh_f":brain[:,100:]}
     accelerator=SimpleNamespace(device=device)
+    process_cpu_rng=torch.get_rng_state().clone();process_cuda_rng=torch.cuda.get_rng_state(device).clone()
     original_encode=backbone.vae.encode
     with patch.object(backbone.vae,"encode",VAEProxy(original_encode,latent_sample).encode), \
          patch.object(torch,"randn_like",lambda value:noise), \
@@ -113,6 +114,7 @@ def main(root: Path) -> None:
     author_loss.backward();author_grads={name:p.grad.detach().cpu().clone() for name,p in module.named_parameters() if p.requires_grad};optimizer.step()
     author_updated={group:{name:value.clone() for name,value in values.items()} for group,values in trainable_state_dict(bundle).items()}
     load_trainable_state_dict(bundle,state);optimizer=torch.optim.AdamW([p for p in module.parameters() if p.requires_grad],lr=1e-5,betas=(.9,.999),eps=1e-8,weight_decay=1e-6,foreach=False,fused=False);optimizer.zero_grad(set_to_none=True)
+    torch.set_rng_state(process_cpu_rng);torch.cuda.set_rng_state(process_cuda_rng,device)
     prediction=module(noisy,timesteps,text,brain,keep)
     per=F.mse_loss(prediction.float(),noise.float(),reduction="none").mean((1,2,3));current_loss=(per*min_snr_weights(timesteps,backbone.noise_scheduler.alphas_cumprod.to(device),5.)).mean()
     current_loss.backward();current_grads={name:p.grad.detach().cpu().clone() for name,p in module.named_parameters() if p.requires_grad};optimizer.step()
