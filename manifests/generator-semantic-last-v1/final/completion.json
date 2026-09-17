@@ -5,10 +5,9 @@
   "developed_candidate": "K-5000",
   "recommended_generator": "B0",
   "generator_state_sha256": "0fda9a9b615982297039b717d032e22ab465fdf4a8a53ed998c21885f86fecfd",
-  "training_implementation_commit": "12305e0abc95d333aebf3e12c99c9279ab78fe37",
   "resume_archive": "resume/K5000-complete.tar.zst",
   "resume_archive_sha256": "61133f259abbf2b6ae373ce4168585a16c02245edfeced540c814619de45b556",
-  "report_sha256": "5715e10f1471f2ad2acb370f75b9159a425a3647538b7008fc70c08eb86bd989",
+  "report_sha256": "629396c230b3da1f3423a655a0b11bc9b45a231091c8e15e2ec46a954f465d31",
   "visual_review_sha256": "b7bdc63298f5ac2ed849443a4cbeaaf4855bf4c9974a876a329170f88a04a48e",
   "gallery_sha256": {
     "fixed32-page-1.jpg": "2ab25ac2f547c4375905ef31ebabf7a7bd89576056bd081d7f3b3928be73d2a8",
@@ -17,5 +16,6 @@
     "fixed32-page-4.jpg": "1f1631cde28df48fc892c36daecb61f257a924d33d8188bd60501a24364630be"
   },
   "standard_test_used": false,
-  "hf_uploaded": false
+  "hf_uploaded": false,
+  "training_implementation_commit": "12305e0abc95d333aebf3e12c99c9279ab78fe37"
 }
